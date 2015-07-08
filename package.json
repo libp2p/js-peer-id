@@ -4,11 +4,31 @@
   "description": "IPFS Peer Id implementation in Node.js",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/lab tests/*-test.js",
+    "coverage": "./node_modules/.bin/lab -t 100 tests/*-test.js",
+    "codestyle": "./node_modules/.bin/standard --format"
   },
   "keywords": [
     "IPFS"
   ],
-  "author": "David Dias <mail@daviddias.me>",
-  "license": "MIT"
+  "author": "David Dias <daviddias@ipfs.io>",
+  "license": "MIT",
+  "pre-commit": [
+    "codestyle",
+    "test"
+  ],
+  "bugs": {
+    "url": "https://github.com/diasdavid/node-ipfs-peer-id/issues"
+  },
+  "homepage": "https://github.com/diasdavid/node-ipfs-peer-id",
+  "devDependencies": {
+    "code": "^1.4.1",
+    "lab": "^5.13.0",
+    "precommit-hook": "^3.0.0",
+    "standard": "^4.5.2"
+  },
+  "dependencies": {
+    "bs58": "^2.0.1",
+    "multihashing": "^0.1.2"
+  }
 }
