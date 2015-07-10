@@ -29,6 +29,6 @@
   },
   "dependencies": {
     "bs58": "^2.0.1",
-    "multihashing": "^0.1.2"
+    "multihashing": "^0.1.3"
   }
 }
