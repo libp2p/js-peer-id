@@ -8,7 +8,7 @@ var crypto = require('crypto')
 
 exports = module.exports = Id
 
-function Id (id, pubKey, privKey) {
+function Id (id, privKey, pubKey) {
   var self = this
 
   if (!(self instanceof Id)) {
@@ -70,7 +70,6 @@ exports.createFromB58String = function (str) {
 
 exports.createFromPubKey = function (pubKey) {
   var mhId = multihashing(pubKey, 'sha2-256')
-
   return new Id(mhId, null, pubKey)
 }
 
