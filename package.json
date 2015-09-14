@@ -17,6 +17,7 @@
     "codestyle",
     "test"
   ],
+  "engines" : { "node" : "^4.0.0" },
   "bugs": {
     "url": "https://github.com/diasdavid/node-ipfs-peer-id/issues"
   },
