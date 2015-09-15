@@ -6,7 +6,9 @@
   "scripts": {
     "test": "./node_modules/.bin/lab tests/*-test.js",
     "coverage": "./node_modules/.bin/lab -t 100 tests/*-test.js",
-    "codestyle": "./node_modules/.bin/standard --format"
+    "codestyle": "./node_modules/.bin/standard --format",
+    "lint": "jshint .",
+    "validate": "npm ls"
   },
   "keywords": [
     "IPFS"
@@ -17,6 +19,9 @@
     "codestyle",
     "test"
   ],
+  "engines": {
+    "node": "^4.0.0"
+  },
   "bugs": {
     "url": "https://github.com/diasdavid/node-peer-id/issues"
   },
