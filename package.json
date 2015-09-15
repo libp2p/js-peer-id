@@ -1,5 +1,5 @@
 {
-  "name": "ipfs-peer-id",
+  "name": "peer-id",
   "version": "0.3.1",
   "description": "IPFS Peer Id implementation in Node.js",
   "main": "src/index.js",
@@ -18,9 +18,9 @@
     "test"
   ],
   "bugs": {
-    "url": "https://github.com/diasdavid/node-ipfs-peer-id/issues"
+    "url": "https://github.com/diasdavid/node-peer-id/issues"
   },
-  "homepage": "https://github.com/diasdavid/node-ipfs-peer-id",
+  "homepage": "https://github.com/diasdavid/node-peer-id",
   "devDependencies": {
     "code": "^1.4.1",
     "lab": "^5.13.0",
