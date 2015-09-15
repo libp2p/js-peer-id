@@ -23,22 +23,22 @@ $ npm install peer-id
 var PeerId = require('ipfs-peer')
 
 // Create a new Id
-var id = new Id.create()
+var id = new PeerId.create()
 
 // Recreate an Id from Hex string
-var id = new Id.createFromHexString(str)
+var id = new PeerId.createFromHexString(str)
 
 // Recreate an Id from a Buffer
-var id = new Id.createFromBytes(buf)
+var id = new PeerId.createFromBytes(buf)
 
 // Recreate an B58 String
-var id = new Id.createFromB58String(str)
+var id = new PeerId.createFromB58String(str)
 
 // Recreate from a Public Key
-var id = new Id.createFromPubKey(pubKey)
+var id = new PeerId.createFromPubKey(pubKey)
 
 // Recreate from a Private Key
-var id = new Id.createFromPrivKey(privKey)
+var id = new PeerId.createFromPrivKey(privKey)
 ```
 
 ### Exporting an Id
