@@ -23,9 +23,9 @@
     "node": "^4.0.0"
   },
   "bugs": {
-    "url": "https://github.com/diasdavid/node-peer-id/issues"
+    "url": "https://github.com/diasdavid/js-peer-id/issues"
   },
-  "homepage": "https://github.com/diasdavid/node-peer-id",
+  "homepage": "https://github.com/diasdavid/js-peer-id",
   "devDependencies": {
     "code": "^1.4.1",
     "lab": "^5.13.0",
