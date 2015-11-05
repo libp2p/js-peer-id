@@ -4,8 +4,13 @@
   "description": "IPFS Peer Id implementation in Node.js",
   "main": "src/index.js",
   "scripts": {
-    "test": "node tests/*-test.js",
-    "lint": "standard"
+    "test:node": "node tests/*-test.js",
+    "lint": "standard",
+    "test": "npm run test:node",
+    "lint": "./node_modules/.bin/standard",
+    "test:browser": "./node_modules/.bin/zuul --browser-version $BROWSER_VERSION --browser-name $BROWSER_NAME -- tests/id-test.js",
+    "test:browser:q": "BROWSER_VERSION=46 BROWSER_NAME=chrome npm run test:browser",
+    "build": "./node_modules/.bin/browserify -s PeerId -e ./src/index.js | tee dist/peer-id.js | ./node_modules/.bin/uglifyjs -m > dist/peer-id.min.js"
   },
   "keywords": [
     "IPFS"
@@ -16,6 +21,11 @@
     "lint",
     "test"
   ],
+  "standard": {
+    "ignore": [
+      "dist"
+    ]
+  },
   "engines": {
     "node": "^4.2.0"
   },

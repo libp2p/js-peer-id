@@ -25,7 +25,7 @@ function Id (id, privKey, pubKey) {
 
   self.toPrint = function () {
     return {
-      id: id.toHexString(),
+      id: self.toHexString(),
       privKey: privKey.toString('hex'),
       pubKey: pubKey.toString('hex')
     }

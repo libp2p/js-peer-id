@@ -43,22 +43,22 @@ You will need to use Node.js `Buffer` API compatible, if you are running inside 
 var PeerId = require('ipfs-peer')
 
 // Create a new Id
-var id = new PeerId.create()
+var id = PeerId.create()
 
 // Recreate an Id from Hex string
-var id = new PeerId.createFromHexString(str)
+var id = PeerId.createFromHexString(str)
 
 // Recreate an Id from a Buffer
-var id = new PeerId.createFromBytes(buf)
+var id = PeerId.createFromBytes(buf)
 
 // Recreate an B58 String
-var id = new PeerId.createFromB58String(str)
+var id = PeerId.createFromB58String(str)
 
 // Recreate from a Public Key
-var id = new PeerId.createFromPubKey(pubKey)
+var id = PeerId.createFromPubKey(pubKey)
 
 // Recreate from a Private Key
-var id = new PeerId.createFromPrivKey(privKey)
+var id = PeerId.createFromPrivKey(privKey)
 ```
 
 ### Exporting an Id
