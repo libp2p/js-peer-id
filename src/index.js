@@ -8,6 +8,8 @@ var keypair = require('keypair')
 
 exports = module.exports = Id
 
+exports.Buffer = Buffer
+
 function Id (id, privKey, pubKey) {
   var self = this
 
