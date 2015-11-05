@@ -1,13 +1,12 @@
 {
   "name": "peer-id",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "IPFS Peer Id implementation in Node.js",
   "main": "src/index.js",
   "scripts": {
     "test:node": "node tests/*-test.js",
     "lint": "standard",
     "test": "npm run test:node",
-    "lint": "./node_modules/.bin/standard",
     "test:browser": "./node_modules/.bin/zuul --browser-version $BROWSER_VERSION --browser-name $BROWSER_NAME -- tests/id-test.js",
     "test:browser:q": "BROWSER_VERSION=46 BROWSER_NAME=chrome npm run test:browser",
     "build": "./node_modules/.bin/browserify -s PeerId -e ./src/index.js | tee dist/peer-id.js | ./node_modules/.bin/uglifyjs -m > dist/peer-id.min.js"
@@ -30,9 +29,9 @@
     "node": "^4.2.0"
   },
   "bugs": {
-    "url": "https://github.com/diasdavid/node-peer-id/issues"
+    "url": "https://github.com/diasdavid/js-peer-id/issues"
   },
-  "homepage": "https://github.com/diasdavid/node-peer-id",
+  "homepage": "https://github.com/diasdavid/js-peer-id",
   "devDependencies": {
     "pre-commit": "^1.1.1",
     "standard": "^5.3.1",
