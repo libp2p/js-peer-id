@@ -4,7 +4,7 @@
 
 var multihashing = require('multihashing')
 var base58 = require('bs58')
-var crypto = require('crypto')
+var keypair = require('keypair')
 
 exports = module.exports = Id
 
@@ -42,18 +42,16 @@ function Id (id, privKey, pubKey) {
   self.toB58String = function () {
     return base58.encode(self.id)
   }
-
 }
 
 // generation
 
 exports.create = function () {
-  var ecdh = crypto.createECDH('secp256k1')
-  ecdh.generateKeys()
+  var pair = keypair()
 
-  var mhId = multihashing(ecdh.getPublicKey(), 'sha2-256')
+  var mhId = multihashing(pair.public, 'sha2-256')
 
-  return new Id(mhId, ecdh.getPrivateKey(), ecdh.getPublicKey())
+  return new Id(mhId, pair.private, pair.public)
 }
 
 exports.createFromHexString = function (str) {
