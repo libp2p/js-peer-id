@@ -5,6 +5,7 @@
 var multihashing = require('multihashing')
 var base58 = require('bs58')
 var keypair = require('keypair')
+var forge = require('node-forge')
 
 exports = module.exports = Id
 
@@ -46,6 +47,10 @@ function Id (id, privKey, pubKey) {
   }
 }
 
+function fix (str) {
+  return str.replace(/\r/g, '') + '\n'
+}
+
 // generation
 
 exports.create = function () {
@@ -73,6 +78,13 @@ exports.createFromPubKey = function (pubKey) {
   return new Id(mhId, null, pubKey)
 }
 
-exports.createFromPrivKey = function () {
-  // TODO(daviddias) derive PubKey from priv
+exports.createFromPrivKey = function (privKey) {
+  var privateKey = forge.pki.privateKeyFromPem(privKey)
+  var publicKey = {
+    n: privateKey.n,
+    e: privateKey.e
+  }
+  var pubKey = fix(forge.pki.publicKeyToRSAPublicKeyPem(publicKey, 72))
+  var mhId = multihashing(pubKey, 'sha2-256')
+  return new Id(mhId, privKey, pubKey)
 }

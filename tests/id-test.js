@@ -44,6 +44,7 @@ test('Recreate from a Public Key', function (t) {
 })
 
 test('Recreate from a Private Key', function (t) {
-  // TODO
+  var id = PeerId.createFromPrivKey(testId.privKey)
+  t.ok(id)
   t.end()
 })
