@@ -8,8 +8,16 @@ var base58 = require('bs58')
 var forge = require('node-forge')
 var protobuf = require('protocol-buffers')
 
+var isNode = !global.window
+
 //protobuf read from file
-var messages = protobuf(fs.readFileSync(__dirname+'/crypto.proto'))
+var messages = isNode ? protobuf(fs.readFileSync(__dirname+'/../pb/crypto.proto')) : protobuf(require('buffer!./../pb/crypto.proto'))
+
+//for some reason webpack can only find forge at forge.forge().someFunction()... 
+//browser should be able to just use forge.someFunction()
+if(!isNode){
+  forge = forge.forge()
+}
 
 exports = module.exports = Id
 
@@ -59,14 +67,14 @@ function unmarshal (key) {
 
 //create a public key protobuf to be base64 string stored in config
 function marshal (data, type) {
-  if(type == 'Public'){
+  if(type === 'Public'){
     var epb = messages.PublicKey.encode({
       Type: 0,
       Data: data
     })
   }
 
-  if(type == 'Private'){
+  if(type === 'Private'){
     var epb = messages.PrivateKey.encode({
       Type: 0,
       Data: data
@@ -76,53 +84,41 @@ function marshal (data, type) {
   return epb
 }
 
-// generation
-exports.create = function () {
-  //generate keys
-  var pair = forge.rsa.generateKeyPair({bits:2048, e: 0x10001})
-
-  //Create Public Key
-  //return the RSA public key to asn1 object and DER encode
-  var asnPub = forge.pki.publicKeyToAsn1(pair.publicKey)
-
+//this returns a base64 encoded protobuf of the public key
+function formatKey(key, type) {
   //create der buffer of public key asn.1 object
-  var derPub = forge.asn1.toDer(asnPub)
+  var der = forge.asn1.toDer(key)
 
   //create forge buffer of der public key buffer
-  var fDerBuf = forge.util.createBuffer(derPub.data, 'binary')
+  var fDerBuf = forge.util.createBuffer(der.data, 'binary')
 
   //convert forge buffer to node buffer public key
   var nDerBuf = new Buffer(fDerBuf.getBytes(), 'binary')
 
   //protobuf the new DER bytes to the PublicKey Data: field
-  var marPubKey = marshal(nDerBuf, 'Public')
+  var marshalKey = marshal(nDerBuf, type)
 
   //encode the protobuf public key to base64 string
-  var pubKeyb64 = marPubKey.toString('base64')
+  var b64 = marshalKey.toString('base64')
+  return b64
+}
 
+// generation
+exports.create = function () {
+  //generate keys
+  var pair = forge.rsa.generateKeyPair({bits:2048, e: 0x10001})
 
-  //create Private Key
-  //return the RSA private key to asn1 object and DER encode
+  //return the RSA public/private key to asn1 object
+  var asnPub = forge.pki.publicKeyToAsn1(pair.publicKey)
   var asnPriv = forge.pki.privateKeyToAsn1(pair.privateKey)
 
-  //create der buffer of private key asn.1 object
-  var derPriv = forge.asn1.toDer(asnPriv)
+  //format the keys to protobuf base64 encoded string
+  var protoPublic64 = formatKey(asnPub, 'Public')
+  var protoPrivate64 = formatKey(asnPriv, 'Private')
+  
+  var mhId = multihashing(new Buffer(protoPublic64, 'base64'), 'sha2-256')
 
-  //create forge buffer of der private key buffer
-  var fDerBufPriv = forge.util.createBuffer(derPriv.data, 'binary')
-
-  //convert forge buffer to node buffer private key
-  var nDerBufPriv = new Buffer(fDerBufPriv.getBytes(), 'binary')
-
-  //protobuf the new DER bytes to the PrivateKey Data: field
-  var marPrivKey = marshal(nDerBufPriv, 'Private')
-
-  //encode the protobuf private key to base64 string
-  var privKeyb64 = marPrivKey.toString('base64')
-
-  var mhId = multihashing(marPubKey, 'sha2-256')
-
-  return new Id(mhId, privKeyb64, pubKeyb64)
+  return new Id(mhId, protoPrivate64, protoPublic64)
 }
 
 exports.createFromHexString = function (str) {
@@ -162,25 +158,11 @@ exports.createFromPrivKey = function (privKey) {
   //set the RSA public key to the modulus and exponent of the private key
   var publicKey = forge.pki.rsa.setPublicKey(privateKey.n, privateKey.e)
 
-  //return the RSA public to asn1 object and DER encode
+  //return the RSA public key to asn1 object
   var asnPub = forge.pki.publicKeyToAsn1(publicKey)
 
-  //create der buffer of public key asn.1 object
-  var derPub = forge.asn1.toDer(asnPub)
-
-  //create forge buffer of der buffer
-  var fDerBuf = forge.util.createBuffer(derPub.data, 'binary')
-
-  //convert forge buffer to node buffer
-  var nDerBuf = new Buffer(fDerBuf.getBytes(), 'binary')
-
-  //protobuf the new DER bytes to the PublicKey Data: field
-  var marPubKey = marshal(nDerBuf, 'Public')
-
-  //encode the protobuf public key to base64 string
-  var pubKeyb64 = marPubKey.toString('base64')
-
-  var mhId = multihashing(marPubKey, 'sha2-256')
-
-  return new Id(mhId, privKey, pubKeyb64)
+  //format the public key
+  var protoPublic64 = formatKey(asnPub, 'Public')
+  var mhId = multihashing(new Buffer(protoPublic64, 'base64'), 'sha2-256')
+  return new Id(mhId, privKey, protoPublic64)
 }
