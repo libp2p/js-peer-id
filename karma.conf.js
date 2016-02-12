@@ -10,17 +10,17 @@ module.exports = function (config) {
     frameworks: ['mocha'],
 
     files: [
-      'tests/id-test.js'
+      'tests/test.js'
     ],
 
     preprocessors: {
-      'tests/test-core/*': ['webpack']
+      'tests/*': ['webpack']
     },
 
     webpack: {
       resolve: {
         extensions: ['', '.js', '.json'],
-        alias: {'node-forge': node_modules_dir+'/deps/forge.bundle.js' }
+        alias: {'node-forge': __dirname+'/deps/forge.bundle.js' }
       },
       externals: {
         fs: '{}'
@@ -53,7 +53,6 @@ module.exports = function (config) {
 
   deps.forEach(function (dep) {
     var depPath = path.resolve(node_modules_dir, dep)
-    //config.webpack.resolve.alias[dep.split(path.sep)[0]] = depPath
     config.webpack.module.noParse.push(depPath)
   })
 }

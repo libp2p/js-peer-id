@@ -15,9 +15,10 @@ var messages = isNode ? protobuf(fs.readFileSync(__dirname+'/../pb/crypto.proto'
 
 //for some reason webpack can only find forge at forge.forge().someFunction()... 
 //browser should be able to just use forge.someFunction()
-if(!isNode){
+//this is only happening when js-ipfs bundles peer-id module
+/*if(!isNode){
   forge = forge.forge()
-}
+}*/
 
 exports = module.exports = Id
 
@@ -115,14 +116,14 @@ exports.create = function () {
   //format the keys to protobuf base64 encoded string
   var protoPublic64 = formatKey(asnPub, 'Public')
   var protoPrivate64 = formatKey(asnPriv, 'Private')
-  
+
   var mhId = multihashing(new Buffer(protoPublic64, 'base64'), 'sha2-256')
 
   return new Id(mhId, protoPrivate64, protoPublic64)
 }
 
 exports.createFromHexString = function (str) {
-  return new Id(new Buffer(str), 'hex')
+  return new Id(new Buffer(str, 'hex'))
 }
 
 exports.createFromBytes = function (buf) {
@@ -135,7 +136,7 @@ exports.createFromB58String = function (str) {
 
 exports.createFromPubKey = function (pubKey) {
   var buf = new Buffer(pubKey, 'base64')
-  var mhId = multihashing(pubKey, 'sha2-256')
+  var mhId = multihashing(buf, 'sha2-256')
   return new Id(mhId, null, pubKey)
 }
 
