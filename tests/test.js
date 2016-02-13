@@ -15,7 +15,8 @@ const testIdBytes = new Buffer('1220151ab1658d8294ab34b71d5582cfe20d06414212f440
 
 const testIdB58String = 'QmQ2zigjQikYnyYUSXZydNXrDRhBut2mubwJBaLXobMt3A'
 
-describe('id', () => {
+describe('id', function(done) {
+  this.timeout(10000)		
   it('create a new id', done => {
   	//this will always be randomly generated. is there something i can test it against?
   	var id = PeerId.create()
