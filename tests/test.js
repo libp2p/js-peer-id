@@ -18,8 +18,8 @@ const testIdB58String = 'QmQ2zigjQikYnyYUSXZydNXrDRhBut2mubwJBaLXobMt3A'
 describe('id', function (done) {
   this.timeout(30000)		
   it('create a new id', done => {
-	// this will always be randomly generated. is there something i can test it against?
     var id = PeerId.create()
+    expect(id.toB58String().length).to.equal(46)
     done()
   })
   it('recreate an Id from Hex string', done => {

@@ -60,7 +60,7 @@ function Id (id, privKey, pubKey) {
   }
 }
 
-// unwrap the private key protobuf stream
+// unwrap the private key protobuf 
 function unmarshal (key) {
   var dpb = messages.PrivateKey.decode(key)
   return dpb
