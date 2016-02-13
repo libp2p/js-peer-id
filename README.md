@@ -6,9 +6,9 @@ peer-id JavaScript implementation
 
 # Description
 
-A IPFS Peer Id is based on a sha256 hash of the peer public key, using [multihash](https://github.com/jbenet/multihash)
+An IPFS Peer Id is based on a sha256 hash of the peer public key, using [multihash](https://github.com/jbenet/multihash)
 
-The public key is currently a base64 encoded string of a protobuf of an RSA DER buffer. This uses a node buffer to pass the base64 encoded public key protobuf to the multihash for ID generation. 
+The public key is a base64 encoded string of a protobuf containing an RSA DER buffer. This uses a node buffer to pass the base64 encoded public key protobuf to the multihash for ID generation. 
 
 
 # Usage

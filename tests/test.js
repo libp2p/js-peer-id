@@ -32,7 +32,7 @@ describe('id', function (done) {
     expect(testId.id).to.equal(id.toHexString())
     done()
   })
-  it('Recreate an B58 String', done => {
+  it('Recreate a B58 String', done => {
     var id = PeerId.createFromB58String(testIdB58String)
     expect(testIdB58String).to.equal(id.toB58String())
     done()
