@@ -13,13 +13,6 @@ var isNode = !global.window
 // protobuf read from file
 var messages = isNode ? protobuf(fs.readFileSync(__dirname + '/../pb/crypto.proto')) : protobuf(require('buffer!./../pb/crypto.proto'))
 
-// for some reason webpack can only find forge at forge.forge().someFunction()
-// browser should be able to just use forge.someFunction()
-// this is only happening when js-ipfs bundles peer-id module
-/* if(!isNode){
-  forge = forge.forge()
-} */
-
 exports = module.exports = Id
 
 exports.Buffer = Buffer
