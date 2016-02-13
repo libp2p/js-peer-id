@@ -15,37 +15,37 @@ const testIdBytes = new Buffer('1220151ab1658d8294ab34b71d5582cfe20d06414212f440
 
 const testIdB58String = 'QmQ2zigjQikYnyYUSXZydNXrDRhBut2mubwJBaLXobMt3A'
 
-describe('id', function(done) {
-  this.timeout(10000)		
+describe('id', function (done) {
+  this.timeout(30000)		
   it('create a new id', done => {
-  	//this will always be randomly generated. is there something i can test it against?
-  	var id = PeerId.create()
-	done()
+	// this will always be randomly generated. is there something i can test it against?
+    var id = PeerId.create()
+    done()
   })
-  it('recreate an Id from Hex string', done =>{
-  	var id = PeerId.createFromHexString(testIdHex)
-  	expect(testIdBytes).to.deep.equal(id.id)
-	done()
+  it('recreate an Id from Hex string', done => {
+    var id = PeerId.createFromHexString(testIdHex)
+    expect(testIdBytes).to.deep.equal(id.id)
+    done()
   })
-  it('Recreate an Id from a Buffer', done =>{
-  	var id = PeerId.createFromBytes(testIdBytes)
-  	expect(testId.id).to.equal(id.toHexString())
-	done()
+  it('Recreate an Id from a Buffer', done => {
+    var id = PeerId.createFromBytes(testIdBytes)
+    expect(testId.id).to.equal(id.toHexString())
+    done()
   })
-  it('Recreate an B58 String', done =>{
-  	var id = PeerId.createFromB58String(testIdB58String)
-  	expect(testIdB58String).to.equal(id.toB58String())
-	done()
+  it('Recreate an B58 String', done => {
+    var id = PeerId.createFromB58String(testIdB58String)
+    expect(testIdB58String).to.equal(id.toB58String())
+    done()
   })
-  it('Recreate from a Public Key', done =>{
-  	var id = PeerId.createFromPubKey(testId.pubKey)
-  	expect(testIdB58String).to.equal(id.toB58String())
-	done()
+  it('Recreate from a Public Key', done => {
+    var id = PeerId.createFromPubKey(testId.pubKey)
+    expect(testIdB58String).to.equal(id.toB58String())
+    done()
   })
-  it('Recreate from a Private Key', done =>{
-  	var id = PeerId.createFromPrivKey(testId.privKey)
-  	expect(testIdB58String).to.equal(id.toB58String())
-	done()
+  it('Recreate from a Private Key', done => {
+    var id = PeerId.createFromPrivKey(testId.privKey)
+    expect(testIdB58String).to.equal(id.toB58String())
+    done()
   })
 })
 

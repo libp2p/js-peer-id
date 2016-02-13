@@ -4,7 +4,6 @@ module.exports = function (config) {
   var deps = [
     'deps/forge.bundle.js'
   ]
-  
   config.set({
     basePath: '',
     frameworks: ['mocha'],
@@ -20,7 +19,7 @@ module.exports = function (config) {
     webpack: {
       resolve: {
         extensions: ['', '.js', '.json'],
-        alias: {'node-forge': __dirname+'/deps/forge.bundle.js' }
+        alias: { 'node-forge': __dirname + '/deps/forge.bundle.js' }
       },
       externals: {
         fs: '{}'
@@ -33,7 +32,7 @@ module.exports = function (config) {
           { test: /\.json$/, loader: 'json' }
         ],
         noParse: []
-      },
+      }
     },
 
     webpackMiddleware: {

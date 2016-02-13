@@ -10,15 +10,15 @@ var protobuf = require('protocol-buffers')
 
 var isNode = !global.window
 
-//protobuf read from file
-var messages = isNode ? protobuf(fs.readFileSync(__dirname+'/../pb/crypto.proto')) : protobuf(require('buffer!./../pb/crypto.proto'))
+// protobuf read from file
+var messages = isNode ? protobuf(fs.readFileSync(__dirname + '/../pb/crypto.proto')) : protobuf(require('buffer!./../pb/crypto.proto'))
 
-//for some reason webpack can only find forge at forge.forge().someFunction()... 
-//browser should be able to just use forge.someFunction()
-//this is only happening when js-ipfs bundles peer-id module
-/*if(!isNode){
+// for some reason webpack can only find forge at forge.forge().someFunction()
+// browser should be able to just use forge.someFunction()
+// this is only happening when js-ipfs bundles peer-id module
+/* if(!isNode){
   forge = forge.forge()
-}*/
+} */
 
 exports = module.exports = Id
 
@@ -60,23 +60,24 @@ function Id (id, privKey, pubKey) {
   }
 }
 
-//unwrap the private key protobuf stream 
+// unwrap the private key protobuf stream
 function unmarshal (key) {
   var dpb = messages.PrivateKey.decode(key)
   return dpb
 }
 
-//create a public key protobuf to be base64 string stored in config
+// create a public key protobuf to be base64 string stored in config
 function marshal (data, type) {
-  if(type === 'Public'){
-    var epb = messages.PublicKey.encode({
+  var epb
+  if (type === 'Public') {
+    epb = messages.PublicKey.encode({
       Type: 0,
       Data: data
     })
   }
 
-  if(type === 'Private'){
-    var epb = messages.PrivateKey.encode({
+  if (type === 'Private') {
+    epb = messages.PrivateKey.encode({
       Type: 0,
       Data: data
     })
@@ -85,35 +86,35 @@ function marshal (data, type) {
   return epb
 }
 
-//this returns a base64 encoded protobuf of the public key
-function formatKey(key, type) {
-  //create der buffer of public key asn.1 object
+// this returns a base64 encoded protobuf of the public key
+function formatKey (key, type) {
+  // create der buffer of public key asn.1 object
   var der = forge.asn1.toDer(key)
 
-  //create forge buffer of der public key buffer
+  // create forge buffer of der public key buffer
   var fDerBuf = forge.util.createBuffer(der.data, 'binary')
 
-  //convert forge buffer to node buffer public key
+  // convert forge buffer to node buffer public key
   var nDerBuf = new Buffer(fDerBuf.getBytes(), 'binary')
 
-  //protobuf the new DER bytes to the PublicKey Data: field
+  // protobuf the new DER bytes to the PublicKey Data: field
   var marshalKey = marshal(nDerBuf, type)
 
-  //encode the protobuf public key to base64 string
+  // encode the protobuf public key to base64 string
   var b64 = marshalKey.toString('base64')
   return b64
 }
 
 // generation
 exports.create = function () {
-  //generate keys
-  var pair = forge.rsa.generateKeyPair({bits:2048, e: 0x10001})
+  // generate keys
+  var pair = forge.rsa.generateKeyPair({ bits: 2048, e: 0x10001 })
 
-  //return the RSA public/private key to asn1 object
+  // return the RSA public/private key to asn1 object
   var asnPub = forge.pki.publicKeyToAsn1(pair.publicKey)
   var asnPriv = forge.pki.privateKeyToAsn1(pair.privateKey)
 
-  //format the keys to protobuf base64 encoded string
+  // format the keys to protobuf base64 encoded string
   var protoPublic64 = formatKey(asnPub, 'Public')
   var protoPrivate64 = formatKey(asnPriv, 'Private')
 
@@ -141,28 +142,28 @@ exports.createFromPubKey = function (pubKey) {
 }
 
 exports.createFromPrivKey = function (privKey) {
-  //create a buffer from the base64 encoded string
+  // create a buffer from the base64 encoded string
   var buf = new Buffer(privKey, 'base64')
 
-  //get the private key data from the protobuf
+  // get the private key data from the protobuf
   var mpk = unmarshal(buf)
 
-  //create a forge buffer
+  // create a forge buffer
   var fbuf = forge.util.createBuffer(mpk.Data.toString('binary'))
 
-  //create an asn1 object from the private key bytes saved in the protobuf Data: field
+  // create an asn1 object from the private key bytes saved in the protobuf Data: field
   var asnPriv = forge.asn1.fromDer(fbuf)
 
-  //get the RSA privatekey data from the asn1 object
+  // get the RSA privatekey data from the asn1 object
   var privateKey = forge.pki.privateKeyFromAsn1(asnPriv)
 
-  //set the RSA public key to the modulus and exponent of the private key
+  // set the RSA public key to the modulus and exponent of the private key
   var publicKey = forge.pki.rsa.setPublicKey(privateKey.n, privateKey.e)
 
-  //return the RSA public key to asn1 object
+  // return the RSA public key to asn1 object
   var asnPub = forge.pki.publicKeyToAsn1(publicKey)
 
-  //format the public key
+  // format the public key
   var protoPublic64 = formatKey(asnPub, 'Public')
   var mhId = multihashing(new Buffer(protoPublic64, 'base64'), 'sha2-256')
   return new Id(mhId, privKey, protoPublic64)
