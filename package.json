@@ -4,10 +4,11 @@
   "description": "IPFS Peer Id implementation in Node.js",
   "main": "src/index.js",
   "scripts": {
-    "test:node": "mocha tests/test.js",
     "lint": "standard",
     "test": "npm run test:node && npm run test:browser",
-    "test:browser": "karma start karma.conf.js"
+    "test:node": "mocha tests/test.js",
+    "test:browser": "karma start karma.conf.js",
+    "coverage": "istanbul cover --print both -- _mocha tests/test.js"
   },
   "keywords": [
     "IPFS"
@@ -20,7 +21,8 @@
   ],
   "standard": {
     "ignore": [
-      "dist"
+      "dist",
+      "deps"
     ]
   },
   "engines": {
@@ -33,6 +35,7 @@
   "devDependencies": {
     "buffer-loader": "0.0.1",
     "chai": "^3.5.0",
+    "istanbul": "^0.4.2",
     "json-loader": "^0.5.4",
     "karma": "^0.13.19",
     "karma-chrome-launcher": "^0.2.2",

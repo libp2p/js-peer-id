@@ -11,7 +11,8 @@ var protobuf = require('protocol-buffers')
 var isNode = !global.window
 
 // protobuf read from file
-var messages = isNode ? protobuf(fs.readFileSync(__dirname + '/../pb/crypto.proto')) : protobuf(require('buffer!./../pb/crypto.proto'))
+var messages = isNode ? protobuf(fs.readFileSync(__dirname + '/../pb/crypto.proto'))
+                      : protobuf(require('buffer!./../pb/crypto.proto'))
 
 exports = module.exports = Id
 
@@ -53,7 +54,7 @@ function Id (id, privKey, pubKey) {
   }
 }
 
-// unwrap the private key protobuf 
+// unwrap the private key protobuf
 function unmarshal (key) {
   var dpb = messages.PrivateKey.decode(key)
   return dpb

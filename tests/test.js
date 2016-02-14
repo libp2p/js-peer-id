@@ -1,3 +1,5 @@
+/* globals describe, it */
+
 'use strict'
 
 const expect = require('chai').expect
@@ -16,32 +18,38 @@ const testIdBytes = new Buffer('1220151ab1658d8294ab34b71d5582cfe20d06414212f440
 const testIdB58String = 'QmQ2zigjQikYnyYUSXZydNXrDRhBut2mubwJBaLXobMt3A'
 
 describe('id', function (done) {
-  this.timeout(30000)		
+  this.timeout(30000)
+
   it('create a new id', done => {
     var id = PeerId.create()
     expect(id.toB58String().length).to.equal(46)
     done()
   })
+
   it('recreate an Id from Hex string', done => {
     var id = PeerId.createFromHexString(testIdHex)
     expect(testIdBytes).to.deep.equal(id.id)
     done()
   })
+
   it('Recreate an Id from a Buffer', done => {
     var id = PeerId.createFromBytes(testIdBytes)
     expect(testId.id).to.equal(id.toHexString())
     done()
   })
+
   it('Recreate a B58 String', done => {
     var id = PeerId.createFromB58String(testIdB58String)
     expect(testIdB58String).to.equal(id.toB58String())
     done()
   })
+
   it('Recreate from a Public Key', done => {
     var id = PeerId.createFromPubKey(testId.pubKey)
     expect(testIdB58String).to.equal(id.toB58String())
     done()
   })
+
   it('Recreate from a Private Key', done => {
     var id = PeerId.createFromPrivKey(testId.privKey)
     expect(testIdB58String).to.equal(id.toB58String())
