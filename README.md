@@ -1,7 +1,11 @@
 peer-id JavaScript implementation
-==============================
+=================================
 
-[![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io) [[![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](http://webchat.freenode.net/?channels=%23ipfs) ![Build Status](https://travis-ci.org/diasdavid/js-peer-id.svg?style=flat-square)](https://travis-ci.org/diasdavid/js-peer-id) ![](https://img.shields.io/badge/coverage-95%25-yellow.svg?style=flat-square) [![Dependency Status](https://david-dm.org/diasdavid/js-peer-id.svg?style=flat-square)](https://david-dm.org/diasdavid/js-peer-id) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
+[![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io) [[![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](http://webchat.freenode.net/?channels=%23ipfs)
+[![Build Status](https://travis-ci.org/diasdavid/js-peer-id.svg?style=flat-square)](https://travis-ci.org/diasdavid/js-peer-id)
+![](https://img.shields.io/badge/coverage-95%25-yellow.svg?style=flat-square)
+[![Dependency Status](https://david-dm.org/diasdavid/js-peer-id.svg?style=flat-square)](https://david-dm.org/diasdavid/js-peer-id)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 > IPFS Peer Id implementation in JavaScript
 
 # Description
@@ -16,11 +20,11 @@ The public key is a base64 encoded string of a protobuf containing an RSA DER bu
 ### In Node.js through npm
 
 ```bash
-$ npm install --save peer-id
+> npm install --save peer-id
 ```
 
 ```javascript
-var PeerId = require('peer-id')
+const PeerId = require('peer-id')
 ```
 
 ### In the Browser through browserify
@@ -32,7 +36,7 @@ Same as in Node.js, you just have to [browserify](https://github.com/substack/no
 Make the [peer-id.min.js](/dist/peer-id.min.js) available through your server and load it using a normal `<script>` tag, this will export the `peerId` constructor on the `window` object, such that:
 
 ```JavaScript
-var PeerId = window.PeerId
+const PeerId = window.PeerId
 ```
 
 #### Gotchas
@@ -42,25 +46,25 @@ You will need to use Node.js `Buffer` API compatible, if you are running inside 
 ### Creating a new Id
 
 ```
-var PeerId = require('ipfs-peer')
+const PeerId = require('ipfs-peer')
 
 // Create a new Id
-var id = PeerId.create()
+const id = PeerId.create()
 
 // Recreate an Id from Hex string
-var id = PeerId.createFromHexString(str)
+const id = PeerId.createFromHexString(str)
 
 // Recreate an Id from a Buffer
-var id = PeerId.createFromBytes(buf)
+const id = PeerId.createFromBytes(buf)
 
 // Recreate an B58 String
-var id = PeerId.createFromB58String(str)
+const id = PeerId.createFromB58String(str)
 
 // Recreate from a Public Key
-var id = PeerId.createFromPubKey(pubKey)
+const id = PeerId.createFromPubKey(pubKey)
 
 // Recreate from a Private Key
-var id = PeerId.createFromPrivKey(privKey)
+const id = PeerId.createFromPrivKey(privKey)
 ```
 
 ### Exporting an Id
