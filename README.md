@@ -30,14 +30,14 @@ const PeerId = require('peer-id')
 
 ### In the Browser through browserify
 
-Same as in Node.js, you just have to [browserify](https://github.com/substack/node-browserify) the code before serving it. See the browserify repo for how to do that.
+TODO: Figure out how to get this working with browserify and webpack. Browserify can't bundle our replacement of ```fs.readFileSync``` with ```require('buffer!./file')```. 
 
 ### In the Browser through `<script>` tag
 
-Make the [peer-id.min.js](/dist/peer-id.min.js) available through your server and load it using a normal `<script>` tag, this will export the `peerId` constructor on the `window` object, such that:
+Make the [peer-id.js](/dist/peer-id.js) available through your server and load it using a normal `<script>` tag, this will export the `PeerId` object, such that:
 
 ```JavaScript
-const PeerId = window.PeerId
+const Id = PeerId
 ```
 
 #### Gotchas

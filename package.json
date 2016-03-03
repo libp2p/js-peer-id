@@ -8,7 +8,8 @@
     "test": "npm run test:node && npm run test:browser",
     "test:node": "mocha tests/test.js",
     "test:browser": "karma start karma.conf.js",
-    "coverage": "istanbul cover --print both -- _mocha tests/test.js"
+    "coverage": "istanbul cover --print both -- _mocha tests/test.js",
+    "build": "webpack"
   },
   "keywords": [
     "IPFS"
@@ -33,6 +34,7 @@
   },
   "homepage": "https://github.com/diasdavid/js-peer-id",
   "devDependencies": {
+    "browserify": "^13.0.0",
     "buffer-loader": "0.0.1",
     "chai": "^3.5.0",
     "istanbul": "^0.4.2",
@@ -47,7 +49,7 @@
     "mocha": "^2.4.5",
     "pre-commit": "^1.1.1",
     "standard": "^6.0.7",
-    "webpack": "^1.12.13"
+    "webpack": "^1.12.14"
   },
   "dependencies": {
     "bs58": "^3.0.0",

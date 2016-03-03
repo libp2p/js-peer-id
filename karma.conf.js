@@ -17,6 +17,10 @@ module.exports = (config) => {
     },
 
     webpack: {
+      output: {
+        path: __dirname + '/dist',
+        filename: 'bundle.js'
+      },
       resolve: {
         extensions: ['', '.js', '.json'],
         alias: { 'node-forge': path.resolve(__dirname, 'deps/forge.bundle.js') }
