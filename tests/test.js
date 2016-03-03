@@ -20,38 +20,38 @@ const testIdB58String = 'QmQ2zigjQikYnyYUSXZydNXrDRhBut2mubwJBaLXobMt3A'
 describe('id', function (done) {
   this.timeout(30000)
 
-  it('create a new id', done => {
-    var id = PeerId.create()
+  it('create a new id', (done) => {
+    const id = PeerId.create()
     expect(id.toB58String().length).to.equal(46)
     done()
   })
 
-  it('recreate an Id from Hex string', done => {
-    var id = PeerId.createFromHexString(testIdHex)
+  it('recreate an Id from Hex string', (done) => {
+    const id = PeerId.createFromHexString(testIdHex)
     expect(testIdBytes).to.deep.equal(id.id)
     done()
   })
 
-  it('Recreate an Id from a Buffer', done => {
-    var id = PeerId.createFromBytes(testIdBytes)
+  it('Recreate an Id from a Buffer', (done) => {
+    const id = PeerId.createFromBytes(testIdBytes)
     expect(testId.id).to.equal(id.toHexString())
     done()
   })
 
-  it('Recreate a B58 String', done => {
-    var id = PeerId.createFromB58String(testIdB58String)
+  it('Recreate a B58 String', (done) => {
+    const id = PeerId.createFromB58String(testIdB58String)
     expect(testIdB58String).to.equal(id.toB58String())
     done()
   })
 
-  it('Recreate from a Public Key', done => {
-    var id = PeerId.createFromPubKey(testId.pubKey)
+  it('Recreate from a Public Key', (done) => {
+    const id = PeerId.createFromPubKey(testId.pubKey)
     expect(testIdB58String).to.equal(id.toB58String())
     done()
   })
 
-  it('Recreate from a Private Key', done => {
-    var id = PeerId.createFromPrivKey(testId.privKey)
+  it('Recreate from a Private Key', (done) => {
+    const id = PeerId.createFromPrivKey(testId.privKey)
     expect(testIdB58String).to.equal(id.toB58String())
     done()
   })

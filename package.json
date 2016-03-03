@@ -26,7 +26,7 @@
     ]
   },
   "engines": {
-    "node": "^4.2.0"
+    "node": "^4.3.0"
   },
   "bugs": {
     "url": "https://github.com/diasdavid/js-peer-id/issues"
@@ -46,7 +46,7 @@
     "karma-webpack": "^1.7.0",
     "mocha": "^2.4.5",
     "pre-commit": "^1.1.1",
-    "standard": "^5.3.1",
+    "standard": "^6.0.7",
     "webpack": "^1.12.13"
   },
   "dependencies": {
