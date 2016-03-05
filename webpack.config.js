@@ -1,15 +1,14 @@
-var webpack = require("webpack")
-var path = require("path")
+var path = require('path')
 
 module.exports = {
   name: 'peerid',
   context: __dirname,
-  entry: "./src/index.js",
+  entry: './src/index.js',
   output: {
-    path: __dirname + '/dist',
+    path: path.join(__dirname, 'dist'),
     filename: 'peer-id.js',
-    libraryTarget: "var",
-    library: "PeerId"
+    libraryTarget: 'var',
+    library: 'PeerId'
   },
   resolve: {
     extensions: ['', '.js', '.json'],

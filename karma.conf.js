@@ -18,7 +18,7 @@ module.exports = (config) => {
 
     webpack: {
       output: {
-        path: __dirname + '/dist',
+        path: path.join(__dirname, 'dist'),
         filename: 'bundle.js'
       },
       resolve: {
