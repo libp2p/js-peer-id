@@ -1,6 +1,6 @@
 {
   "name": "peer-id",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "IPFS Peer Id implementation in Node.js",
   "main": "src/index.js",
   "scripts": {
@@ -13,7 +13,8 @@
   },
   "standard": {
     "ignore": [
-      "dist"
+      "dist",
+      "deps"
     ]
   },
   "keywords": [
@@ -25,12 +26,6 @@
     "lint",
     "test"
   ],
-  "standard": {
-    "ignore": [
-      "dist",
-      "deps"
-    ]
-  },
   "engines": {
     "node": "^4.3.0"
   },
