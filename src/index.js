@@ -109,9 +109,13 @@ exports.create = function () {
   const protoPublic64 = formatKey(asnPub, 'Public')
   const protoPrivate64 = formatKey(asnPriv, 'Private')
 
+  // store the keys as a buffer
+  const bufProtoPub64 = new Buffer(protoPublic64, 'base64')
+  const bufProtoPriv64 = new Buffer(protoPrivate64, 'base64')
+  
   const mhId = multihashing(new Buffer(protoPublic64, 'base64'), 'sha2-256')
 
-  return new Id(mhId, protoPrivate64, protoPublic64)
+  return new Id(mhId, bufProtoPriv64, bufProtoPub64)
 }
 
 exports.createFromHexString = function (str) {

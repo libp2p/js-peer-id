@@ -55,5 +55,12 @@ describe('id', function (done) {
     expect(testIdB58String).to.equal(id.toB58String())
     done()
   })
+
+  it('Compare generated ID with one created from PubKey', (done) => {
+    const id1 = PeerId.create()
+    const id2 = PeerId.createFromPubKey(id1.pubKey)
+    expect(id2.id).to.deep.equal(id1.id)
+    done()
+  })
 })
 
