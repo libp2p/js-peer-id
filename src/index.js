@@ -12,8 +12,7 @@ const path = require('path')
 const isNode = !global.window
 
 // protobuf read from file
-const messages = isNode ? protobuf(fs.readFileSync(path.resolve(__dirname, 'pb/crypto.proto')))
-                      : protobuf(require('buffer!./pb/crypto.proto'))
+const messages = isNode ? protobuf(fs.readFileSync(path.resolve(__dirname, 'pb/crypto.proto'))) : protobuf(require('buffer!./pb/crypto.proto'))
 
 exports = module.exports = Id
 
@@ -31,7 +30,6 @@ function Id (id, privKey, pubKey) {
   self.id = id // multihash - sha256 - buffer
 
   // pretty print
-
   self.toPrint = function () {
     return {
       id: self.toB58String(),
@@ -41,7 +39,6 @@ function Id (id, privKey, pubKey) {
   }
 
   // encode/decode functions
-
   self.toHexString = function () {
     return self.id.toString('hex')
   }
@@ -129,12 +126,14 @@ exports.createFromB58String = function (str) {
   return new Id(new Buffer(base58.decode(str)))
 }
 
+// Public Key input will be a buffer
 exports.createFromPubKey = function (pubKey) {
   const buf = new Buffer(pubKey, 'base64')
   const mhId = multihashing(buf, 'sha2-256')
   return new Id(mhId, null, pubKey)
 }
 
+// Private key input will be a string
 exports.createFromPrivKey = function (privKey) {
   // create a buffer from the base64 encoded string
   const buf = new Buffer(privKey, 'base64')
@@ -159,6 +158,9 @@ exports.createFromPrivKey = function (privKey) {
 
   // format the public key
   const protoPublic64 = formatKey(asnPub, 'Public')
+
+  // buffer the public key for consistency before storing
+  const bufProtoPub64 = new Buffer(protoPublic64, 'base64')
   const mhId = multihashing(new Buffer(protoPublic64, 'base64'), 'sha2-256')
-  return new Id(mhId, privKey, protoPublic64)
+  return new Id(mhId, privKey, bufProtoPub64)
 }
