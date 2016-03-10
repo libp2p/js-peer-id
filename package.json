@@ -9,7 +9,7 @@
     "test:node": "mocha tests/test.js",
     "test:browser": "karma start karma.conf.js",
     "coverage": "istanbul cover --print both -- _mocha tests/test.js",
-    "build": "webpack"
+    "dist": "webpack"
   },
   "standard": {
     "ignore": [
