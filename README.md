@@ -28,9 +28,13 @@ The public key is a base64 encoded string of a protobuf containing an RSA DER bu
 const PeerId = require('peer-id')
 ```
 
+### In the Browser through Webpack
+
+Follow our [webpack config](/webpack.config.js) example.
+
 ### In the Browser through browserify
 
-TODO: Figure out how to get this working with browserify and webpack. Browserify can't bundle our replacement of ```fs.readFileSync``` with ```require('buffer!./file')```. 
+> **WIP** Doesn't work out yet
 
 ### In the Browser through `<script>` tag
 
