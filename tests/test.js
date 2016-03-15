@@ -62,5 +62,12 @@ describe('id', function (done) {
     expect(id2.id).to.deep.equal(id1.id)
     done()
   })
+
+  it('Non-default # of bits', (done) => {
+    const shortId = PeerId.create({ bits: 128 })
+    const longId = PeerId.create({ bits: 256 })
+    expect(shortId.privKey.length).is.below(longId.privKey.length)
+    done()
+  })
 })
 
