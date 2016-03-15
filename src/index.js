@@ -97,9 +97,15 @@ function formatKey (key, type) {
 }
 
 // generation
-exports.create = function () {
+exports.create = function (opts) {
+  opts = opts || {}
+  opts.bits = opts.bits || 2048
+
   // generate keys
-  const pair = forge.rsa.generateKeyPair({ bits: 2048, e: 0x10001 })
+  const pair = forge.rsa.generateKeyPair({
+    bits: opts.bits,
+    e: 0x10001
+  })
 
   // return the RSA public/private key to asn1 object
   const asnPub = forge.pki.publicKeyToAsn1(pair.publicKey)
