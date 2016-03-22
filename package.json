@@ -4,18 +4,13 @@
   "description": "IPFS Peer Id implementation in Node.js",
   "main": "src/index.js",
   "scripts": {
-    "lint": "standard",
-    "test": "npm run test:node && npm run test:browser",
-    "test:node": "mocha tests/test.js",
-    "test:browser": "karma start karma.conf.js",
-    "coverage": "istanbul cover --print both -- _mocha tests/test.js",
-    "dist": "webpack"
-  },
-  "standard": {
-    "ignore": [
-      "dist",
-      "deps"
-    ]
+    "lint": "dignified-lint",
+    "build": "dignified-build",
+    "test": "dignified-test",
+    "test:node": "dignified-test node",
+    "test:browser": "dignified-test browser",
+    "release": "dignified-release",
+    "coverage": "istanbul cover --print both -- _mocha tests/test.js"
   },
   "keywords": [
     "IPFS"
@@ -34,22 +29,11 @@
   },
   "homepage": "https://github.com/diasdavid/js-peer-id",
   "devDependencies": {
-    "browserify": "^13.0.0",
     "buffer-loader": "0.0.1",
     "chai": "^3.5.0",
+    "dignified.js": "github:dignifiedquire/dignified.js",
     "istanbul": "^0.4.2",
-    "json-loader": "^0.5.4",
-    "karma": "^0.13.19",
-    "karma-chrome-launcher": "^0.2.2",
-    "karma-cli": "^0.1.2",
-    "karma-firefox-launcher": "^0.1.7",
-    "karma-mocha": "^0.2.1",
-    "karma-spec-reporter": "0.0.24",
-    "karma-webpack": "^1.7.0",
-    "mocha": "^2.4.5",
-    "pre-commit": "^1.1.1",
-    "standard": "^6.0.7",
-    "webpack": "^1.12.14"
+    "pre-commit": "^1.1.1"
   },
   "dependencies": {
     "bs58": "^3.0.0",
@@ -60,5 +44,14 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/diasdavid/js-peer-id.git"
+  },
+  "dignified": {
+    "webpack": {
+      "resolve": {
+        "alias": {
+          "node-forge": "../vendor/forge.bundle.js"
+        }
+      }
+    }
   }
 }
