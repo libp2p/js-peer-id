@@ -1,10 +1,7 @@
 language: node_js
 node_js:
-  - "4.0"
-
-branches:
-  only:
-    - master
+  - 4
+  - 5
 
 before_install:
   - npm i -g npm
@@ -18,4 +15,5 @@ before_script:
   - sh -e /etc/init.d/xvfb start
 
 script:
+  - npm run lint
   - npm test

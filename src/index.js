@@ -1,6 +1,7 @@
 /*
  * Id is an object representation of a peer Id. a peer Id is a multihash
  */
+'use strict'
 
 const fs = require('fs')
 const multihashing = require('multihashing')
@@ -9,10 +10,8 @@ const forge = require('node-forge')
 const protobuf = require('protocol-buffers')
 const path = require('path')
 
-const isNode = !global.window
-
 // protobuf read from file
-const messages = isNode ? protobuf(fs.readFileSync(path.resolve(__dirname, 'pb/crypto.proto'))) : protobuf(require('buffer!./pb/crypto.proto'))
+const messages = protobuf(fs.readFileSync(path.resolve(__dirname, '../protos/crypto.proto')))
 
 exports = module.exports = Id
 
