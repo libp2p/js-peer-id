@@ -10,7 +10,7 @@
     "test:node": "dignified-test node",
     "test:browser": "dignified-test browser",
     "release": "dignified-release",
-    "coverage": "istanbul cover --print both -- _mocha tests/test.js"
+    "coverage": "dignified-coverage"
   },
   "keywords": [
     "IPFS"
