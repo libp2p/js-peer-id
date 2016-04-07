@@ -12,7 +12,7 @@ const path = require('path')
 const isNode = !global.window
 
 // protobuf read from file
-const messages = isNode ? protobuf(fs.readFileSync(path.resolve(__dirname, 'pb/crypto.proto'))) : protobuf(require('buffer!./pb/crypto.proto'))
+const messages = isNode ? protobuf(fs.readFileSync(path.resolve(__dirname, 'pb/crypto.proto'))) : protobuf(require('buffer-loader!./pb/crypto.proto'))
 
 exports = module.exports = Id
 
