@@ -13,40 +13,41 @@ peer-id JavaScript implementation
 
 An IPFS Peer Id is based on a sha256 hash of the peer public key, using [multihash](https://github.com/jbenet/multihash)
 
-The public key is a base64 encoded string of a protobuf containing an RSA DER buffer. This uses a node buffer to pass the base64 encoded public key protobuf to the multihash for ID generation. 
+The public key is a base64 encoded string of a protobuf containing an RSA DER buffer. This uses a node buffer to pass the base64 encoded public key protobuf to the multihash for ID generation.
 
+# Installation
 
-# Usage
+## npm
 
-### In Node.js through npm
-
-```bash
-> npm install --save peer-id
+```sh
+> npm i peer-id
 ```
 
-```javascript
-const PeerId = require('peer-id')
-```
-
-### In the Browser through Webpack
-
-Follow our [webpack config](/webpack.config.js) example.
-
-### In the Browser through browserify
-
-> **WIP** Doesn't work out yet
-
-### In the Browser through `<script>` tag
-
-Make the [peer-id.js](/dist/peer-id.js) available through your server and load it using a normal `<script>` tag, this will export the `PeerId` object, such that:
+## Use in Node.js
 
 ```JavaScript
-const Id = PeerId
+var PeerId = require('peer-id')
 ```
 
-#### Gotchas
+## Use in a browser with browserify, webpack or any other bundler
 
-You will need to use Node.js `Buffer` API compatible, if you are running inside the browser, you can access it by `PeerId.Buffer` or you can install Feross's [Buffer](https://github.com/feross/buffer).
+The code published to npm that gets loaded on require is in fact a ES5 transpiled version with the right shims added. This means that you can require it and use with your favourite bundler without having to adjust asset management process.
+
+```JavaScript
+var PeerId = require('peer-id')
+```
+
+## Use in a browser Using a script tag
+
+Loading this module through a script tag will make the `PeerId` obj available in the global namespace.
+
+```html
+<script src="https://npmcdn.com/peer-id/dist/index.min.js"></script>
+<!-- OR -->
+<script src="https://npmcdn.com/peer-id/dist/index.js"></script>
+```
+
+# Usage
 
 ### Creating a new Id
 
