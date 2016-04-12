@@ -2,7 +2,8 @@
   "name": "peer-id",
   "version": "0.6.4",
   "description": "IPFS Peer Id implementation in Node.js",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "jsnext": "src/index.js",
   "scripts": {
     "lint": "dignified-lint",
     "build": "dignified-build",
