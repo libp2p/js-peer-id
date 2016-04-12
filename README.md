@@ -55,7 +55,7 @@ pub key    2BeBZVKJ9RQs4i4LbGv4ReEeuBA5dck2Gje3wt67e44XuyyPq5jE
 var PeerId = require('peer-id')
 ```
 
-## Browser: Browserify or Webpack
+## Browser: Browserify, Webpack, other bundlers
 
 The code published to npm that gets loaded on require is in fact a ES5
 transpiled version with the right shims added. This means that you can require
