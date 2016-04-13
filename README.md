@@ -132,15 +132,16 @@ Returns an object with the ID's properties in hex format:
 
 Returns the Peer ID's `id` as a hex string.
 
-```js
-1220d6243998f2fc56343ad7ed0342ab7886a4eb18d736f1b67d44b37fcc81e0f39f```
+```
+1220d6243998f2fc56343ad7ed0342ab7886a4eb18d736f1b67d44b37fcc81e0f39f
+```
 
 ### id.toBytes()
 
 Returns the Peer ID's `id` as a buffer.
 
 
-```js
+```
 <Buffer 12 20 d6 24 39 98 f2 fc 56 34 3a d7 ed 03 42 ab 78 86 a4 eb 18 d7 36 f1 b6 7d 44 b3 7f cc 81 e0 f3 9f>
 ```
 
@@ -148,7 +149,7 @@ Returns the Peer ID's `id` as a buffer.
 
 Returns the Peer ID's `id` as a base58 string.
 
-```js
+```
 QmckZzdVd72h9QUFuJJpQqhsZqGLwjhh81qSvZ9BhB2FQi
 ```
 
