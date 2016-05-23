@@ -33,28 +33,16 @@
   "homepage": "https://github.com/diasdavid/js-peer-id",
   "devDependencies": {
     "aegir": "^3.0.4",
-    "buffer-loader": "0.0.1",
     "chai": "^3.5.0",
     "pre-commit": "^1.1.2"
   },
   "dependencies": {
-    "bs58": "^3.0.0",
-    "multihashing": "^0.2.0",
-    "node-forge": "^0.6.38",
-    "protocol-buffers": "^3.1.4"
+    "libp2p-crypto": "^0.4.0",
+    "multihashes": "^0.2.2"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/diasdavid/js-peer-id.git"
-  },
-  "aegir": {
-    "webpack": {
-      "resolve": {
-        "alias": {
-          "node-forge": "../vendor/forge.bundle.js"
-        }
-      }
-    }
   },
   "contributors": [
     "David Dias <daviddias.p@gmail.com>",
