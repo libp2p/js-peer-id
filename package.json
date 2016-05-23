@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/diasdavid/js-peer-id",
   "devDependencies": {
-    "aegir": "^2.1.1",
+    "aegir": "^3.0.4",
     "buffer-loader": "0.0.1",
     "chai": "^3.5.0",
     "pre-commit": "^1.1.2"
@@ -46,7 +46,7 @@
     "type": "git",
     "url": "https://github.com/diasdavid/js-peer-id.git"
   },
-  "dignified": {
+  "aegir": {
     "webpack": {
       "resolve": {
         "alias": {
