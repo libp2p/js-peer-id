@@ -1,6 +1,7 @@
 /*
  * Id is an object representation of a peer Id. a peer Id is a multihash
  */
+
 'use strict'
 
 const fs = require('fs')
@@ -10,17 +11,16 @@ const forge = require('node-forge')
 const protobuf = require('protocol-buffers')
 const path = require('path')
 
-// protobuf read from file
-const messages = protobuf(fs.readFileSync(path.resolve(__dirname, '../protos/crypto.proto')))
+const pbCrypto = protobuf(fs.readFileSync(path.resolve(__dirname, '../protos/crypto.proto')))
 
-exports = module.exports = Id
+exports = module.exports = PeerId
 
 exports.Buffer = Buffer
 
-function Id (id, privKey, pubKey) {
+function PeerId (id, privKey, pubKey) {
   const self = this
 
-  if (!(self instanceof Id)) {
+  if (!(self instanceof PeerId)) {
     throw new Error('Id must be called with new')
   }
 
@@ -34,6 +34,14 @@ function Id (id, privKey, pubKey) {
       id: self.toB58String(),
       privKey: privKey.toString('hex'),
       pubKey: pubKey.toString('hex')
+    }
+  }
+
+  self.toJSON = function () {
+    return {
+      id: self.id.toString('hex'),
+      privKey: self.privKey.toString('hex'),
+      pubKey: self.pubKey.toString('hex')
     }
   }
 
@@ -52,23 +60,25 @@ function Id (id, privKey, pubKey) {
 }
 
 // unwrap the private key protobuf
-function unmarshal (key) {
-  return messages.PrivateKey.decode(key)
+function keyUnmarshal (key) {
+  return pbCrypto.PrivateKey.decode(key)
 }
 
 // create a public key protobuf to be base64 string stored in config
-function marshal (data, type) {
-  var epb
+function keyMarshal (data, type) {
+  const RSA = 0
+
+  let epb
   if (type === 'Public') {
-    epb = messages.PublicKey.encode({
-      Type: 0,
+    epb = pbCrypto.PublicKey.encode({
+      Type: RSA,
       Data: data
     })
   }
 
   if (type === 'Private') {
-    epb = messages.PrivateKey.encode({
-      Type: 0,
+    epb = pbCrypto.PrivateKey.encode({
+      Type: RSA,
       Data: data
     })
   }
@@ -88,10 +98,10 @@ function formatKey (key, type) {
   const nDerBuf = new Buffer(fDerBuf.getBytes(), 'binary')
 
   // protobuf the new DER bytes to the PublicKey Data: field
-  const marshalKey = marshal(nDerBuf, type)
+  const marsheledKey = keyMarshal(nDerBuf, type)
 
   // encode the protobuf public key to base64 string
-  const b64 = marshalKey.toString('base64')
+  const b64 = marsheledKey.toString('base64')
   return b64
 }
 
@@ -120,26 +130,26 @@ exports.create = function (opts) {
 
   const mhId = multihashing(new Buffer(protoPublic64, 'base64'), 'sha2-256')
 
-  return new Id(mhId, bufProtoPriv64, bufProtoPub64)
+  return new PeerId(mhId, bufProtoPriv64, bufProtoPub64)
 }
 
 exports.createFromHexString = function (str) {
-  return new Id(new Buffer(str, 'hex'))
+  return new PeerId(new Buffer(str, 'hex'))
 }
 
 exports.createFromBytes = function (buf) {
-  return new Id(buf)
+  return new PeerId(buf)
 }
 
 exports.createFromB58String = function (str) {
-  return new Id(new Buffer(base58.decode(str)))
+  return new PeerId(new Buffer(base58.decode(str)))
 }
 
 // Public Key input will be a buffer
 exports.createFromPubKey = function (pubKey) {
   const buf = new Buffer(pubKey, 'base64')
   const mhId = multihashing(buf, 'sha2-256')
-  return new Id(mhId, null, pubKey)
+  return new PeerId(mhId, null, pubKey)
 }
 
 // Private key input will be a string
@@ -148,7 +158,7 @@ exports.createFromPrivKey = function (privKey) {
   const buf = new Buffer(privKey, 'base64')
 
   // get the private key data from the protobuf
-  const mpk = unmarshal(buf)
+  const mpk = keyUnmarshal(buf)
 
   // create a forge buffer
   const fbuf = forge.util.createBuffer(mpk.Data.toString('binary'))
@@ -171,5 +181,12 @@ exports.createFromPrivKey = function (privKey) {
   // buffer the public key for consistency before storing
   const bufProtoPub64 = new Buffer(protoPublic64, 'base64')
   const mhId = multihashing(new Buffer(protoPublic64, 'base64'), 'sha2-256')
-  return new Id(mhId, privKey, bufProtoPub64)
+  return new PeerId(mhId, privKey, bufProtoPub64)
+}
+
+exports.createFromJSON = function (obj) {
+  return new PeerId(
+      new Buffer(obj.id, 'hex'),
+      new Buffer(obj.privKey, 'hex'),
+      new Buffer(obj.pubKey, 'hex'))
 }

@@ -93,4 +93,12 @@ describe('id', function (done) {
     expect(id.toBytes().toString('hex')).to.equal(testIdBytes.toString('hex'))
     done()
   })
+
+  it('toJSON', (done) => {
+    const id = PeerId.create()
+    expect(id.toB58String()).to.equal(PeerId.createFromJSON(id.toJSON()).toB58String())
+    expect(id.privKey).to.deep.equal(PeerId.createFromJSON(id.toJSON()).privKey)
+    expect(id.pubKey).to.deep.equal(PeerId.createFromJSON(id.toJSON()).pubKey)
+    done()
+  })
 })
