@@ -55,5 +55,12 @@
         }
       }
     }
-  }
+  },
+  "contributors": [
+    "David Dias <daviddias.p@gmail.com>",
+    "David Dias <mail@daviddias.me>",
+    "Stephen Whitmore <stephen.whitmore@gmail.com>",
+    "dignifiedquire <dignifiedquire@gmail.com>",
+    "nginnever <ginneversource@gmail.com>"
+  ]
 }
