@@ -10,24 +10,21 @@ const assert = require('assert')
 
 class PeerId {
   constructor (id, privKey, pubKey) {
-    if (Buffer.isBuffer(id)) {
-      this.id = id
-    } else {
-      throw new Error('invalid id provided')
-    }
+    assert(Buffer.isBuffer(id), 'invalid id provided')
 
     if (pubKey) {
-      assert(this.id.equals(pubKey.hash()), 'inconsistent arguments')
+      assert(id.equals(pubKey.hash()), 'inconsistent arguments')
     }
 
     if (privKey) {
-      assert(this.id.equals(privKey.public.hash()), 'inconsistent arguments')
+      assert(id.equals(privKey.public.hash()), 'inconsistent arguments')
     }
 
     if (privKey && pubKey) {
       assert(privKey.public.bytes.equals(pubKey.bytes), 'inconsistent arguments')
     }
 
+    this.id = id
     this.privKey = privKey
     this._pubKey = pubKey
   }
@@ -42,12 +39,16 @@ class PeerId {
     }
   }
 
+  // Return the protobuf version of the public key,
+  // matching go ipfs formatting
   marshalPubKey () {
     if (this.pubKey) {
       return crypto.marshalPublicKey(this.pubKey)
     }
   }
 
+  // Return the protobuf version of the private key,
+  // matching go ipfs formatting
   marshalPrivKey () {
     if (this.privKey) {
       return crypto.marshalPrivateKey(this.privKey)
@@ -56,18 +57,16 @@ class PeerId {
 
   // pretty print
   toPrint () {
-    return {
-      id: mh.toB58String(this.id),
-      privKey: toHexOpt(this.marshalPrivKey()),
-      pubKey: toHexOpt(this.marshalPubKey())
-    }
+    return this.toJSON()
   }
 
+  // return the jsonified version of the key, matching the formatting
+  // of go-ipfs for its config file
   toJSON () {
     return {
-      id: mh.toHexString(this.id),
-      privKey: toHexOpt(this.marshalPrivKey()),
-      pubKey: toHexOpt(this.marshalPubKey())
+      id: mh.toB58String(this.id),
+      privKey: toB64Opt(this.marshalPrivKey()),
+      pubKey: toB64Opt(this.marshalPubKey())
     }
   }
 
@@ -136,18 +135,18 @@ exports.createFromJSON = function (obj) {
   let pub
 
   if (obj.privKey) {
-    priv = crypto.unmarshalPrivateKey(new Buffer(obj.privKey, 'hex'))
+    priv = crypto.unmarshalPrivateKey(new Buffer(obj.privKey, 'base64'))
   }
 
   if (obj.pubKey) {
-    pub = crypto.unmarshalPublicKey(new Buffer(obj.pubKey, 'hex'))
+    pub = crypto.unmarshalPublicKey(new Buffer(obj.pubKey, 'base64'))
   }
 
-  return new PeerId(mh.fromHexString(obj.id), priv, pub)
+  return new PeerId(mh.fromB58String(obj.id), priv, pub)
 }
 
-function toHexOpt (val) {
+function toB64Opt (val) {
   if (val) {
-    return val.toString('hex')
+    return val.toString('base64')
   }
 }

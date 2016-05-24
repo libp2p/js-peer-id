@@ -29,8 +29,8 @@ var bs58 = require('bs58')
 var id = PeerId.create({ bits: 32 })
 
 console.log('id        ', id.toB58String())
-console.log('priv key  ', bs58.encode(id.privKey))
-console.log('pub key   ', bs58.encode(id.pubKey))
+console.log('priv key  ', bs58.encode(id.privKey.bytes))
+console.log('pub key   ', bs58.encode(id.pubKey.bytes))
 ```
 
 ```
@@ -51,7 +51,7 @@ pub key    2BeBZVKJ9RQs4i4LbGv4ReEeuBA5dck2Gje3wt67e44XuyyPq5jE
 
 ## Node.js
 
-```JavaScript
+```js
 var PeerId = require('peer-id')
 ```
 
@@ -62,7 +62,7 @@ transpiled version with the right shims added. This means that you can require
 it and use with your favourite bundler without having to adjust asset management
 process.
 
-```JavaScript
+```js
 var PeerId = require('peer-id')
 ```
 
@@ -85,50 +85,51 @@ const PeerId = require('peer-id')
 
 ## Create
 
-### PeerId.create()
+### `new PeerId(id[, privKey, pubKey])`
 
-Generates a new Peer ID, complete with public/private keypair. A Peer ID has the
-following properties:
+- `id: Buffer` - The multihash of the publick key as `Buffer`
+- `privKey: RsaPrivateKey` - The private key
+- `pubKey: RsaPublicKey` - The public key
 
-- `pubKey` - Buffer containing the public key bytes
-- `privKey` - Buffer containing the private key bytes
-- `id` - Buffer containing the multihash bytes
+The key format is detailed in [libp2p-crypto](https://github.com/ipfs/js-libp2p-crypto).
+
+### `create([opts])`
+
+Generates a new Peer ID, complete with public/private keypair.
+
+- `opts: Object`: Default: `{bits: 2048}`
 
 ## Import
 
-### PeerId.createFromHexString(str)
+### `createFromHexString(str)`
 
 Creates a Peer ID from hex string representing the key's multihash.
 
-### PeerId.createFromBytes(buf)
+### `createFromBytes(buf)`
 
 Creates a Peer ID from a buffer representing the key's multihash.
 
-### PeerId.createFromB58String(str)
+### `createFromB58String(str)`
 Creates a Peer ID from a Base58 string representing the key's multihash.
 
-### PeerId.createFromPubKey(pubKey)
+### `createFromPubKey(pubKey)`
 
 Creates a Peer ID from a buffer containing a public key.
 
-### PeerId.createFromPrivKey(privKey)
+### `createFromPrivKey(privKey)`
 
 Creates a Peer ID from a buffer containing a private key.
 
+### `createFromJSON(obj)`
+
+- `obj.id: String` - The multihash encoded in `base58`
+- `obj.pubKey: String` - The public key in protobuf format, encoded in 'base64'
+- `obj.privKey: String` - The private key in protobuf format, encoded in 'base 64'
+
+
 ## Export
 
-### id.toPrint()
-
-Returns an object with the ID's properties in hex format:
-```js
-{
-  id: 'QmckZzdVd72h9QUFuJJpQqhsZqGLwjhh81qSvZ9BhB2FQi',
-  privKey: '080012a609308204a20201000282010100a608889914da08959d3a3db0734cee812c96...',
-  pubKey: '080012a60230820122300d06092a864886f70d01010105000382010f003082010a0282010...'
-}
-```
-
-### id.toHexString()
+### `toHexString()`
 
 Returns the Peer ID's `id` as a hex string.
 
@@ -136,22 +137,35 @@ Returns the Peer ID's `id` as a hex string.
 1220d6243998f2fc56343ad7ed0342ab7886a4eb18d736f1b67d44b37fcc81e0f39f
 ```
 
-### id.toBytes()
+### `toBytes()`
 
 Returns the Peer ID's `id` as a buffer.
-
 
 ```
 <Buffer 12 20 d6 24 39 98 f2 fc 56 34 3a d7 ed 03 42 ab 78 86 a4 eb 18 d7 36 f1 b6 7d 44 b3 7f cc 81 e0 f3 9f>
 ```
 
-### id.toB58String()
+### `toB58String()`
 
 Returns the Peer ID's `id` as a base58 string.
 
 ```
 QmckZzdVd72h9QUFuJJpQqhsZqGLwjhh81qSvZ9BhB2FQi
 ```
+
+### `toJSON()`
+
+Returns an `obj` of the form
+
+- `obj.id: String` - The multihash encoded in `base58`
+- `obj.pubKey: String` - The public key in protobuf format, encoded in 'base64'
+- `obj.privKey: String` - The private key in protobuf format, encoded in 'base 64'
+
+
+### `toPrint()`
+
+Alias for `.toJSON()`.
+
 
 # License
 
