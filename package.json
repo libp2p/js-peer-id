@@ -37,7 +37,7 @@
     "pre-commit": "^1.1.2"
   },
   "dependencies": {
-    "libp2p-crypto": "^0.4.0",
+    "libp2p-crypto": "^0.5.0",
     "multihashes": "^0.2.2"
   },
   "repository": {
