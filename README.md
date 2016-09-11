@@ -2,7 +2,7 @@
 
 [![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://ipn.io)
 [![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg?style=flat-square)](http://webchat.freenode.net/?channels=%23ipfs)
-[![Build Status](https://travis-ci.org/diasdavid/js-peer-id.svg?style=flat-square)](https://travis-ci.org/diasdavid/js-peer-id)
+[![Build Status](https://travis-ci.org/libp2p/js-peer-id.svg?style=flat-square)](https://travis-ci.org/libp2p/js-peer-id)
 [![Coverage Status](https://coveralls.io/repos/github/libp2p/js-peer-id/badge.svg?branch=master)](https://coveralls.io/github/libp2p/js-peer-id?branch=master)
 [![Dependency Status](https://david-dm.org/libp2p/js-peer-id.svg?style=flat-square)](https://david-dm.org/libp2p/js-peer-id)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
