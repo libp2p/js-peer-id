@@ -72,9 +72,9 @@ Loading this module through a script tag will make the `PeerId` obj available in
 the global namespace.
 
 ```html
-<script src="https://npmcdn.com/peer-id/dist/index.min.js"></script>
+<script src="https://unpkg.com/peer-id/dist/index.min.js"></script>
 <!-- OR -->
-<script src="https://npmcdn.com/peer-id/dist/index.js"></script>
+<script src="https://unpkg.com/peer-id/dist/index.js"></script>
 ```
 
 # API
