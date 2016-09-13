@@ -26,11 +26,11 @@ to the multihash for ID generation.*
 var PeerId = require('peer-id')
 var bs58 = require('bs58')
 
-var id = PeerId.create({ bits: 32 })
-
-console.log('id        ', id.toB58String())
-console.log('priv key  ', bs58.encode(id.privKey.bytes))
-console.log('pub key   ', bs58.encode(id.pubKey.bytes))
+PeerId.create({ bits: 512 }, (err, id) => {
+  console.log('id        ', id.toB58String())
+  console.log('priv key  ', bs58.encode(id.privKey.bytes))
+  console.log('pub key   ', bs58.encode(id.pubKey.bytes))
+})
 ```
 
 ```
@@ -93,11 +93,14 @@ const PeerId = require('peer-id')
 
 The key format is detailed in [libp2p-crypto](https://github.com/libp2p/js-libp2p-crypto).
 
-### `create([opts])`
+### `create([opts], cb)`
 
 Generates a new Peer ID, complete with public/private keypair.
 
 - `opts: Object`: Default: `{bits: 2048}`
+- `cb: Function`
+
+Calls back `cb` with `err, id`.
 
 ## Import
 
@@ -112,20 +115,30 @@ Creates a Peer ID from a buffer representing the key's multihash.
 ### `createFromB58String(str)`
 Creates a Peer ID from a Base58 string representing the key's multihash.
 
-### `createFromPubKey(pubKey)`
+### `createFromPubKey(pubKey, cb)`
 
-Creates a Peer ID from a buffer containing a public key.
+- `publicKey: Buffer`
+- `cb: Function`
 
-### `createFromPrivKey(privKey)`
+Creates a Peer ID from a buffer containing a public key and
+calls back `cb` with `err, id`.
 
-Creates a Peer ID from a buffer containing a private key.
+### `createFromPrivKey(privKey, cb)`
 
-### `createFromJSON(obj)`
+- `privKey: Buffer`
+- `cb: Function`
+
+Creates a Peer ID from a buffer containing a private key and
+calls back `cb` with `err, id`.
+
+### `createFromJSON(obj, cb)`
 
 - `obj.id: String` - The multihash encoded in `base58`
 - `obj.pubKey: String` - The public key in protobuf format, encoded in 'base64'
 - `obj.privKey: String` - The private key in protobuf format, encoded in 'base 64'
+- `cb: Function`
 
+Calls back `cb` with `err, id`.
 
 ## Export
 

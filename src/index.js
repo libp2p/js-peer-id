@@ -88,13 +88,21 @@ exports = module.exports = PeerId
 exports.Buffer = Buffer
 
 // generation
-exports.create = function (opts) {
+exports.create = function (opts, cb) {
+  if (typeof opts === 'function') {
+    cb = opts
+    opts = {}
+  }
   opts = opts || {}
   opts.bits = opts.bits || 2048
 
-  const privKey = crypto.generateKeyPair('RSA', opts.bits)
+  crypto.generateKeyPair('RSA', opts.bits, (err, privKey) => {
+    if (err) {
+      return cb(err)
+    }
 
-  return new PeerId(privKey.public.hash(), privKey)
+    cb(null, new PeerId(privKey.public.hash(), privKey))
+  })
 }
 
 exports.createFromHexString = function (str) {
@@ -110,27 +118,28 @@ exports.createFromB58String = function (str) {
 }
 
 // Public Key input will be a buffer
-exports.createFromPubKey = function (key) {
+exports.createFromPubKey = function (key, cb) {
   let buf = key
   if (typeof buf === 'string') {
     buf = new Buffer(key, 'base64')
   }
+
   const pubKey = crypto.unmarshalPublicKey(buf)
-  return new PeerId(pubKey.hash(), null, pubKey)
+  cb(null, new PeerId(pubKey.hash(), null, pubKey))
 }
 
 // Private key input will be a string
-exports.createFromPrivKey = function (key) {
+exports.createFromPrivKey = function (key, cb) {
   let buf = key
   if (typeof buf === 'string') {
     buf = new Buffer(key, 'base64')
   }
 
   const privKey = crypto.unmarshalPrivateKey(buf)
-  return new PeerId(privKey.public.hash(), privKey)
+  cb(null, new PeerId(privKey.public.hash(), privKey))
 }
 
-exports.createFromJSON = function (obj) {
+exports.createFromJSON = function (obj, cb) {
   let priv
   let pub
 
@@ -142,7 +151,7 @@ exports.createFromJSON = function (obj) {
     pub = crypto.unmarshalPublicKey(new Buffer(obj.pubKey, 'base64'))
   }
 
-  return new PeerId(mh.fromB58String(obj.id), priv, pub)
+  cb(null, new PeerId(mh.fromB58String(obj.id), priv, pub))
 }
 
 function toB64Opt (val) {
