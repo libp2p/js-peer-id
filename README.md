@@ -115,30 +115,23 @@ Creates a Peer ID from a buffer representing the key's multihash.
 ### `createFromB58String(str)`
 Creates a Peer ID from a Base58 string representing the key's multihash.
 
-### `createFromPubKey(pubKey, cb)`
+### `createFromPubKey(pubKey)`
 
 - `publicKey: Buffer`
-- `cb: Function`
 
-Creates a Peer ID from a buffer containing a public key and
-calls back `cb` with `err, id`.
+Creates a Peer ID from a buffer containing a public key.
 
-### `createFromPrivKey(privKey, cb)`
+### `createFromPrivKey(privKey)`
 
 - `privKey: Buffer`
-- `cb: Function`
 
-Creates a Peer ID from a buffer containing a private key and
-calls back `cb` with `err, id`.
+Creates a Peer ID from a buffer containing a private key.
 
-### `createFromJSON(obj, cb)`
+### `createFromJSON(obj)`
 
 - `obj.id: String` - The multihash encoded in `base58`
 - `obj.pubKey: String` - The public key in protobuf format, encoded in 'base64'
 - `obj.privKey: String` - The private key in protobuf format, encoded in 'base 64'
-- `cb: Function`
-
-Calls back `cb` with `err, id`.
 
 ## Export
 

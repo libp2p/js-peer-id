@@ -118,28 +118,28 @@ exports.createFromB58String = function (str) {
 }
 
 // Public Key input will be a buffer
-exports.createFromPubKey = function (key, cb) {
+exports.createFromPubKey = function (key) {
   let buf = key
   if (typeof buf === 'string') {
     buf = new Buffer(key, 'base64')
   }
 
   const pubKey = crypto.unmarshalPublicKey(buf)
-  cb(null, new PeerId(pubKey.hash(), null, pubKey))
+  return new PeerId(pubKey.hash(), null, pubKey)
 }
 
 // Private key input will be a string
-exports.createFromPrivKey = function (key, cb) {
+exports.createFromPrivKey = function (key) {
   let buf = key
   if (typeof buf === 'string') {
     buf = new Buffer(key, 'base64')
   }
 
   const privKey = crypto.unmarshalPrivateKey(buf)
-  cb(null, new PeerId(privKey.public.hash(), privKey))
+  return new PeerId(privKey.public.hash(), privKey)
 }
 
-exports.createFromJSON = function (obj, cb) {
+exports.createFromJSON = function (obj) {
   let priv
   let pub
 
@@ -151,7 +151,7 @@ exports.createFromJSON = function (obj, cb) {
     pub = crypto.unmarshalPublicKey(new Buffer(obj.pubKey, 'base64'))
   }
 
-  cb(null, new PeerId(mh.fromB58String(obj.id), priv, pub))
+  return new PeerId(mh.fromB58String(obj.id), priv, pub)
 }
 
 function toB64Opt (val) {

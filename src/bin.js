@@ -4,4 +4,10 @@
 
 const PeerId = require('./index.js')
 
-console.log(JSON.stringify(PeerId.create().toJSON(), null, '  '))
+PeerId.create((err, id) => {
+  if (err) {
+    throw err
+  }
+
+  console.log(JSON.stringify(id.toJSON(), null, 2))
+})

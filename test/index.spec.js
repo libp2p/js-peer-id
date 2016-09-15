@@ -43,37 +43,27 @@ describe('PeerId', () => {
     expect(testIdB58String).to.equal(id.toB58String())
   })
 
-  it('Recreate from a Public Key', (done) => {
-    PeerId.createFromPubKey(testId.pubKey, (err, id) => {
-      expect(err).to.not.exist
-      expect(testIdB58String).to.equal(id.toB58String())
-      done()
-    })
+  it('Recreate from a Public Key', () => {
+    const id = PeerId.createFromPubKey(testId.pubKey)
+    expect(testIdB58String).to.equal(id.toB58String())
   })
 
-  it('Recreate from a Private Key', (done) => {
-    PeerId.createFromPrivKey(testId.privKey, (err, id) => {
-      expect(err).to.not.exist
-      expect(testIdB58String).to.equal(id.toB58String())
+  it('Recreate from a Private Key', () => {
+    const id = PeerId.createFromPrivKey(testId.privKey)
+    expect(testIdB58String).to.equal(id.toB58String())
 
-      const encoded = new Buffer(testId.privKey, 'base64')
-      PeerId.createFromPrivKey(encoded, (err, id2) => {
-        expect(err).to.not.exist
-        expect(testIdB58String).to.equal(id2.toB58String())
-        done()
-      })
-    })
+    const encoded = new Buffer(testId.privKey, 'base64')
+    const id2 = PeerId.createFromPrivKey(encoded)
+    expect(testIdB58String).to.equal(id2.toB58String())
   })
 
   it('Compare generated ID with one created from PubKey', (done) => {
     PeerId.create((err, id1) => {
       expect(err).to.not.exist
 
-      PeerId.createFromPubKey(id1.marshalPubKey(), (err, id2) => {
-        expect(err).to.not.exist
-        expect(id1.id).to.be.eql(id2.id)
-        done()
-      })
+      const id2 = PeerId.createFromPubKey(id1.marshalPubKey())
+      expect(id1.id).to.be.eql(id2.id)
+      done()
     })
   })
 
@@ -88,16 +78,13 @@ describe('PeerId', () => {
     })
   })
 
-  it('Pretty printing', (done) => {
-    PeerId.createFromPrivKey(testId.privKey, (err, id) => {
-      expect(err).to.not.exist
-      const out = id.toPrint()
+  it('Pretty printing', () => {
+    const id = PeerId.createFromPrivKey(testId.privKey)
+    const out = id.toPrint()
 
-      expect(out.id).to.equal(testIdB58String)
-      expect(out.privKey).to.equal(testId.privKey)
-      expect(out.pubKey).to.equal(testId.pubKey)
-      done()
-    })
+    expect(out.id).to.equal(testIdB58String)
+    expect(out.privKey).to.equal(testId.privKey)
+    expect(out.pubKey).to.equal(testId.pubKey)
   })
 
   it('toBytes', () => {
@@ -110,25 +97,24 @@ describe('PeerId', () => {
       PeerId.create({bits: 512}, (err, id) => {
         expect(err).to.not.exist
 
-        PeerId.createFromJSON(id.toJSON(), (err, other) => {
-          expect(err).to.not.exist
-          expect(
-            id.toB58String()
-          ).to.equal(
-            other.toB58String()
-          )
-          expect(
-            id.privKey.bytes
-          ).to.deep.equal(
-            other.privKey.bytes
-          )
-          expect(
-            id.pubKey.bytes
-          ).to.deep.equal(
-            other.pubKey.bytes
-          )
-          done()
-        })
+        const other = PeerId.createFromJSON(id.toJSON())
+
+        expect(
+          id.toB58String()
+        ).to.equal(
+          other.toB58String()
+        )
+        expect(
+          id.privKey.bytes
+        ).to.deep.equal(
+          other.privKey.bytes
+        )
+        expect(
+          id.pubKey.bytes
+        ).to.deep.equal(
+          other.pubKey.bytes
+        )
+        done()
       })
     })
 
@@ -139,27 +125,23 @@ describe('PeerId', () => {
         expect(id.privKey).to.not.exist
         expect(id.pubKey).to.not.exist
 
-        PeerId.createFromJSON(id.toJSON(), (err, other) => {
-          expect(err).to.not.exist
-          expect(
-            id.toB58String()
-          ).to.equal(
-            other.toB58String()
-          )
-          done()
-        })
+        const other = PeerId.createFromJSON(id.toJSON())
+        expect(
+          id.toB58String()
+        ).to.equal(
+          other.toB58String()
+        )
+        done()
       })
     })
 
     it('go interop', () => {
-      PeerId.createFromJSON(goId, (err, id) => {
-        expect(err).to.not.exist
-        expect(
-          mh.toB58String(id.privKey.public.hash())
-        ).to.be.eql(
-          goId.id
-        )
-      })
+      const id = PeerId.createFromJSON(goId)
+      expect(
+        mh.toB58String(id.privKey.public.hash())
+      ).to.be.eql(
+        goId.id
+      )
     })
   })
 
