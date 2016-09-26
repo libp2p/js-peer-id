@@ -1,10 +1,11 @@
 /* eslint max-nested-callbacks: ["error", 8] */
 /* eslint-env mocha */
 'use strict'
-
+require('loud-rejection')()
 const expect = require('chai').expect
 const crypto = require('libp2p-crypto')
 const mh = require('multihashes')
+const parallel = require('async/parallel')
 
 const PeerId = require('../src')
 
@@ -43,34 +44,44 @@ describe('PeerId', () => {
     expect(testIdB58String).to.equal(id.toB58String())
   })
 
-  it('Recreate from a Public Key', () => {
-    const id = PeerId.createFromPubKey(testId.pubKey)
-    expect(testIdB58String).to.equal(id.toB58String())
+  it('Recreate from a Public Key', (done) => {
+    PeerId.createFromPubKey(testId.pubKey, (err, id) => {
+      expect(err).to.not.exist
+      expect(testIdB58String).to.equal(id.toB58String())
+      done()
+    })
   })
 
-  it('Recreate from a Private Key', () => {
-    const id = PeerId.createFromPrivKey(testId.privKey)
-    expect(testIdB58String).to.equal(id.toB58String())
+  it('Recreate from a Private Key', (done) => {
+    PeerId.createFromPrivKey(testId.privKey, (err, id) => {
+      expect(err).to.not.exist
+      expect(testIdB58String).to.equal(id.toB58String())
 
-    const encoded = new Buffer(testId.privKey, 'base64')
-    const id2 = PeerId.createFromPrivKey(encoded)
-    expect(testIdB58String).to.equal(id2.toB58String())
+      const encoded = new Buffer(testId.privKey, 'base64')
+      PeerId.createFromPrivKey(encoded, (err, id2) => {
+        expect(err).to.not.exist
+        expect(testIdB58String).to.equal(id2.toB58String())
+        done()
+      })
+    })
   })
 
   it('Compare generated ID with one created from PubKey', (done) => {
     PeerId.create((err, id1) => {
       expect(err).to.not.exist
 
-      const id2 = PeerId.createFromPubKey(id1.marshalPubKey())
-      expect(id1.id).to.be.eql(id2.id)
-      done()
+      PeerId.createFromPubKey(id1.marshalPubKey(), (err, id2) => {
+        expect(err).to.not.exist
+        expect(id1.id).to.be.eql(id2.id)
+        done()
+      })
     })
   })
 
   it('Non-default # of bits', (done) => {
-    PeerId.create({ bits: 512 }, (err, shortId) => {
+    PeerId.create({ bits: 1024 }, (err, shortId) => {
       expect(err).to.not.exist
-      PeerId.create({ bits: 1024 }, (err, longId) => {
+      PeerId.create({ bits: 4096 }, (err, longId) => {
         expect(err).to.not.exist
         expect(shortId.privKey.bytes.length).is.below(longId.privKey.bytes.length)
         done()
@@ -78,13 +89,15 @@ describe('PeerId', () => {
     })
   })
 
-  it('Pretty printing', () => {
-    const id = PeerId.createFromPrivKey(testId.privKey)
-    const out = id.toPrint()
-
-    expect(out.id).to.equal(testIdB58String)
-    expect(out.privKey).to.equal(testId.privKey)
-    expect(out.pubKey).to.equal(testId.pubKey)
+  it('Pretty printing', (done) => {
+    PeerId.create((err, id1) => {
+      expect(err).to.not.exist
+      PeerId.createFromPrivKey(id1.toPrint().privKey, (err, id2) => {
+        expect(err).to.not.exist
+        expect(id1.toPrint()).to.be.eql(id2.toPrint())
+        done()
+      })
+    })
   })
 
   it('toBytes', () => {
@@ -92,112 +105,118 @@ describe('PeerId', () => {
     expect(id.toBytes().toString('hex')).to.equal(testIdBytes.toString('hex'))
   })
 
-  describe('toJSON', () => {
+  describe('fromJSON', () => {
     it('full node', (done) => {
-      PeerId.create({bits: 512}, (err, id) => {
+      PeerId.create({bits: 1024}, (err, id) => {
         expect(err).to.not.exist
 
-        const other = PeerId.createFromJSON(id.toJSON())
-
-        expect(
-          id.toB58String()
-        ).to.equal(
-          other.toB58String()
-        )
-        expect(
-          id.privKey.bytes
-        ).to.deep.equal(
-          other.privKey.bytes
-        )
-        expect(
-          id.pubKey.bytes
-        ).to.deep.equal(
-          other.pubKey.bytes
-        )
-        done()
+        PeerId.createFromJSON(id.toJSON(), (err, other) => {
+          expect(err).to.not.exist
+          expect(
+            id.toB58String()
+          ).to.equal(
+            other.toB58String()
+          )
+          expect(
+            id.privKey.bytes
+          ).to.deep.equal(
+            other.privKey.bytes
+          )
+          expect(
+            id.pubKey.bytes
+          ).to.deep.equal(
+            other.pubKey.bytes
+          )
+          done()
+        })
       })
     })
 
     it('only id', (done) => {
-      crypto.generateKeyPair('RSA', 512, (err, key) => {
+      crypto.generateKeyPair('RSA', 1024, (err, key) => {
         expect(err).to.not.exist
-        const id = PeerId.createFromBytes(key.public.hash())
-        expect(id.privKey).to.not.exist
-        expect(id.pubKey).to.not.exist
+        key.public.hash((err, digest) => {
+          expect(err).to.not.exist
 
-        const other = PeerId.createFromJSON(id.toJSON())
-        expect(
-          id.toB58String()
-        ).to.equal(
-          other.toB58String()
-        )
-        done()
-      })
-    })
+          const id = PeerId.createFromBytes(digest)
+          expect(id.privKey).to.not.exist
+          expect(id.pubKey).to.not.exist
 
-    it('go interop', () => {
-      const id = PeerId.createFromJSON(goId)
-      expect(
-        mh.toB58String(id.privKey.public.hash())
-      ).to.be.eql(
-        goId.id
-      )
-    })
-  })
-
-  describe('throws on inconsistent data', () => {
-    let k1, k2, k3
-    before((done) => {
-      crypto.generateKeyPair('RSA', 512, (err, _k1) => {
-        if (err) return done(err)
-        k1 = _k1
-        crypto.generateKeyPair('RSA', 512, (err, _k2) => {
-          if (err) return done(err)
-          k2 = _k2
-          crypto.generateKeyPair('RSA', 512, (err, _k3) => {
-            if (err) return done(err)
-            k3 = _k3
+          PeerId.createFromJSON(id.toJSON(), (err, other) => {
+            expect(err).to.not.exist
+            expect(
+              id.toB58String()
+            ).to.equal(
+              other.toB58String()
+            )
             done()
           })
         })
       })
     })
 
-    it('missmatch id - private key', () => {
-      expect(
-        () => new PeerId(k1.public.hash(), k2)
-      ).to.throw(
-        /inconsistent arguments/
-      )
+    it('go interop', (done) => {
+      PeerId.createFromJSON(goId, (err, id) => {
+        expect(err).to.not.exist
+        id.privKey.public.hash((err, digest) => {
+          expect(err).to.not.exist
+          expect(
+            mh.toB58String(digest)
+          ).to.be.eql(
+            goId.id
+          )
+          done()
+        })
+      })
+    })
+  })
+
+  describe('throws on inconsistent data', () => {
+    let k1, k2, k3
+    before((done) => {
+      parallel([
+        (cb) => crypto.generateKeyPair('RSA', 1024, cb),
+        (cb) => crypto.generateKeyPair('RSA', 1024, cb),
+        (cb) => crypto.generateKeyPair('RSA', 1024, cb)
+      ], (err, keys) => {
+        if (err) {
+          return done(err)
+        }
+
+        k1 = keys[0]
+        k2 = keys[1]
+        k3 = keys[2]
+        done()
+      })
     })
 
-    it('missmatch id - public key', () => {
-      expect(
-        () => new PeerId(k1.public.hash(), null, k2.public)
-      ).to.throw(
-        /inconsistent arguments/
-      )
+    it('missmatch private - public key', (done) => {
+      k1.public.hash((err, digest) => {
+        expect(err).to.not.exist
+        expect(
+          () => new PeerId(digest, k1, k2.public)
+        ).to.throw(
+            /inconsistent arguments/
+        )
+        done()
+      })
     })
 
-    it('missmatch private - public key', () => {
-      expect(
-        () => new PeerId(k1.public.hash(), k1, k2.public)
-      ).to.throw(
-        /inconsistent arguments/
-      )
-    })
-
-    it('missmatch id - private - public key', () => {
-      expect(
-        () => new PeerId(k1.public.hash(), k1, k3.public)
-      ).to.throw(
-        /inconsistent arguments/
-      )
+    it('missmatch id - private - public key', (done) => {
+      k1.public.hash((err, digest) => {
+        expect(err).to.not.exist
+        expect(
+          () => new PeerId(digest, k1, k3.public)
+        ).to.throw(
+            /inconsistent arguments/
+        )
+        done()
+      })
     })
 
     it('invalid id', () => {
       expect(
-        () => new PeerId(k1.public.hash().toString())
+        () => new PeerId('hello world')
       ).to.throw(
         /invalid id/
       )
