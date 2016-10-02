@@ -13,7 +13,7 @@
 
 Generate, import, and export PeerIDs, for use with [IPFS](https://github.com/ipfs/ipfs).
 
-*A Peer ID is the SHA-256 [multihash](https://github.com/jbenet/multihash) of a
+*A Peer ID is the SHA-256 [multihash](https://github.com/multiformats/multihash) of a
 public key.*
 
 *The public key is a base64 encoded string of a protobuf containing an RSA DER
@@ -91,7 +91,7 @@ const PeerId = require('peer-id')
 - `privKey: RsaPrivateKey` - The private key
 - `pubKey: RsaPublicKey` - The public key
 
-The key format is detailed in [libp2p-crypto](https://github.com/ipfs/js-libp2p-crypto).
+The key format is detailed in [libp2p-crypto](https://github.com/libp2p/js-libp2p-crypto).
 
 ### `create([opts])`
 
