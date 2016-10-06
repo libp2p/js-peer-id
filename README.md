@@ -9,6 +9,33 @@
 
 > [IPFS](https://github.com/ipfs/ipfs) Peer ID implementation in JavaScript.
 
+- [Description](#description)
+- [Example](#example)
+- [Installation](#installation)
+  - [npm](#npm)
+- [Setup](#setup)
+  - [Node.js](#nodejs)
+  - [Browser: Browserify, Webpack, other bundlers](#browser-browserify-webpack-other-bundlers)
+  - [Browser: `<script>` Tag](#browser-script-tag)
+- [API](#api)
+  - [Create](#create)
+    - [`new PeerId(id[, privKey, pubKey])`](#new-peeridid-privkey-pubkey)
+    - [`create([opts], callback)`](#createopts-callback)
+  - [Import](#import)
+    - [`createFromHexString(str)`](#createfromhexstringstr)
+    - [`createFromBytes(buf)`](#createfrombytesbuf)
+    - [`createFromB58String(str)`](#createfromb58stringstr)
+    - [`createFromPubKey(pubKey)`](#createfrompubkeypubkey)
+    - [`createFromPrivKey(privKey)`](#createfromprivkeyprivkey)
+    - [`createFromJSON(obj)`](#createfromjsonobj)
+  - [Export](#export)
+    - [`toHexString()`](#tohexstring)
+    - [`toBytes()`](#tobytes)
+    - [`toB58String()`](#tob58string)
+    - [`toJSON()`](#tojson)
+    - [`toPrint()`](#toprint)
+- [License](#license)
+
 # Description
 
 Generate, import, and export PeerIDs, for use with [IPFS](https://github.com/ipfs/ipfs).
@@ -93,14 +120,14 @@ const PeerId = require('peer-id')
 
 The key format is detailed in [libp2p-crypto](https://github.com/libp2p/js-libp2p-crypto).
 
-### `create([opts], cb)`
+### `create([opts], callback)`
 
 Generates a new Peer ID, complete with public/private keypair.
 
 - `opts: Object`: Default: `{bits: 2048}`
-- `cb: Function`
+- `callback: Function`
 
-Calls back `cb` with `err, id`.
+Calls back `callback` with `err, id`.
 
 ## Import
 

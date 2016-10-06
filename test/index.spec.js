@@ -1,7 +1,7 @@
 /* eslint max-nested-callbacks: ["error", 8] */
 /* eslint-env mocha */
 'use strict'
-require('loud-rejection')()
+
 const expect = require('chai').expect
 const crypto = require('libp2p-crypto')
 const mh = require('multihashes')
