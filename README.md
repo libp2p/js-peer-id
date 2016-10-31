@@ -58,17 +58,26 @@ to the multihash for ID generation.*
 var PeerId = require('peer-id')
 var bs58 = require('bs58')
 
-PeerId.create({ bits: 512 }, (err, id) => {
-  console.log('id        ', id.toB58String())
-  console.log('priv key  ', bs58.encode(id.privKey.bytes))
-  console.log('pub key   ', bs58.encode(id.pubKey.bytes))
+PeerId.create({ bits: 1024 }, (err, id) => {
+  console.log(JSON.stringify(id.toJSON(), null, 2)
 })
 ```
 
 ```
-id         QmeeLFb92nkZJGj3gXLqXrEMzCMYs6uBgQLVNbrcXEvYXk
-priv key   6ibrcPAbevzvPpkq6EA6XmLyuhmUrJrEvUfgQDtEiSEPzGnGU8Ejwf6b11DVm6opnFGo
-pub key    2BeBZVKJ9RQs4i4LbGv4ReEeuBA5dck2Gje3wt67e44XuyyPq5jE
+{
+  "id": "Qma9T5YraSnpRDZqRR4krcSJabThc8nwZuJV3LercPHufi",
+  "privKey": "CAAS4AQwggJcAgEAAoGBAMBgbIqyOL26oV3nGPBYrdpbvzCYxtv5tDHrshPUqKu5yQB+QgmzSNNEXKL9FbF4IwsOsKkCiNR+x
+hzjt4ePByrBjJADlrJR56piKxssEdJPiGdbdDwRsWtkQ+iKBuyI+i4Jl+q2mVLosBD4/o/WqeWj0oqIplIgqYAWR+WcHkLbAgMBAAECgYAsg+N5
+8KWamZ4PeZNWwl5wYbyLBT821cAxsQWC+zmQiywM1ip3zimy4WXCPWgQqekJ/Ps6EKES8sbrFnJ4hss0XZ+BC0FTsPs1o3c5T1h9L7zN8RA9/Bs
+V7kF9RKUOHG0Tr0oZ3CGzqRNDNUeznJPEUP3amb1YCXMJLPkR+AONQQJBAO5huuYxxEDEjNn4zCiJFGwdbZSA097Gyyi8PS0po+X/0KRx8WgQun
+Za+dh+LohEmxEk85gQ+GJrvbaPG94G4aECQQDOmEK1zmuJvI2PRZ/QPHs9CgRL1bIZEg8rJfhnv0YDD7NUeTpyT8+3/A4nbJjw8/zsr0A2UdSW6
+EfEaaaplsr7AkEAvJQ5q4MxMt+KYaEtuN+AdWruVi137mOrMgWAC+tGClxOLNkq1V1udNTRk892djx3w59MyT6bkBiVkwcxT3p4IQJAV914GdzF
+7dmsly+0bZsbivVUqHAlg/YjT2WhxXYbL7ggvB+nFPEO1iA0YN4WGfybKIrMk42wDdKSm12XzW7duwJAS9oUNnPDNEWnmNYXQsrkSMSloKJPsyC
+WosGBHPvUQbuavAr0AWG0irShVma0J1WtNSIfs2w7Q+zxFlX4umjgDw==",
+  "pubKey": "CAASogEwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMBgbIqyOL26oV3nGPBYrdpbvzCYxtv5tDHrshPUqKu5yQB+QgmzSN
+NEXKL9FbF4IwsOsKkCiNR+xhzjt4ePByrBjJADlrJR56piKxssEdJPiGdbdDwRsWtkQ+iKBuyI+i4Jl+q2mVLosBD4/o/WqeWj0oqIplIgqYAWR
++WcHkLbAgMBAAE="
+}
 ```
 
 # Installation
