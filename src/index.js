@@ -196,11 +196,11 @@ exports.createFromJSON = function (obj, callback) {
       }
 
       if (pub && !privDigest.equals(pubDigest)) {
-        callback(new Error('Public and private key do not match'))
+        return callback(new Error('Public and private key do not match'))
       }
 
       if (id && !privDigest.equals(id)) {
-        callback(new Error('Id and private key do not match'))
+        return callback(new Error('Id and private key do not match'))
       }
 
       callback(null, new PeerId(id, priv, pub))
