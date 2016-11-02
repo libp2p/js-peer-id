@@ -9,8 +9,7 @@
 ![](https://img.shields.io/badge/npm-%3E%3D3.0.0-orange.svg?style=flat-square)
 ![](https://img.shields.io/badge/Node.js-%3E%3D4.0.0-orange.svg?style=flat-square)
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/js-peer-id.svg)](https://saucelabs.com/u/js-peer-i
-d)
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/ipfs-js-peer-id.svg)](https://saucelabs.com/u/ipfs-js-peer-id)
 
 > [IPFS](https://github.com/ipfs/ipfs) Peer ID implementation in JavaScript.
 
@@ -66,17 +65,8 @@ PeerId.create({ bits: 1024 }, (err, id) => {
 ```
 {
   "id": "Qma9T5YraSnpRDZqRR4krcSJabThc8nwZuJV3LercPHufi",
-  "privKey": "CAAS4AQwggJcAgEAAoGBAMBgbIqyOL26oV3nGPBYrdpbvzCYxtv5tDHrshPUqKu5yQB+QgmzSNNEXKL9FbF4IwsOsKkCiNR+x
-hzjt4ePByrBjJADlrJR56piKxssEdJPiGdbdDwRsWtkQ+iKBuyI+i4Jl+q2mVLosBD4/o/WqeWj0oqIplIgqYAWR+WcHkLbAgMBAAECgYAsg+N5
-8KWamZ4PeZNWwl5wYbyLBT821cAxsQWC+zmQiywM1ip3zimy4WXCPWgQqekJ/Ps6EKES8sbrFnJ4hss0XZ+BC0FTsPs1o3c5T1h9L7zN8RA9/Bs
-V7kF9RKUOHG0Tr0oZ3CGzqRNDNUeznJPEUP3amb1YCXMJLPkR+AONQQJBAO5huuYxxEDEjNn4zCiJFGwdbZSA097Gyyi8PS0po+X/0KRx8WgQun
-Za+dh+LohEmxEk85gQ+GJrvbaPG94G4aECQQDOmEK1zmuJvI2PRZ/QPHs9CgRL1bIZEg8rJfhnv0YDD7NUeTpyT8+3/A4nbJjw8/zsr0A2UdSW6
-EfEaaaplsr7AkEAvJQ5q4MxMt+KYaEtuN+AdWruVi137mOrMgWAC+tGClxOLNkq1V1udNTRk892djx3w59MyT6bkBiVkwcxT3p4IQJAV914GdzF
-7dmsly+0bZsbivVUqHAlg/YjT2WhxXYbL7ggvB+nFPEO1iA0YN4WGfybKIrMk42wDdKSm12XzW7duwJAS9oUNnPDNEWnmNYXQsrkSMSloKJPsyC
-WosGBHPvUQbuavAr0AWG0irShVma0J1WtNSIfs2w7Q+zxFlX4umjgDw==",
-  "pubKey": "CAASogEwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMBgbIqyOL26oV3nGPBYrdpbvzCYxtv5tDHrshPUqKu5yQB+QgmzSN
-NEXKL9FbF4IwsOsKkCiNR+xhzjt4ePByrBjJADlrJR56piKxssEdJPiGdbdDwRsWtkQ+iKBuyI+i4Jl+q2mVLosBD4/o/WqeWj0oqIplIgqYAWR
-+WcHkLbAgMBAAE="
+  "privKey": "CAAS4AQwggJcAgEAAoGBAMBgbIqyOL26oV3nGPBYrdpbv..",
+  "pubKey": "CAASogEwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMBgbIqyOL26oV3nGPBYrdpbvzCY..."
 }
 ```
 
