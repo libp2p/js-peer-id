@@ -2,9 +2,8 @@
   "name": "peer-id",
   "version": "0.7.0",
   "description": "IPFS Peer Id implementation in Node.js",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "bin": "src/bin.js",
-  "jsnext:main": "src/index.js",
   "scripts": {
     "lint": "aegir-lint",
     "build": "aegir-build",
@@ -27,24 +26,25 @@
     "test"
   ],
   "engines": {
-    "node": "^4.3.0"
+    "node": ">=4.0.0"
   },
   "bugs": {
-    "url": "https://github.com/diasdavid/js-peer-id/issues"
+    "url": "https://github.com/libp2p/js-peer-id/issues"
   },
-  "homepage": "https://github.com/diasdavid/js-peer-id",
+  "homepage": "https://github.com/libp2p/js-peer-id",
   "devDependencies": {
-    "aegir": "^8.0.0",
+    "aegir": "^9.0.1",
     "chai": "^3.5.0",
     "pre-commit": "^1.1.3"
   },
   "dependencies": {
-    "libp2p-crypto": "^0.6.1",
+    "async": "^2.0.1",
+    "libp2p-crypto": "^0.7.0",
     "multihashes": "^0.2.2"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/diasdavid/js-peer-id.git"
+    "url": "https://github.com/libp2p/js-peer-id.git"
   },
   "contributors": [
     "David Dias <daviddias.p@gmail.com>",

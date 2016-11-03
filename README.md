@@ -6,8 +6,39 @@
 [![Coverage Status](https://coveralls.io/repos/github/libp2p/js-peer-id/badge.svg?branch=master)](https://coveralls.io/github/libp2p/js-peer-id?branch=master)
 [![Dependency Status](https://david-dm.org/libp2p/js-peer-id.svg?style=flat-square)](https://david-dm.org/libp2p/js-peer-id)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
+![](https://img.shields.io/badge/npm-%3E%3D3.0.0-orange.svg?style=flat-square)
+![](https://img.shields.io/badge/Node.js-%3E%3D4.0.0-orange.svg?style=flat-square)
+
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/ipfs-js-peer-id.svg)](https://saucelabs.com/u/ipfs-js-peer-id)
 
 > [IPFS](https://github.com/ipfs/ipfs) Peer ID implementation in JavaScript.
+
+- [Description](#description)
+- [Example](#example)
+- [Installation](#installation)
+  - [npm](#npm)
+- [Setup](#setup)
+  - [Node.js](#nodejs)
+  - [Browser: Browserify, Webpack, other bundlers](#browser-browserify-webpack-other-bundlers)
+  - [Browser: `<script>` Tag](#browser-script-tag)
+- [API](#api)
+  - [Create](#create)
+    - [`new PeerId(id[, privKey, pubKey])`](#new-peeridid-privkey-pubkey)
+    - [`create([opts], callback)`](#createopts-callback)
+  - [Import](#import)
+    - [`createFromHexString(str)`](#createfromhexstringstr)
+    - [`createFromBytes(buf)`](#createfrombytesbuf)
+    - [`createFromB58String(str)`](#createfromb58stringstr)
+    - [`createFromPubKey(pubKey)`](#createfrompubkeypubkey)
+    - [`createFromPrivKey(privKey)`](#createfromprivkeyprivkey)
+    - [`createFromJSON(obj)`](#createfromjsonobj)
+  - [Export](#export)
+    - [`toHexString()`](#tohexstring)
+    - [`toBytes()`](#tobytes)
+    - [`toB58String()`](#tob58string)
+    - [`toJSON()`](#tojson)
+    - [`toPrint()`](#toprint)
+- [License](#license)
 
 # Description
 
@@ -26,17 +57,17 @@ to the multihash for ID generation.*
 var PeerId = require('peer-id')
 var bs58 = require('bs58')
 
-var id = PeerId.create({ bits: 32 })
-
-console.log('id        ', id.toB58String())
-console.log('priv key  ', bs58.encode(id.privKey.bytes))
-console.log('pub key   ', bs58.encode(id.pubKey.bytes))
+PeerId.create({ bits: 1024 }, (err, id) => {
+  console.log(JSON.stringify(id.toJSON(), null, 2)
+})
 ```
 
 ```
-id         QmeeLFb92nkZJGj3gXLqXrEMzCMYs6uBgQLVNbrcXEvYXk
-priv key   6ibrcPAbevzvPpkq6EA6XmLyuhmUrJrEvUfgQDtEiSEPzGnGU8Ejwf6b11DVm6opnFGo
-pub key    2BeBZVKJ9RQs4i4LbGv4ReEeuBA5dck2Gje3wt67e44XuyyPq5jE
+{
+  "id": "Qma9T5YraSnpRDZqRR4krcSJabThc8nwZuJV3LercPHufi",
+  "privKey": "CAAS4AQwggJcAgEAAoGBAMBgbIqyOL26oV3nGPBYrdpbv..",
+  "pubKey": "CAASogEwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMBgbIqyOL26oV3nGPBYrdpbvzCY..."
+}
 ```
 
 # Installation
@@ -93,11 +124,14 @@ const PeerId = require('peer-id')
 
 The key format is detailed in [libp2p-crypto](https://github.com/libp2p/js-libp2p-crypto).
 
-### `create([opts])`
+### `create([opts], callback)`
 
 Generates a new Peer ID, complete with public/private keypair.
 
 - `opts: Object`: Default: `{bits: 2048}`
+- `callback: Function`
+
+Calls back `callback` with `err, id`.
 
 ## Import
 
@@ -114,9 +148,13 @@ Creates a Peer ID from a Base58 string representing the key's multihash.
 
 ### `createFromPubKey(pubKey)`
 
+- `publicKey: Buffer`
+
 Creates a Peer ID from a buffer containing a public key.
 
 ### `createFromPrivKey(privKey)`
+
+- `privKey: Buffer`
 
 Creates a Peer ID from a buffer containing a private key.
 
@@ -125,7 +163,6 @@ Creates a Peer ID from a buffer containing a private key.
 - `obj.id: String` - The multihash encoded in `base58`
 - `obj.pubKey: String` - The public key in protobuf format, encoded in 'base64'
 - `obj.privKey: String` - The private key in protobuf format, encoded in 'base 64'
-
 
 ## Export
 
