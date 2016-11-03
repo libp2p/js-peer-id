@@ -49,8 +49,11 @@
   "contributors": [
     "David Dias <daviddias.p@gmail.com>",
     "David Dias <mail@daviddias.me>",
+    "Friedel Ziegelmayer <dignifiedquire@gmail.com>",
+    "Richard Littauer <richard.littauer@gmail.com>",
     "Stephen Whitmore <stephen.whitmore@gmail.com>",
-    "dignifiedquire <dignifiedquire@gmail.com>",
-    "nginnever <ginneversource@gmail.com>"
+    "greenkeeperio-bot <support@greenkeeper.io>",
+    "nginnever <ginneversource@gmail.com>",
+    "npmcdn-to-unpkg-bot <npmcdn-to-unpkg-bot@users.noreply.github.com>"
   ]
 }
