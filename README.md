@@ -22,22 +22,6 @@
   - [Browser: Browserify, Webpack, other bundlers](#browser-browserify-webpack-other-bundlers)
   - [Browser: `<script>` Tag](#browser-script-tag)
 - [API](#api)
-  - [Create](#create)
-    - [`new PeerId(id[, privKey, pubKey])`](#new-peeridid-privkey-pubkey)
-    - [`create([opts], callback)`](#createopts-callback)
-  - [Import](#import)
-    - [`createFromHexString(str)`](#createfromhexstringstr)
-    - [`createFromBytes(buf)`](#createfrombytesbuf)
-    - [`createFromB58String(str)`](#createfromb58stringstr)
-    - [`createFromPubKey(pubKey)`](#createfrompubkeypubkey)
-    - [`createFromPrivKey(privKey)`](#createfromprivkeyprivkey)
-    - [`createFromJSON(obj)`](#createfromjsonobj)
-  - [Export](#export)
-    - [`toHexString()`](#tohexstring)
-    - [`toBytes()`](#tobytes)
-    - [`toB58String()`](#tob58string)
-    - [`toJSON()`](#tojson)
-    - [`toPrint()`](#toprint)
 - [License](#license)
 
 # Description
@@ -55,7 +39,6 @@ to the multihash for ID generation.*
 
 ```js
 var PeerId = require('peer-id')
-var bs58 = require('bs58')
 
 PeerId.create({ bits: 1024 }, (err, id) => {
   console.log(JSON.stringify(id.toJSON(), null, 2)
@@ -109,100 +92,6 @@ the global namespace.
 ```
 
 # API
-
-```js
-const PeerId = require('peer-id')
-```
-
-## Create
-
-### `new PeerId(id[, privKey, pubKey])`
-
-- `id: Buffer` - The multihash of the publick key as `Buffer`
-- `privKey: RsaPrivateKey` - The private key
-- `pubKey: RsaPublicKey` - The public key
-
-The key format is detailed in [libp2p-crypto](https://github.com/libp2p/js-libp2p-crypto).
-
-### `create([opts], callback)`
-
-Generates a new Peer ID, complete with public/private keypair.
-
-- `opts: Object`: Default: `{bits: 2048}`
-- `callback: Function`
-
-Calls back `callback` with `err, id`.
-
-## Import
-
-### `createFromHexString(str)`
-
-Creates a Peer ID from hex string representing the key's multihash.
-
-### `createFromBytes(buf)`
-
-Creates a Peer ID from a buffer representing the key's multihash.
-
-### `createFromB58String(str)`
-Creates a Peer ID from a Base58 string representing the key's multihash.
-
-### `createFromPubKey(pubKey)`
-
-- `publicKey: Buffer`
-
-Creates a Peer ID from a buffer containing a public key.
-
-### `createFromPrivKey(privKey)`
-
-- `privKey: Buffer`
-
-Creates a Peer ID from a buffer containing a private key.
-
-### `createFromJSON(obj)`
-
-- `obj.id: String` - The multihash encoded in `base58`
-- `obj.pubKey: String` - The public key in protobuf format, encoded in 'base64'
-- `obj.privKey: String` - The private key in protobuf format, encoded in 'base 64'
-
-## Export
-
-### `toHexString()`
-
-Returns the Peer ID's `id` as a hex string.
-
-```
-1220d6243998f2fc56343ad7ed0342ab7886a4eb18d736f1b67d44b37fcc81e0f39f
-```
-
-### `toBytes()`
-
-Returns the Peer ID's `id` as a buffer.
-
-```
-<Buffer 12 20 d6 24 39 98 f2 fc 56 34 3a d7 ed 03 42 ab 78 86 a4 eb 18 d7 36 f1 b6 7d 44 b3 7f cc 81 e0 f3 9f>
-```
-
-### `toB58String()`
-
-Returns the Peer ID's `id` as a base58 string.
-
-```
-QmckZzdVd72h9QUFuJJpQqhsZqGLwjhh81qSvZ9BhB2FQi
-```
-
-### `toJSON()`
-
-Returns an `obj` of the form
-
-- `obj.id: String` - The multihash encoded in `base58`
-- `obj.pubKey: String` - The public key in protobuf format, encoded in 'base64'
-- `obj.privKey: String` - The private key in protobuf format, encoded in 'base 64'
-
-
-### `toPrint()`
-
-Alias for `.toJSON()`.
-
 
 # License
 
