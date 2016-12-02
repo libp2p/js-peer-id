@@ -1,11 +1,8 @@
 Generate, import, and export PeerIDs, for use with [IPFS](https://github.com/ipfs/ipfs).
 
-*A Peer ID is the SHA-256 [multihash](https://github.com/multiformats/multihash) of a
-public key.*
-
-*The public key is a base64 encoded string of a protobuf containing an RSA DER
-buffer. This uses a node buffer to pass the base64 encoded public key protobuf
-to the multihash for ID generation.*
+> A Peer ID is the SHA-256 [multihash](https://github.com/multiformats/multihash) of a public key.
+>
+> The public key is a base64 encoded string of a protobuf containing an RSA DER buffer. This uses a node buffer to pass the base64 encoded public key protobuf to the multihash for ID generation.
 
 ## Example
 
@@ -17,7 +14,7 @@ PeerId.create({ bits: 1024 }, (err, id) => {
 })
 ```
 
-```
+```json
 {
   "id": "Qma9T5YraSnpRDZqRR4krcSJabThc8nwZuJV3LercPHufi",
   "privKey": "CAAS4AQwggJcAgEAAoGBAMBgbIqyOL26oV3nGPBYrdpbv..",
