@@ -70,7 +70,6 @@ class PeerId {
    *  matching go-ipfs formatting.
    *
    * @returns {Buffer} - The marshalled public key
-   * @throws {Error} - Failure
    */
   marshalPubKey () {
     if (this.pubKey) {
@@ -138,188 +137,188 @@ class PeerId {
   toB58String () {
     return mh.toB58String(this.id)
   }
-}
 
-/**
- * Create a new `PeerId` by generating a new public/private keypair.
- *
- * @param {Object=} opts - Configuration object.
- * @param {number} [opts.bits=2048] - How many bits to use for the RSA key generation.
- * @param {function(Error, PeerId)} callback - Node.js style callback.
- * @returns {undefined}
- *
- * @example
- * const PeerId = require('peer-id')
- *
- * PeerId.create((err, id) => {
- *   if (err) {
- *     throw err
- *   }
- *   console.log('id', JSON.stringify(id))
- * })
- *
- */
-PeerId.create = function (opts, callback) {
-  if (typeof opts === 'function') {
-    callback = opts
-    opts = {}
-  }
-  opts = opts || {}
-  opts.bits = opts.bits || 2048
-
-  waterfall([
-    (cb) => crypto.generateKeyPair('RSA', opts.bits, cb),
-    (privKey, cb) => privKey.public.hash((err, digest) => {
-      cb(err, digest, privKey)
-    })
-  ], (err, digest, privKey) => {
-    if (err) {
-      return callback(err)
+  /**
+   * Create a new `PeerId` by generating a new public/private keypair.
+   *
+   * @param {Object=} opts - Configuration object.
+   * @param {number} [opts.bits=2048] - How many bits to use for the RSA key generation.
+   * @param {function(Error, PeerId)} callback - Node.js style callback.
+   * @returns {undefined}
+   *
+   * @example
+   * const PeerId = require('peer-id')
+   *
+   * PeerId.create((err, id) => {
+   *   if (err) {
+   *     throw err
+   *   }
+   *   console.log('id', JSON.stringify(id))
+   * })
+   *
+   */
+  static create (opts, callback) {
+    if (typeof opts === 'function') {
+      callback = opts
+      opts = {}
     }
+    opts = opts || {}
+    opts.bits = opts.bits || 2048
 
-    callback(null, new PeerId(digest, privKey))
-  })
-}
-
-/**
- * Creates a Peer ID from hex string representing the key's multihash.
- *
- * @param {string} str - Hex encoded id
- * @returns {PeerId}
- */
-PeerId.createFromHexString = function (str) {
-  return new PeerId(mh.fromHexString(str))
-}
-
-/**
- * Creates a Peer ID from a buffer representing the key's multihash.
- *
- * @param {Buffer} buf
- * @returns {PeerId}
- */
-PeerId.createFromBytes = function (buf) {
-  return new PeerId(buf)
-}
-
-/**
- * Creates a Peer ID from a `base58` string representing the
- * key's multihash.
- *
- * @param {string} str - `base58` encoded id
- * @returns {PeerId}
- */
-PeerId.createFromB58String = function (str) {
-  return new PeerId(mh.fromB58String(str))
-}
-
-/**
- * Creates a Peer ID from a buffer containing a public key.
- *
- * @param {string|Buffer} key
- * @param {function(Error, PeerId)} callback
- * @returns {undefined}
- */
-PeerId.createFromPubKey = function (key, callback) {
-  let buf = key
-  if (typeof buf === 'string') {
-    buf = new Buffer(key, 'base64')
-  }
-
-  if (typeof callback !== 'function') {
-    throw new Error('callback is required')
-  }
-
-  const pubKey = crypto.unmarshalPublicKey(buf)
-  pubKey.hash((err, digest) => {
-    if (err) {
-      return callback(err)
-    }
-
-    callback(null, new PeerId(digest, null, pubKey))
-  })
-}
-
-/**
- * Creates a Peer ID from a buffer containing a private key.
- *
- * @param {string|Buffer} key - The private key, if passed as
- *   string `base64` encoding is assumed.
- * @param {function(Error, PeerId)} callback
- * @returns {undefined}
- */
-PeerId.createFromPrivKey = function (key, callback) {
-  let buf = key
-  if (typeof buf === 'string') {
-    buf = new Buffer(key, 'base64')
-  }
-
-  if (typeof callback !== 'function') {
-    throw new Error('callback is required')
-  }
-
-  waterfall([
-    (cb) => crypto.unmarshalPrivateKey(buf, cb),
-    (privKey, cb) => privKey.public.hash((err, digest) => {
-      cb(err, digest, privKey)
-    })
-  ], (err, digest, privKey) => {
-    if (err) {
-      return callback(err)
-    }
-
-    callback(null, new PeerId(digest, privKey))
-  })
-}
-
-/**
- * Import a `PeerId` from a serialized JSON object.
- *
- * @param {PeerIdJson} obj
- * @param {function(Error, PeerId)} callback
- * @returns {undefined}
- */
-PeerId.createFromJSON = function (obj, callback) {
-  if (typeof callback !== 'function') {
-    throw new Error('callback is required')
-  }
-
-  const id = mh.fromB58String(obj.id)
-  const rawPrivKey = obj.privKey && new Buffer(obj.privKey, 'base64')
-  const rawPubKey = obj.pubKey && new Buffer(obj.pubKey, 'base64')
-  const pub = rawPubKey && crypto.unmarshalPublicKey(rawPubKey)
-
-  if (rawPrivKey) {
     waterfall([
-      (cb) => crypto.unmarshalPrivateKey(rawPrivKey, cb),
-      (priv, cb) => priv.public.hash((err, digest) => {
-        cb(err, digest, priv)
-      }),
-      (privDigest, priv, cb) => {
-        if (pub) {
-          pub.hash((err, pubDigest) => {
-            cb(err, privDigest, priv, pubDigest)
-          })
-        } else {
-          cb(null, privDigest, priv)
-        }
-      }
-    ], (err, privDigest, priv, pubDigest) => {
+      (cb) => crypto.generateKeyPair('RSA', opts.bits, cb),
+      (privKey, cb) => privKey.public.hash((err, digest) => {
+        cb(err, digest, privKey)
+      })
+    ], (err, digest, privKey) => {
       if (err) {
         return callback(err)
       }
 
-      if (pub && !privDigest.equals(pubDigest)) {
-        return callback(new Error('Public and private key do not match'))
-      }
-
-      if (id && !privDigest.equals(id)) {
-        return callback(new Error('Id and private key do not match'))
-      }
-
-      callback(null, new PeerId(id, priv, pub))
+      callback(null, new PeerId(digest, privKey))
     })
-  } else {
-    callback(null, new PeerId(id, null, pub))
+  }
+
+  /**
+   * Creates a Peer ID from hex string representing the key's multihash.
+   *
+   * @param {string} str - Hex encoded id
+   * @returns {PeerId}
+   */
+  static createFromHexString (str) {
+    return new PeerId(mh.fromHexString(str))
+  }
+
+  /**
+   * Creates a Peer ID from a buffer representing the key's multihash.
+   *
+   * @param {Buffer} buf
+   * @returns {PeerId}
+   */
+  static createFromBytes (buf) {
+    return new PeerId(buf)
+  }
+
+  /**
+   * Creates a Peer ID from a `base58` string representing the
+   * key's multihash.
+   *
+   * @param {string} str - `base58` encoded id
+   * @returns {PeerId}
+   */
+  static createFromB58String (str) {
+    return new PeerId(mh.fromB58String(str))
+  }
+
+  /**
+   * Creates a Peer ID from a buffer containing a public key.
+   *
+   * @param {string|Buffer} key
+   * @param {function(Error, PeerId)} callback
+   * @returns {undefined}
+   */
+  static createFromPubKey (key, callback) {
+    let buf = key
+    if (typeof buf === 'string') {
+      buf = new Buffer(key, 'base64')
+    }
+
+    if (typeof callback !== 'function') {
+      throw new Error('callback is required')
+    }
+
+    const pubKey = crypto.unmarshalPublicKey(buf)
+    pubKey.hash((err, digest) => {
+      if (err) {
+        return callback(err)
+      }
+
+      callback(null, new PeerId(digest, null, pubKey))
+    })
+  }
+
+  /**
+   * Creates a Peer ID from a buffer containing a private key.
+   *
+   * @param {string|Buffer} key - The private key, if passed as
+   *   string `base64` encoding is assumed.
+   * @param {function(Error, PeerId)} callback
+   * @returns {undefined}
+   */
+  static createFromPrivKey (key, callback) {
+    let buf = key
+    if (typeof buf === 'string') {
+      buf = new Buffer(key, 'base64')
+    }
+
+    if (typeof callback !== 'function') {
+      throw new Error('callback is required')
+    }
+
+    waterfall([
+      (cb) => crypto.unmarshalPrivateKey(buf, cb),
+      (privKey, cb) => privKey.public.hash((err, digest) => {
+        cb(err, digest, privKey)
+      })
+    ], (err, digest, privKey) => {
+      if (err) {
+        return callback(err)
+      }
+
+      callback(null, new PeerId(digest, privKey))
+    })
+  }
+
+  /**
+   * Import a `PeerId` from a serialized JSON object.
+   *
+   * @param {PeerIdJson} obj
+   * @param {function(Error, PeerId)} callback
+   * @returns {undefined}
+   */
+  static createFromJSON (obj, callback) {
+    if (typeof callback !== 'function') {
+      throw new Error('callback is required')
+    }
+
+    const id = mh.fromB58String(obj.id)
+    const rawPrivKey = obj.privKey && new Buffer(obj.privKey, 'base64')
+    const rawPubKey = obj.pubKey && new Buffer(obj.pubKey, 'base64')
+    const pub = rawPubKey && crypto.unmarshalPublicKey(rawPubKey)
+
+    if (rawPrivKey) {
+      waterfall([
+        (cb) => crypto.unmarshalPrivateKey(rawPrivKey, cb),
+        (priv, cb) => priv.public.hash((err, digest) => {
+          cb(err, digest, priv)
+        }),
+        (privDigest, priv, cb) => {
+          if (pub) {
+            pub.hash((err, pubDigest) => {
+              cb(err, privDigest, priv, pubDigest)
+            })
+          } else {
+            cb(null, privDigest, priv)
+          }
+        }
+      ], (err, privDigest, priv, pubDigest) => {
+        if (err) {
+          return callback(err)
+        }
+
+        if (pub && !privDigest.equals(pubDigest)) {
+          return callback(new Error('Public and private key do not match'))
+        }
+
+        if (id && !privDigest.equals(id)) {
+          return callback(new Error('Id and private key do not match'))
+        }
+
+        callback(null, new PeerId(id, priv, pub))
+      })
+    } else {
+      callback(null, new PeerId(id, null, pub))
+    }
   }
 }
 
