@@ -52,7 +52,7 @@ class PeerId {
   }
 
   /**
-   * The private key of this id, if it exists.
+   * The public key of this id, if it exists.
    *
    * @type {(RSAPublicKey|undefined)}
    */
