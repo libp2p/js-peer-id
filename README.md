@@ -58,7 +58,7 @@ var PeerId = require('peer-id')
 var bs58 = require('bs58')
 
 PeerId.create({ bits: 1024 }, (err, id) => {
-  console.log(JSON.stringify(id.toJSON(), null, 2)
+  console.log(JSON.stringify(id.toJSON(), null, 2))
 })
 ```
 
