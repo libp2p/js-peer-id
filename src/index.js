@@ -146,6 +146,7 @@ class PeerId {
  * @param {Object=} opts - Configuration object.
  * @param {number} [opts.bits=2048] - How many bits to use for the RSA key generation.
  * @param {function(Error, PeerId)} callback - Node.js style callback.
+ * @returns {undefined}
  *
  * @example
  * const PeerId = require('peer-id')
@@ -216,6 +217,7 @@ PeerId.createFromB58String = function (str) {
  *
  * @param {string|Buffer} key
  * @param {function(Error, PeerId)} callback
+ * @returns {undefined}
  */
 PeerId.createFromPubKey = function (key, callback) {
   let buf = key
@@ -243,6 +245,7 @@ PeerId.createFromPubKey = function (key, callback) {
  * @param {string|Buffer} key - The private key, if passed as
  *   string `base64` encoding is assumed.
  * @param {function(Error, PeerId)} callback
+ * @returns {undefined}
  */
 PeerId.createFromPrivKey = function (key, callback) {
   let buf = key
@@ -273,6 +276,7 @@ PeerId.createFromPrivKey = function (key, callback) {
  *
  * @param {PeerIdJson} obj
  * @param {function(Error, PeerId)} callback
+ * @returns {undefined}
  */
 PeerId.createFromJSON = function (obj, callback) {
   if (typeof callback !== 'function') {
