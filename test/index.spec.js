@@ -29,6 +29,17 @@ describe('PeerId', () => {
     })
   })
 
+  it('throws on changing the id', (done) => {
+    PeerId.create((err, id) => {
+      expect(err).to.not.exist
+      expect(id.toB58String().length).to.equal(46)
+      expect(() => {
+        id.id = new Buffer('hello')
+      }).to.throw(/immutable/)
+      done()
+    })
+  })
+
   it('recreate an Id from Hex string', () => {
     const id = PeerId.createFromHexString(testIdHex)
     expect(testIdBytes).to.deep.equal(id.id)

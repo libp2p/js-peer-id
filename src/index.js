@@ -17,9 +17,18 @@ class PeerId {
       assert(privKey.public.bytes.equals(pubKey.bytes), 'inconsistent arguments')
     }
 
-    this.id = id
+    this._id = id
+    this._idB58String = mh.toB58String(this.id)
     this._privKey = privKey
     this._pubKey = pubKey
+  }
+
+  get id () {
+    return this._id
+  }
+
+  set id (val) {
+    throw new Error('Id is immutable')
   }
 
   get privKey () {
@@ -61,7 +70,7 @@ class PeerId {
   // of go-ipfs for its config file
   toJSON () {
     return {
-      id: mh.toB58String(this.id),
+      id: this.toB58String(),
       privKey: toB64Opt(this.marshalPrivKey()),
       pubKey: toB64Opt(this.marshalPubKey())
     }
@@ -77,7 +86,7 @@ class PeerId {
   }
 
   toB58String () {
-    return mh.toB58String(this.id)
+    return this._idB58String
   }
 }
 
