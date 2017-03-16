@@ -2,7 +2,10 @@
 /* eslint-env mocha */
 'use strict'
 
-const expect = require('chai').expect
+const chai = require('chai')
+const dirtyChai = require('dirty-chai')
+chai.use(dirtyChai)
+const expect = chai.expect
 const crypto = require('libp2p-crypto')
 const mh = require('multihashes')
 const parallel = require('async/parallel')
@@ -23,7 +26,7 @@ describe('PeerId', () => {
 
   it('create a new id', (done) => {
     PeerId.create((err, id) => {
-      expect(err).to.not.exist
+      expect(err).to.not.exist()
       expect(id.toB58String().length).to.equal(46)
       done()
     })
@@ -31,7 +34,7 @@ describe('PeerId', () => {
 
   it('throws on changing the id', (done) => {
     PeerId.create((err, id) => {
-      expect(err).to.not.exist
+      expect(err).to.not.exist()
       expect(id.toB58String().length).to.equal(46)
       expect(() => {
         id.id = new Buffer('hello')
@@ -57,7 +60,7 @@ describe('PeerId', () => {
 
   it('Recreate from a Public Key', (done) => {
     PeerId.createFromPubKey(testId.pubKey, (err, id) => {
-      expect(err).to.not.exist
+      expect(err).to.not.exist()
       expect(testIdB58String).to.equal(id.toB58String())
       done()
     })
@@ -65,12 +68,12 @@ describe('PeerId', () => {
 
   it('Recreate from a Private Key', (done) => {
     PeerId.createFromPrivKey(testId.privKey, (err, id) => {
-      expect(err).to.not.exist
+      expect(err).to.not.exist()
       expect(testIdB58String).to.equal(id.toB58String())
 
       const encoded = new Buffer(testId.privKey, 'base64')
       PeerId.createFromPrivKey(encoded, (err, id2) => {
-        expect(err).to.not.exist
+        expect(err).to.not.exist()
         expect(testIdB58String).to.equal(id2.toB58String())
         done()
       })
@@ -79,10 +82,10 @@ describe('PeerId', () => {
 
   it('Compare generated ID with one created from PubKey', (done) => {
     PeerId.create((err, id1) => {
-      expect(err).to.not.exist
+      expect(err).to.not.exist()
 
       PeerId.createFromPubKey(id1.marshalPubKey(), (err, id2) => {
-        expect(err).to.not.exist
+        expect(err).to.not.exist()
         expect(id1.id).to.be.eql(id2.id)
         done()
       })
@@ -91,9 +94,9 @@ describe('PeerId', () => {
 
   it('Non-default # of bits', (done) => {
     PeerId.create({ bits: 1024 }, (err, shortId) => {
-      expect(err).to.not.exist
+      expect(err).to.not.exist()
       PeerId.create({ bits: 4096 }, (err, longId) => {
-        expect(err).to.not.exist
+        expect(err).to.not.exist()
         expect(shortId.privKey.bytes.length).is.below(longId.privKey.bytes.length)
         done()
       })
@@ -102,9 +105,9 @@ describe('PeerId', () => {
 
   it('Pretty printing', (done) => {
     PeerId.create((err, id1) => {
-      expect(err).to.not.exist
+      expect(err).to.not.exist()
       PeerId.createFromPrivKey(id1.toPrint().privKey, (err, id2) => {
-        expect(err).to.not.exist
+        expect(err).to.not.exist()
         expect(id1.toPrint()).to.be.eql(id2.toPrint())
         done()
       })
@@ -118,26 +121,14 @@ describe('PeerId', () => {
 
   describe('fromJSON', () => {
     it('full node', (done) => {
-      PeerId.create({bits: 1024}, (err, id) => {
-        expect(err).to.not.exist
+      PeerId.create({ bits: 1024 }, (err, id) => {
+        expect(err).to.not.exist()
 
         PeerId.createFromJSON(id.toJSON(), (err, other) => {
-          expect(err).to.not.exist
-          expect(
-            id.toB58String()
-          ).to.equal(
-            other.toB58String()
-          )
-          expect(
-            id.privKey.bytes
-          ).to.deep.equal(
-            other.privKey.bytes
-          )
-          expect(
-            id.pubKey.bytes
-          ).to.deep.equal(
-            other.pubKey.bytes
-          )
+          expect(err).to.not.exist()
+          expect(id.toB58String()).to.equal(other.toB58String())
+          expect(id.privKey.bytes).to.eql(other.privKey.bytes)
+          expect(id.pubKey.bytes).to.eql(other.pubKey.bytes)
           done()
         })
       })
@@ -145,16 +136,16 @@ describe('PeerId', () => {
 
     it('only id', (done) => {
       crypto.generateKeyPair('RSA', 1024, (err, key) => {
-        expect(err).to.not.exist
+        expect(err).to.not.exist()
         key.public.hash((err, digest) => {
-          expect(err).to.not.exist
+          expect(err).to.not.exist()
 
           const id = PeerId.createFromBytes(digest)
-          expect(id.privKey).to.not.exist
-          expect(id.pubKey).to.not.exist
+          expect(id.privKey).to.not.exist()
+          expect(id.pubKey).to.not.exist()
 
           PeerId.createFromJSON(id.toJSON(), (err, other) => {
-            expect(err).to.not.exist
+            expect(err).to.not.exist()
             expect(
               id.toB58String()
             ).to.equal(
@@ -168,9 +159,9 @@ describe('PeerId', () => {
 
     it('go interop', (done) => {
       PeerId.createFromJSON(goId, (err, id) => {
-        expect(err).to.not.exist
+        expect(err).to.not.exist()
         id.privKey.public.hash((err, digest) => {
-          expect(err).to.not.exist
+          expect(err).to.not.exist()
           expect(
             mh.toB58String(digest)
           ).to.be.eql(
@@ -203,7 +194,7 @@ describe('PeerId', () => {
 
     it('missmatch private - public key', (done) => {
       k1.public.hash((err, digest) => {
-        expect(err).to.not.exist
+        expect(err).to.not.exist()
         expect(
           () => new PeerId(digest, k1, k2.public)
         ).to.throw(
@@ -215,7 +206,7 @@ describe('PeerId', () => {
 
     it('missmatch id - private - public key', (done) => {
       k1.public.hash((err, digest) => {
-        expect(err).to.not.exist
+        expect(err).to.not.exist()
         expect(
           () => new PeerId(digest, k1, k3.public)
         ).to.throw(
