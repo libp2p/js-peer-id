@@ -91,7 +91,6 @@ class PeerId {
 }
 
 exports = module.exports = PeerId
-exports.Buffer = Buffer
 
 // generation
 exports.create = function (opts, callback) {
@@ -217,6 +216,12 @@ exports.createFromJSON = function (obj, callback) {
   } else {
     callback(null, new PeerId(id, null, pub))
   }
+}
+
+exports.isPeerId = function (peerId) {
+  return Boolean(typeof peerId === 'object' &&
+    peerId._id &&
+    peerId._idB58String)
 }
 
 function toB64Opt (val) {

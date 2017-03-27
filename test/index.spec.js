@@ -32,6 +32,16 @@ describe('PeerId', () => {
     })
   })
 
+  it('isPeerId', (done) => {
+    PeerId.create((err, id) => {
+      expect(err).to.not.exist()
+      expect(PeerId.isPeerId(id)).to.equal(true)
+      expect(PeerId.isPeerId('aaa')).to.equal(false)
+      expect(PeerId.isPeerId(new Buffer('batatas'))).to.equal(false)
+      done()
+    })
+  })
+
   it('throws on changing the id', (done) => {
     PeerId.create((err, id) => {
       expect(err).to.not.exist()
