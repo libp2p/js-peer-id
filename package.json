@@ -40,9 +40,10 @@
     "pre-commit": "^1.2.2"
   },
   "dependencies": {
+    "async": "^2.2.0",
     "libp2p-crypto": "~0.8.7",
-    "multihashes": "~0.4.5",
-    "async": "^2.2.0"
+    "lodash": "^4.17.4",
+    "multihashes": "~0.4.5"
   },
   "repository": {
     "type": "git",
