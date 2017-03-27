@@ -219,6 +219,12 @@ exports.createFromJSON = function (obj, callback) {
   }
 }
 
+exports.isPeerId = function (peerId) {
+  if (peerId.constructor && peerId.constructor.name) {
+    return peerId.constructor.name === 'PeerId'
+  }
+}
+
 function toB64Opt (val) {
   if (val) {
     return val.toString('base64')
