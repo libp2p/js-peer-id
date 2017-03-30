@@ -88,6 +88,16 @@ class PeerId {
   toB58String () {
     return this._idB58String
   }
+
+  isEqual (id) {
+    if (Buffer.isBuffer(id)) {
+      return this.id.equals(id)
+    } else if (id.id) {
+      return this.id.equals(id.id)
+    } else {
+      throw new Error('not valid Id')
+    }
+  }
 }
 
 exports = module.exports = PeerId
