@@ -129,6 +129,20 @@ describe('PeerId', () => {
     expect(id.toBytes().toString('hex')).to.equal(testIdBytes.toString('hex'))
   })
 
+  it('isEqual', (done) => {
+    parallel([
+      (cb) => PeerId.create(cb),
+      (cb) => PeerId.create(cb)
+    ], (err, ids) => {
+      expect(err).to.not.exist()
+      expect(ids[0].isEqual(ids[0])).to.equal(true)
+      expect(ids[0].isEqual(ids[1])).to.equal(false)
+      expect(ids[0].isEqual(ids[0].id)).to.equal(true)
+      expect(ids[0].isEqual(ids[1].id)).to.equal(false)
+      done()
+    })
+  })
+
   describe('fromJSON', () => {
     it('full node', (done) => {
       PeerId.create({ bits: 1024 }, (err, id) => {

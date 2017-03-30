@@ -203,6 +203,9 @@ Returns an `obj` of the form
 
 Alias for `.toJSON()`.
 
+### `isEqual(id)`
+
+- `id` can be a PeerId or a Buffer containing the id
 
 # License
 
