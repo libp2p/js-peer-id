@@ -35,26 +35,32 @@ class PeerId {
     return this._privKey
   }
 
+  set privKey (privKey) {
+    this._privKey = privKey
+  }
+
   get pubKey () {
     if (this._pubKey) {
       return this._pubKey
     }
 
-    if (this.privKey) {
-      return this.privKey.public
+    if (this._privKey) {
+      return this._privKey.public
     }
   }
 
-  // Return the protobuf version of the public key,
-  // matching go ipfs formatting
+  set pubKey (pubKey) {
+    this._pubKey = pubKey
+  }
+
+  // Return the protobuf version of the public key, matching go ipfs formatting
   marshalPubKey () {
     if (this.pubKey) {
       return crypto.marshalPublicKey(this.pubKey)
     }
   }
 
-  // Return the protobuf version of the private key,
-  // matching go ipfs formatting
+  // Return the protobuf version of the private key, matching go ipfs formatting
   marshalPrivKey () {
     if (this.privKey) {
       return crypto.marshalPrivateKey(this.privKey)
@@ -98,6 +104,22 @@ class PeerId {
       throw new Error('not valid Id')
     }
   }
+
+  /*
+   * Check if this PeerId instance is valid (privKey -> pubKey -> Id)
+   */
+  isValid (callback) {
+    // TODO Needs better checking
+    if (this.privKey &&
+      this.privKey.public &&
+      this.privKey.public.bytes &&
+      Buffer.isBuffer(this.pubKey.bytes) &&
+      this.privKey.public.bytes.equals(this.pubKey.bytes)) {
+      callback()
+    } else {
+      callback(new Error('Keys not match'))
+    }
+  }
 }
 
 exports = module.exports = PeerId
@@ -139,16 +161,17 @@ exports.createFromB58String = function (str) {
 
 // Public Key input will be a buffer
 exports.createFromPubKey = function (key, callback) {
+  if (typeof callback !== 'function') {
+    throw new Error('callback is required')
+  }
+
   let buf = key
   if (typeof buf === 'string') {
     buf = new Buffer(key, 'base64')
   }
 
-  if (typeof callback !== 'function') {
-    throw new Error('callback is required')
-  }
-
   const pubKey = crypto.unmarshalPublicKey(buf)
+
   pubKey.hash((err, digest) => {
     if (err) {
       return callback(err)
