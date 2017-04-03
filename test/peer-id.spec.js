@@ -197,17 +197,56 @@ describe('PeerId', () => {
     })
   })
 
+  it('set privKey (valid)', (done) => {
+    PeerId.create((err, peerId) => {
+      expect(err).to.not.exist()
+      peerId.privKey = peerId._privKey
+      peerId.isValid(done)
+    })
+  })
+
+  it('set pubKey (valid)', (done) => {
+    PeerId.create((err, peerId) => {
+      expect(err).to.not.exist()
+      peerId.pubKey = peerId._pubKey
+      peerId.isValid(done)
+    })
+  })
+
+  it('set privKey (invalid)', (done) => {
+    PeerId.create((err, peerId) => {
+      expect(err).to.not.exist()
+      peerId.privKey = new Buffer('bufff')
+      peerId.isValid((err) => {
+        expect(err).to.exist()
+        done()
+      })
+    })
+  })
+
+  it('set pubKey (invalid)', (done) => {
+    PeerId.create((err, peerId) => {
+      expect(err).to.not.exist()
+      peerId.pubKey = new Buffer('buffff')
+      peerId.isValid((err) => {
+        expect(err).to.exist()
+        done()
+      })
+    })
+  })
+
   describe('throws on inconsistent data', () => {
-    let k1, k2, k3
+    let k1
+    let k2
+    let k3
+
     before((done) => {
       parallel([
         (cb) => crypto.generateKeyPair('RSA', 1024, cb),
         (cb) => crypto.generateKeyPair('RSA', 1024, cb),
         (cb) => crypto.generateKeyPair('RSA', 1024, cb)
       ], (err, keys) => {
-        if (err) {
-          return done(err)
-        }
+        expect(err).to.not.exist()
 
         k1 = keys[0]
         k2 = keys[1]
@@ -219,11 +258,8 @@ describe('PeerId', () => {
     it('missmatch private - public key', (done) => {
       k1.public.hash((err, digest) => {
         expect(err).to.not.exist()
-        expect(
-          () => new PeerId(digest, k1, k2.public)
-        ).to.throw(
-            /inconsistent arguments/
-        )
+        expect(() => new PeerId(digest, k1, k2.public))
+          .to.throw(/inconsistent arguments/)
         done()
       })
     })
@@ -231,11 +267,8 @@ describe('PeerId', () => {
     it('missmatch id - private - public key', (done) => {
       k1.public.hash((err, digest) => {
         expect(err).to.not.exist()
-        expect(
-          () => new PeerId(digest, k1, k3.public)
-        ).to.throw(
-            /inconsistent arguments/
-        )
+        expect(() => new PeerId(digest, k1, k3.public))
+          .to.throw(/inconsistent arguments/)
         done()
       })
     })
