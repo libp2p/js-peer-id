@@ -9,7 +9,7 @@
 ![](https://img.shields.io/badge/npm-%3E%3D3.0.0-orange.svg?style=flat-square)
 ![](https://img.shields.io/badge/Node.js-%3E%3D4.0.0-orange.svg?style=flat-square)
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/ipfs-js-peer-id.svg)](https://saucelabs.com/u/ipfs-js-peer-id)
+<!-- [![Sauce Test Status](https://saucelabs.com/browser-matrix/ipfs-js-peer-id.svg)](https://saucelabs.com/u/ipfs-js-peer-id) -->
 
 > [IPFS](https://github.com/ipfs/ipfs) Peer ID implementation in JavaScript.
 
@@ -44,25 +44,21 @@
 
 Generate, import, and export PeerIDs, for use with [IPFS](https://github.com/ipfs/ipfs).
 
-*A Peer ID is the SHA-256 [multihash](https://github.com/multiformats/multihash) of a
-public key.*
+A Peer ID is the SHA-256 [multihash](https://github.com/multiformats/multihash) of a public key.
 
-*The public key is a base64 encoded string of a protobuf containing an RSA DER
-buffer. This uses a node buffer to pass the base64 encoded public key protobuf
-to the multihash for ID generation.*
+The public key is a base64 encoded string of a protobuf containing an RSA DER buffer. This uses a node buffer to pass the base64 encoded public key protobuf to the multihash for ID generation.
 
 # Example
 
-```js
-var PeerId = require('peer-id')
-var bs58 = require('bs58')
+```JavaScript
+const PeerId = require('peer-id')
 
 PeerId.create({ bits: 1024 }, (err, id) => {
+  if (err) { throw err }
   console.log(JSON.stringify(id.toJSON(), null, 2))
 })
 ```
-
-```
+```bash
 {
   "id": "Qma9T5YraSnpRDZqRR4krcSJabThc8nwZuJV3LercPHufi",
   "privKey": "CAAS4AQwggJcAgEAAoGBAMBgbIqyOL26oV3nGPBYrdpbv..",
@@ -83,7 +79,7 @@ PeerId.create({ bits: 1024 }, (err, id) => {
 ## Node.js
 
 ```js
-var PeerId = require('peer-id')
+const PeerId = require('peer-id')
 ```
 
 ## Browser: Browserify, Webpack, other bundlers
@@ -94,7 +90,7 @@ it and use with your favourite bundler without having to adjust asset management
 process.
 
 ```js
-var PeerId = require('peer-id')
+const PeerId = require('peer-id')
 ```
 
 ## Browser: `<script>` Tag
