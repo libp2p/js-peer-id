@@ -9,8 +9,6 @@
 ![](https://img.shields.io/badge/npm-%3E%3D3.0.0-orange.svg?style=flat-square)
 ![](https://img.shields.io/badge/Node.js-%3E%3D4.0.0-orange.svg?style=flat-square)
 
-<!-- [![Sauce Test Status](https://saucelabs.com/browser-matrix/ipfs-js-peer-id.svg)](https://saucelabs.com/u/ipfs-js-peer-id) -->
-
 > [IPFS](https://github.com/ipfs/ipfs) Peer ID implementation in JavaScript.
 
 - [Description](#description)
