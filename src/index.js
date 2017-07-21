@@ -8,6 +8,7 @@ const mh = require('multihashes')
 const crypto = require('libp2p-crypto')
 const assert = require('assert')
 const waterfall = require('async/waterfall')
+const Buffer = require('safe-buffer').Buffer
 
 class PeerId {
   constructor (id, privKey, pubKey) {
@@ -56,14 +57,14 @@ class PeerId {
   // Return the protobuf version of the public key, matching go ipfs formatting
   marshalPubKey () {
     if (this.pubKey) {
-      return crypto.marshalPublicKey(this.pubKey)
+      return crypto.keys.marshalPublicKey(this.pubKey)
     }
   }
 
   // Return the protobuf version of the private key, matching go ipfs formatting
   marshalPrivKey () {
     if (this.privKey) {
-      return crypto.marshalPrivateKey(this.privKey)
+      return crypto.keys.marshalPrivateKey(this.privKey)
     }
   }
 
@@ -134,7 +135,7 @@ exports.create = function (opts, callback) {
   opts.bits = opts.bits || 2048
 
   waterfall([
-    (cb) => crypto.generateKeyPair('RSA', opts.bits, cb),
+    (cb) => crypto.keys.generateKeyPair('RSA', opts.bits, cb),
     (privKey, cb) => privKey.public.hash((err, digest) => {
       cb(err, digest, privKey)
     })
@@ -167,10 +168,10 @@ exports.createFromPubKey = function (key, callback) {
 
   let buf = key
   if (typeof buf === 'string') {
-    buf = new Buffer(key, 'base64')
+    buf = Buffer.from(key, 'base64')
   }
 
-  const pubKey = crypto.unmarshalPublicKey(buf)
+  const pubKey = crypto.keys.unmarshalPublicKey(buf)
 
   pubKey.hash((err, digest) => {
     if (err) {
@@ -185,7 +186,7 @@ exports.createFromPubKey = function (key, callback) {
 exports.createFromPrivKey = function (key, callback) {
   let buf = key
   if (typeof buf === 'string') {
-    buf = new Buffer(key, 'base64')
+    buf = Buffer.from(key, 'base64')
   }
 
   if (typeof callback !== 'function') {
@@ -193,7 +194,7 @@ exports.createFromPrivKey = function (key, callback) {
   }
 
   waterfall([
-    (cb) => crypto.unmarshalPrivateKey(buf, cb),
+    (cb) => crypto.keys.unmarshalPrivateKey(buf, cb),
     (privKey, cb) => privKey.public.hash((err, digest) => {
       cb(err, digest, privKey)
     })
@@ -212,13 +213,13 @@ exports.createFromJSON = function (obj, callback) {
   }
 
   const id = mh.fromB58String(obj.id)
-  const rawPrivKey = obj.privKey && new Buffer(obj.privKey, 'base64')
-  const rawPubKey = obj.pubKey && new Buffer(obj.pubKey, 'base64')
-  const pub = rawPubKey && crypto.unmarshalPublicKey(rawPubKey)
+  const rawPrivKey = obj.privKey && Buffer.from(obj.privKey, 'base64')
+  const rawPubKey = obj.pubKey && Buffer.from(obj.pubKey, 'base64')
+  const pub = rawPubKey && crypto.keys.unmarshalPublicKey(rawPubKey)
 
   if (rawPrivKey) {
     waterfall([
-      (cb) => crypto.unmarshalPrivateKey(rawPrivKey, cb),
+      (cb) => crypto.keys.unmarshalPrivateKey(rawPrivKey, cb),
       (priv, cb) => priv.public.hash((err, digest) => {
         cb(err, digest, priv)
       }),
