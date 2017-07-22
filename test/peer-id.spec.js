@@ -9,6 +9,7 @@ const expect = chai.expect
 const crypto = require('libp2p-crypto')
 const mh = require('multihashes')
 const parallel = require('async/parallel')
+const Buffer = require('safe-buffer').Buffer
 
 const PeerId = require('../src')
 
@@ -37,7 +38,7 @@ describe('PeerId', () => {
       expect(err).to.not.exist()
       expect(PeerId.isPeerId(id)).to.equal(true)
       expect(PeerId.isPeerId('aaa')).to.equal(false)
-      expect(PeerId.isPeerId(new Buffer('batatas'))).to.equal(false)
+      expect(PeerId.isPeerId(Buffer.from('batatas'))).to.equal(false)
       done()
     })
   })
@@ -47,7 +48,7 @@ describe('PeerId', () => {
       expect(err).to.not.exist()
       expect(id.toB58String().length).to.equal(46)
       expect(() => {
-        id.id = new Buffer('hello')
+        id.id = Buffer.from('hello')
       }).to.throw(/immutable/)
       done()
     })
@@ -81,7 +82,7 @@ describe('PeerId', () => {
       expect(err).to.not.exist()
       expect(testIdB58String).to.equal(id.toB58String())
 
-      const encoded = new Buffer(testId.privKey, 'base64')
+      const encoded = Buffer.from(testId.privKey, 'base64')
       PeerId.createFromPrivKey(encoded, (err, id2) => {
         expect(err).to.not.exist()
         expect(testIdB58String).to.equal(id2.toB58String())
@@ -159,7 +160,7 @@ describe('PeerId', () => {
     })
 
     it('only id', (done) => {
-      crypto.generateKeyPair('RSA', 1024, (err, key) => {
+      crypto.keys.generateKeyPair('RSA', 1024, (err, key) => {
         expect(err).to.not.exist()
         key.public.hash((err, digest) => {
           expect(err).to.not.exist()
@@ -170,11 +171,7 @@ describe('PeerId', () => {
 
           PeerId.createFromJSON(id.toJSON(), (err, other) => {
             expect(err).to.not.exist()
-            expect(
-              id.toB58String()
-            ).to.equal(
-              other.toB58String()
-            )
+            expect(id.toB58String()).to.equal(other.toB58String())
             done()
           })
         })
@@ -186,11 +183,7 @@ describe('PeerId', () => {
         expect(err).to.not.exist()
         id.privKey.public.hash((err, digest) => {
           expect(err).to.not.exist()
-          expect(
-            mh.toB58String(digest)
-          ).to.be.eql(
-            goId.id
-          )
+          expect(mh.toB58String(digest)).to.eql(goId.id)
           done()
         })
       })
@@ -216,7 +209,7 @@ describe('PeerId', () => {
   it('set privKey (invalid)', (done) => {
     PeerId.create((err, peerId) => {
       expect(err).to.not.exist()
-      peerId.privKey = new Buffer('bufff')
+      peerId.privKey = Buffer.from('bufff')
       peerId.isValid((err) => {
         expect(err).to.exist()
         done()
@@ -227,7 +220,7 @@ describe('PeerId', () => {
   it('set pubKey (invalid)', (done) => {
     PeerId.create((err, peerId) => {
       expect(err).to.not.exist()
-      peerId.pubKey = new Buffer('buffff')
+      peerId.pubKey = Buffer.from('buffff')
       peerId.isValid((err) => {
         expect(err).to.exist()
         done()
@@ -242,9 +235,9 @@ describe('PeerId', () => {
 
     before((done) => {
       parallel([
-        (cb) => crypto.generateKeyPair('RSA', 1024, cb),
-        (cb) => crypto.generateKeyPair('RSA', 1024, cb),
-        (cb) => crypto.generateKeyPair('RSA', 1024, cb)
+        (cb) => crypto.keys.generateKeyPair('RSA', 1024, cb),
+        (cb) => crypto.keys.generateKeyPair('RSA', 1024, cb),
+        (cb) => crypto.keys.generateKeyPair('RSA', 1024, cb)
       ], (err, keys) => {
         expect(err).to.not.exist()
 
@@ -274,11 +267,7 @@ describe('PeerId', () => {
     })
 
     it('invalid id', () => {
-      expect(
-        () => new PeerId('hello world')
-      ).to.throw(
-        /invalid id/
-      )
+      expect(() => new PeerId('hello world')).to.throw(/invalid id/)
     })
   })
 })

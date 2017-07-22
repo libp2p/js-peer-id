@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "async": "^2.5.0",
-    "libp2p-crypto": "~0.8.8",
+    "libp2p-crypto": "~0.9.4",
     "lodash": "^4.17.4",
     "multihashes": "~0.4.5"
   },
