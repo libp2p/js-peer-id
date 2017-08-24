@@ -133,9 +133,10 @@ exports.create = function (opts, callback) {
   }
   opts = opts || {}
   opts.bits = opts.bits || 2048
+  opts.type = opts.type || 'RSA'
 
   waterfall([
-    (cb) => crypto.keys.generateKeyPair('RSA', opts.bits, cb),
+    (cb) => crypto.keys.generateKeyPair(opts.type, opts.bits, cb),
     (privKey, cb) => privKey.public.hash((err, digest) => {
       cb(err, digest, privKey)
     })
