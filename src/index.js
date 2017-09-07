@@ -8,7 +8,6 @@ const mh = require('multihashes')
 const crypto = require('libp2p-crypto')
 const assert = require('assert')
 const waterfall = require('async/waterfall')
-const Buffer = require('safe-buffer').Buffer
 
 class PeerId {
   constructor (id, privKey, pubKey) {

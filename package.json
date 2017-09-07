@@ -5,16 +5,15 @@
   "main": "src/index.js",
   "bin": "src/bin.js",
   "scripts": {
-    "lint": "aegir-lint",
-    "build": "aegir-build",
-    "test": "aegir-test",
-    "test:node": "aegir-test node",
-    "test:browser": "aegir-test browser",
-    "release": "aegir-release",
-    "release-minor": "aegir-release --type minor",
-    "release-major": "aegir-release --type major",
-    "coverage": "aegir-coverage",
-    "coverage-publish": "aegir-coverage publish"
+    "lint": "aegir lint",
+    "build": "aegir build",
+    "test": "aegir test",
+    "test:node": "aegir test -t node",
+    "test:browser": "aegir test -t browser -t webworker",
+    "release": "aegir release",
+    "release-minor": "aegir release --type minor",
+    "release-major": "aegir release --type major",
+    "coverage": "aegir coverage"
   },
   "keywords": [
     "IPFS"
@@ -34,14 +33,14 @@
   },
   "homepage": "https://github.com/libp2p/js-peer-id",
   "devDependencies": {
-    "aegir": "^11.0.2",
+    "aegir": "^12.0.6",
     "chai": "^4.1.2",
     "dirty-chai": "^2.0.1",
     "pre-commit": "^1.2.2"
   },
   "dependencies": {
     "async": "^2.5.0",
-    "libp2p-crypto": "~0.9.4",
+    "libp2p-crypto": "~0.10.3",
     "lodash": "^4.17.4",
     "multihashes": "~0.4.9"
   },

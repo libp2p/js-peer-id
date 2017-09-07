@@ -9,7 +9,6 @@ const expect = chai.expect
 const crypto = require('libp2p-crypto')
 const mh = require('multihashes')
 const parallel = require('async/parallel')
-const Buffer = require('safe-buffer').Buffer
 
 const PeerId = require('../src')
 
@@ -103,7 +102,9 @@ describe('PeerId', () => {
     })
   })
 
-  it('Non-default # of bits', (done) => {
+  it('Non-default # of bits', function (done) {
+    // rsa is slow atm
+    this.timeout(20000)
     PeerId.create({ bits: 1024 }, (err, shortId) => {
       expect(err).to.not.exist()
       PeerId.create({ bits: 4096 }, (err, longId) => {
