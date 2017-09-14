@@ -85,6 +85,7 @@ describe('PeerId', () => {
       PeerId.createFromPrivKey(encoded, (err, id2) => {
         expect(err).to.not.exist()
         expect(testIdB58String).to.equal(id2.toB58String())
+        expect(id.marshalPubKey()).to.deep.equal(id2.marshalPubKey())
         done()
       })
     })

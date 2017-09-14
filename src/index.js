@@ -202,7 +202,7 @@ exports.createFromPrivKey = function (key, callback) {
       return callback(err)
     }
 
-    callback(null, new PeerId(digest, privKey))
+    callback(null, new PeerId(digest, privKey, privKey.public))
   })
 }
 
