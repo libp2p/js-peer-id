@@ -105,7 +105,7 @@ describe('PeerId', () => {
 
   it('Non-default # of bits', function (done) {
     // rsa is slow atm
-    this.timeout(20000)
+    this.timeout(100000)
     PeerId.create({ bits: 1024 }, (err, shortId) => {
       expect(err).to.not.exist()
       PeerId.create({ bits: 4096 }, (err, longId) => {
