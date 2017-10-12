@@ -1,3 +1,13 @@
+<a name="0.10.2"></a>
+## [0.10.2](https://github.com/libp2p/js-peer-id/compare/v0.10.1...v0.10.2) (2017-10-12)
+
+
+### Bug Fixes
+
+* Always add public key to constructor if possible, Fix for undefined pubKey in remote peers ([#68](https://github.com/libp2p/js-peer-id/issues/68)) ([3abdcda](https://github.com/libp2p/js-peer-id/commit/3abdcda))
+
+
+
 <a name="0.10.1"></a>
 ## [0.10.1](https://github.com/libp2p/js-peer-id/compare/v0.10.0...v0.10.1) (2017-09-07)
 
