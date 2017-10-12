@@ -85,6 +85,7 @@ describe('PeerId', () => {
       PeerId.createFromPrivKey(encoded, (err, id2) => {
         expect(err).to.not.exist()
         expect(testIdB58String).to.equal(id2.toB58String())
+        expect(id.marshalPubKey()).to.deep.equal(id2.marshalPubKey())
         done()
       })
     })
@@ -104,7 +105,7 @@ describe('PeerId', () => {
 
   it('Non-default # of bits', function (done) {
     // rsa is slow atm
-    this.timeout(20000)
+    this.timeout(100000)
     PeerId.create({ bits: 1024 }, (err, shortId) => {
       expect(err).to.not.exist()
       PeerId.create({ bits: 4096 }, (err, longId) => {
