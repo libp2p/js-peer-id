@@ -19,13 +19,19 @@ const testIdB58String = mh.toB58String(testIdBytes)
 
 const goId = require('./fixtures/go-private-key')
 
+// Test options for making PeerId.create faster
+// INSECURE, only use when testing
+const testOpts = {
+  bits: 512
+}
+
 describe('PeerId', () => {
   it('create an id without \'new\'', () => {
     expect(PeerId).to.throw(Error)
   })
 
   it('create a new id', (done) => {
-    PeerId.create((err, id) => {
+    PeerId.create(testOpts, (err, id) => {
       expect(err).to.not.exist()
       expect(id.toB58String().length).to.equal(46)
       done()
@@ -33,7 +39,7 @@ describe('PeerId', () => {
   })
 
   it('isPeerId', (done) => {
-    PeerId.create((err, id) => {
+    PeerId.create(testOpts, (err, id) => {
       expect(err).to.not.exist()
       expect(PeerId.isPeerId(id)).to.equal(true)
       expect(PeerId.isPeerId('aaa')).to.equal(false)
@@ -42,8 +48,9 @@ describe('PeerId', () => {
     })
   })
 
-  it('throws on changing the id', (done) => {
-    PeerId.create((err, id) => {
+  it('throws on changing the id', function (done) {
+    this.timeout(10000)
+    PeerId.create(testOpts, (err, id) => {
       expect(err).to.not.exist()
       expect(id.toB58String().length).to.equal(46)
       expect(() => {
@@ -92,7 +99,7 @@ describe('PeerId', () => {
   })
 
   it('Compare generated ID with one created from PubKey', (done) => {
-    PeerId.create((err, id1) => {
+    PeerId.create(testOpts, (err, id1) => {
       expect(err).to.not.exist()
 
       PeerId.createFromPubKey(id1.marshalPubKey(), (err, id2) => {
@@ -103,12 +110,20 @@ describe('PeerId', () => {
     })
   })
 
-  it('Non-default # of bits', function (done) {
-    // rsa is slow atm
-    this.timeout(100000)
-    PeerId.create({ bits: 1024 }, (err, shortId) => {
+  it('Works with default options', function (done) {
+    this.timeout(10000)
+    PeerId.create((err, id) => {
       expect(err).to.not.exist()
-      PeerId.create({ bits: 4096 }, (err, longId) => {
+      expect(id.toB58String().length).to.equal(46)
+      done()
+    })
+  })
+
+  it('Non-default # of bits', function (done) {
+    this.timeout(1000 * 60)
+    PeerId.create(testOpts, (err, shortId) => {
+      expect(err).to.not.exist()
+      PeerId.create({ bits: 1024 }, (err, longId) => {
         expect(err).to.not.exist()
         expect(shortId.privKey.bytes.length).is.below(longId.privKey.bytes.length)
         done()
@@ -117,7 +132,7 @@ describe('PeerId', () => {
   })
 
   it('Pretty printing', (done) => {
-    PeerId.create((err, id1) => {
+    PeerId.create(testOpts, (err, id1) => {
       expect(err).to.not.exist()
       PeerId.createFromPrivKey(id1.toPrint().privKey, (err, id2) => {
         expect(err).to.not.exist()
@@ -134,8 +149,8 @@ describe('PeerId', () => {
 
   it('isEqual', (done) => {
     parallel([
-      (cb) => PeerId.create(cb),
-      (cb) => PeerId.create(cb)
+      (cb) => PeerId.create(testOpts, cb),
+      (cb) => PeerId.create(testOpts, cb)
     ], (err, ids) => {
       expect(err).to.not.exist()
       expect(ids[0].isEqual(ids[0])).to.equal(true)
@@ -148,7 +163,7 @@ describe('PeerId', () => {
 
   describe('fromJSON', () => {
     it('full node', (done) => {
-      PeerId.create({ bits: 1024 }, (err, id) => {
+      PeerId.create(testOpts, (err, id) => {
         expect(err).to.not.exist()
 
         PeerId.createFromJSON(id.toJSON(), (err, other) => {
@@ -193,7 +208,7 @@ describe('PeerId', () => {
   })
 
   it('set privKey (valid)', (done) => {
-    PeerId.create((err, peerId) => {
+    PeerId.create(testOpts, (err, peerId) => {
       expect(err).to.not.exist()
       peerId.privKey = peerId._privKey
       peerId.isValid(done)
@@ -201,7 +216,7 @@ describe('PeerId', () => {
   })
 
   it('set pubKey (valid)', (done) => {
-    PeerId.create((err, peerId) => {
+    PeerId.create(testOpts, (err, peerId) => {
       expect(err).to.not.exist()
       peerId.pubKey = peerId._pubKey
       peerId.isValid(done)
@@ -209,7 +224,7 @@ describe('PeerId', () => {
   })
 
   it('set privKey (invalid)', (done) => {
-    PeerId.create((err, peerId) => {
+    PeerId.create(testOpts, (err, peerId) => {
       expect(err).to.not.exist()
       peerId.privKey = Buffer.from('bufff')
       peerId.isValid((err) => {
@@ -220,7 +235,7 @@ describe('PeerId', () => {
   })
 
   it('set pubKey (invalid)', (done) => {
-    PeerId.create((err, peerId) => {
+    PeerId.create(testOpts, (err, peerId) => {
       expect(err).to.not.exist()
       peerId.pubKey = Buffer.from('buffff')
       peerId.isValid((err) => {
@@ -237,9 +252,9 @@ describe('PeerId', () => {
 
     before((done) => {
       parallel([
-        (cb) => crypto.keys.generateKeyPair('RSA', 1024, cb),
-        (cb) => crypto.keys.generateKeyPair('RSA', 1024, cb),
-        (cb) => crypto.keys.generateKeyPair('RSA', 1024, cb)
+        (cb) => crypto.keys.generateKeyPair('RSA', 512, cb),
+        (cb) => crypto.keys.generateKeyPair('RSA', 512, cb),
+        (cb) => crypto.keys.generateKeyPair('RSA', 512, cb)
       ], (err, keys) => {
         expect(err).to.not.exist()
 
