@@ -204,7 +204,7 @@ exports.createFromPrivKey = function (key, callback) {
 
     if (!Buffer.isBuffer(buf)) throw new Error('Supplied key is neither a base64 string nor a buffer')
   } catch (err) {
-    callback(err)
+    return callback(err)
   }
 
   waterfall([
@@ -237,7 +237,7 @@ exports.createFromJSON = function (obj, callback) {
     rawPubKey = obj.pubKey && Buffer.from(obj.pubKey, 'base64')
     pub = rawPubKey && crypto.keys.unmarshalPublicKey(rawPubKey)
   } catch (err) {
-    callback(err)
+    return callback(err)
   }
 
   if (rawPrivKey) {
