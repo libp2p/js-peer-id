@@ -245,6 +245,22 @@ describe('PeerId', () => {
     })
   })
 
+  describe('returns error via cb instead of crashing', () => {
+    const garbage = Buffer.from('00010203040506070809', 'hex')
+
+    const fncs = ['createFromPubKey', 'createFromPrivKey', 'createFromJSON']
+
+    fncs.forEach(fnc => {
+      it(fnc + '(garbage)', cb => {
+        PeerId[fnc](garbage, (err, res) => {
+          expect(err).to.exist()
+          expect(res).to.not.exist()
+          cb()
+        })
+      })
+    })
+  })
+
   describe('throws on inconsistent data', () => {
     let k1
     let k2
