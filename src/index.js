@@ -199,6 +199,8 @@ exports.createFromPrivKey = function (key, callback) {
       buf = Buffer.from(key, 'base64')
     }
 
+    if (!Buffer.isBuffer(buf)) throw new Error('Supplied key is neither a base64 string nor a buffer')
+
     waterfall([
       (cb) => crypto.keys.unmarshalPrivateKey(buf, cb),
       (privKey, cb) => privKey.public.hash((err, digest) => {
