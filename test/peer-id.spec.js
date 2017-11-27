@@ -248,7 +248,7 @@ describe('PeerId', () => {
   })
 
   describe('returns error via cb instead of crashing', () => {
-    const garbage = [Buffer.from('00010203040506070809', 'hex'), {}, null, false, undefined, true, 1, 0, Buffer.from('')]
+    const garbage = [Buffer.from('00010203040506070809', 'hex'), {}, null, false, undefined, true, 1, 0, Buffer.from(''), 'aGVsbG93b3JsZA==', 'helloworld', '']
 
     const fncs = ['createFromPubKey', 'createFromPrivKey', 'createFromJSON']
 
