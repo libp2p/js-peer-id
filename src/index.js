@@ -165,45 +165,55 @@ exports.createFromPubKey = function (key, callback) {
     throw new Error('callback is required')
   }
 
-  let buf = key
-  if (typeof buf === 'string') {
-    buf = Buffer.from(key, 'base64')
-  }
-
-  const pubKey = crypto.keys.unmarshalPublicKey(buf)
-
-  pubKey.hash((err, digest) => {
-    if (err) {
-      return callback(err)
+  try {
+    let buf = key
+    if (typeof buf === 'string') {
+      buf = Buffer.from(key, 'base64')
     }
 
-    callback(null, new PeerId(digest, null, pubKey))
-  })
+    if (!Buffer.isBuffer(buf)) throw new Error('Supplied key is neither a base64 string nor a buffer')
+
+    const pubKey = crypto.keys.unmarshalPublicKey(buf)
+
+    pubKey.hash((err, digest) => {
+      if (err) {
+        return callback(err)
+      }
+
+      callback(null, new PeerId(digest, null, pubKey))
+    })
+  } catch (e) {
+    callback(e)
+  }
 }
 
 // Private key input will be a string
 exports.createFromPrivKey = function (key, callback) {
-  let buf = key
-  if (typeof buf === 'string') {
-    buf = Buffer.from(key, 'base64')
-  }
-
   if (typeof callback !== 'function') {
     throw new Error('callback is required')
   }
 
-  waterfall([
-    (cb) => crypto.keys.unmarshalPrivateKey(buf, cb),
-    (privKey, cb) => privKey.public.hash((err, digest) => {
-      cb(err, digest, privKey)
-    })
-  ], (err, digest, privKey) => {
-    if (err) {
-      return callback(err)
+  try {
+    let buf = key
+    if (typeof buf === 'string') {
+      buf = Buffer.from(key, 'base64')
     }
 
-    callback(null, new PeerId(digest, privKey, privKey.public))
-  })
+    waterfall([
+      (cb) => crypto.keys.unmarshalPrivateKey(buf, cb),
+      (privKey, cb) => privKey.public.hash((err, digest) => {
+        cb(err, digest, privKey)
+      })
+    ], (err, digest, privKey) => {
+      if (err) {
+        return callback(err)
+      }
+
+      callback(null, new PeerId(digest, privKey, privKey.public))
+    })
+  } catch (e) {
+    callback(e)
+  }
 }
 
 exports.createFromJSON = function (obj, callback) {
@@ -211,43 +221,47 @@ exports.createFromJSON = function (obj, callback) {
     throw new Error('callback is required')
   }
 
-  const id = mh.fromB58String(obj.id)
-  const rawPrivKey = obj.privKey && Buffer.from(obj.privKey, 'base64')
-  const rawPubKey = obj.pubKey && Buffer.from(obj.pubKey, 'base64')
-  const pub = rawPubKey && crypto.keys.unmarshalPublicKey(rawPubKey)
+  try {
+    const id = mh.fromB58String(obj.id)
+    const rawPrivKey = obj.privKey && Buffer.from(obj.privKey, 'base64')
+    const rawPubKey = obj.pubKey && Buffer.from(obj.pubKey, 'base64')
+    const pub = rawPubKey && crypto.keys.unmarshalPublicKey(rawPubKey)
 
-  if (rawPrivKey) {
-    waterfall([
-      (cb) => crypto.keys.unmarshalPrivateKey(rawPrivKey, cb),
-      (priv, cb) => priv.public.hash((err, digest) => {
-        cb(err, digest, priv)
-      }),
-      (privDigest, priv, cb) => {
-        if (pub) {
-          pub.hash((err, pubDigest) => {
-            cb(err, privDigest, priv, pubDigest)
-          })
-        } else {
-          cb(null, privDigest, priv)
+    if (rawPrivKey) {
+      waterfall([
+        (cb) => crypto.keys.unmarshalPrivateKey(rawPrivKey, cb),
+        (priv, cb) => priv.public.hash((err, digest) => {
+          cb(err, digest, priv)
+        }),
+        (privDigest, priv, cb) => {
+          if (pub) {
+            pub.hash((err, pubDigest) => {
+              cb(err, privDigest, priv, pubDigest)
+            })
+          } else {
+            cb(null, privDigest, priv)
+          }
         }
-      }
-    ], (err, privDigest, priv, pubDigest) => {
-      if (err) {
-        return callback(err)
-      }
+      ], (err, privDigest, priv, pubDigest) => {
+        if (err) {
+          return callback(err)
+        }
 
-      if (pub && !privDigest.equals(pubDigest)) {
-        return callback(new Error('Public and private key do not match'))
-      }
+        if (pub && !privDigest.equals(pubDigest)) {
+          return callback(new Error('Public and private key do not match'))
+        }
 
-      if (id && !privDigest.equals(id)) {
-        return callback(new Error('Id and private key do not match'))
-      }
+        if (id && !privDigest.equals(id)) {
+          return callback(new Error('Id and private key do not match'))
+        }
 
-      callback(null, new PeerId(id, priv, pub))
-    })
-  } else {
-    callback(null, new PeerId(id, null, pub))
+        callback(null, new PeerId(id, priv, pub))
+      })
+    } else {
+      callback(null, new PeerId(id, null, pub))
+    }
+  } catch (e) {
+    callback(e)
   }
 }
 
