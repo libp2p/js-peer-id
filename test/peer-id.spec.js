@@ -12,6 +12,8 @@ const parallel = require('async/parallel')
 
 const PeerId = require('../src')
 
+const util = require('util')
+
 const testId = require('./fixtures/sample-id')
 const testIdHex = testId.id
 const testIdBytes = mh.fromHexString(testId.id)
@@ -246,16 +248,18 @@ describe('PeerId', () => {
   })
 
   describe('returns error via cb instead of crashing', () => {
-    const garbage = Buffer.from('00010203040506070809', 'hex')
+    const garbage = [Buffer.from('00010203040506070809', 'hex'), {}, null, false, undefined, true, 1, 0, Buffer.from('')]
 
     const fncs = ['createFromPubKey', 'createFromPrivKey', 'createFromJSON']
 
-    fncs.forEach(fnc => {
-      it(fnc + '(garbage)', cb => {
-        PeerId[fnc](garbage, (err, res) => {
-          expect(err).to.exist()
-          expect(res).to.not.exist()
-          cb()
+    garbage.forEach(garbage => {
+      fncs.forEach(fnc => {
+        it(fnc + '(' + util.inspect(garbage) + ')', cb => {
+          PeerId[fnc](garbage, (err, res) => {
+            expect(err).to.exist()
+            expect(res).to.not.exist()
+            cb()
+          })
         })
       })
     })
