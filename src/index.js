@@ -165,12 +165,20 @@ exports.createFromPubKey = function (key, callback) {
     throw new Error('callback is required')
   }
 
-  let buf = key
-  if (typeof buf === 'string') {
-    buf = Buffer.from(key, 'base64')
-  }
+  let pubKey
 
-  const pubKey = crypto.keys.unmarshalPublicKey(buf)
+  try {
+    let buf = key
+    if (typeof buf === 'string') {
+      buf = Buffer.from(key, 'base64')
+    }
+
+    if (!Buffer.isBuffer(buf)) throw new Error('Supplied key is neither a base64 string nor a buffer')
+
+    pubKey = crypto.keys.unmarshalPublicKey(buf)
+  } catch (err) {
+    return callback(err)
+  }
 
   pubKey.hash((err, digest) => {
     if (err) {
@@ -183,13 +191,20 @@ exports.createFromPubKey = function (key, callback) {
 
 // Private key input will be a string
 exports.createFromPrivKey = function (key, callback) {
-  let buf = key
-  if (typeof buf === 'string') {
-    buf = Buffer.from(key, 'base64')
-  }
-
   if (typeof callback !== 'function') {
     throw new Error('callback is required')
+  }
+
+  let buf = key
+
+  try {
+    if (typeof buf === 'string') {
+      buf = Buffer.from(key, 'base64')
+    }
+
+    if (!Buffer.isBuffer(buf)) throw new Error('Supplied key is neither a base64 string nor a buffer')
+  } catch (err) {
+    return callback(err)
   }
 
   waterfall([
@@ -211,10 +226,19 @@ exports.createFromJSON = function (obj, callback) {
     throw new Error('callback is required')
   }
 
-  const id = mh.fromB58String(obj.id)
-  const rawPrivKey = obj.privKey && Buffer.from(obj.privKey, 'base64')
-  const rawPubKey = obj.pubKey && Buffer.from(obj.pubKey, 'base64')
-  const pub = rawPubKey && crypto.keys.unmarshalPublicKey(rawPubKey)
+  let id
+  let rawPrivKey
+  let rawPubKey
+  let pub
+
+  try {
+    id = mh.fromB58String(obj.id)
+    rawPrivKey = obj.privKey && Buffer.from(obj.privKey, 'base64')
+    rawPubKey = obj.pubKey && Buffer.from(obj.pubKey, 'base64')
+    pub = rawPubKey && crypto.keys.unmarshalPublicKey(rawPubKey)
+  } catch (err) {
+    return callback(err)
+  }
 
   if (rawPrivKey) {
     waterfall([
