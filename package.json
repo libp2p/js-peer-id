@@ -33,16 +33,16 @@
   },
   "homepage": "https://github.com/libp2p/js-peer-id",
   "devDependencies": {
-    "aegir": "^12.0.8",
+    "aegir": "^12.2.0",
     "chai": "^4.1.2",
     "dirty-chai": "^2.0.1",
     "pre-commit": "^1.2.2"
   },
   "dependencies": {
-    "async": "^2.5.0",
-    "libp2p-crypto": "~0.10.3",
+    "async": "^2.6.0",
+    "libp2p-crypto": "~0.10.4",
     "lodash": "^4.17.4",
-    "multihashes": "~0.4.9"
+    "multihashes": "~0.4.12"
   },
   "repository": {
     "type": "git",
