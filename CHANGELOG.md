@@ -1,3 +1,13 @@
+<a name="0.10.3"></a>
+## [0.10.3](https://github.com/libp2p/js-peer-id/compare/v0.10.2...v0.10.3) (2017-12-01)
+
+
+### Bug Fixes
+
+* catch error when unmarshaling instead of crashing ([#72](https://github.com/libp2p/js-peer-id/issues/72)) ([156911e](https://github.com/libp2p/js-peer-id/commit/156911e))
+
+
+
 <a name="0.10.2"></a>
 ## [0.10.2](https://github.com/libp2p/js-peer-id/compare/v0.10.1...v0.10.2) (2017-10-12)
 
