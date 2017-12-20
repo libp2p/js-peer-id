@@ -1,6 +1,6 @@
 {
   "name": "peer-id",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "IPFS Peer Id implementation in Node.js",
   "main": "src/index.js",
   "bin": "src/bin.js",
