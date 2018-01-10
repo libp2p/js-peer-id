@@ -1,0 +1,44 @@
+// @flow
+
+import type { Callback } from "callback.flow"
+import * as crypto from "libp2p-crypto"
+
+const { RsaPublicKey, RsaPrivateKey } = crypto.key.rsa
+
+export interface JSONPeerId {
+  id: string;
+  privKey: string;
+  pubKey: string;
+}
+
+export interface PeerId {
+  id: Buffer;
+  privKey: RsaPrivateKey;
+  pubKey: RsaPublicKey;
+
+  toJSON(): JSONPeerId;
+  toPrint(): JSONPeerId;
+  toB58String(): string;
+  toBytes(): Buffer;
+  toHexString(): string;
+  isEqual(PeerId): boolean;
+  marshalPubKey(): Buffer;
+  marshalPrivKey(): Buffer;
+  isValid(Callback<Error>): void;
+}
+
+export type CreateOptions = {
+  bits?: number
+}
+
+declare export default {
+  create(CreateOptions, Callback<Error, PeerId>): void,
+  create(Callback<Error, PeerId>): void,
+  createFromHexString(string): PeerId,
+  createFromBytes(Buffer): PeerId,
+  createFromB58String(string): PeerId,
+  createFromPubKey(string | Buffer, Callback<Error, PeerId>): void,
+  createFromPrivKey(string | Buffer, Callback<Error, PeerId>): void,
+  createFromJSON(JSONPeerId, Callback<Error, PeerId>): void,
+  isPeerId(mixed): boolean
+}
