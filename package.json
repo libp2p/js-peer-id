@@ -4,6 +4,7 @@
   "description": "IPFS Peer Id implementation in Node.js",
   "main": "src/index.js",
   "bin": "src/bin.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "lint": "aegir lint",
     "build": "aegir build",
