@@ -2,6 +2,7 @@
   "name": "peer-id",
   "version": "0.10.7",
   "description": "IPFS Peer Id implementation in Node.js",
+  "leadMaintainer": "Pedro Teixeira <i@pgte.me>",
   "main": "src/index.js",
   "bin": "src/bin.js",
   "scripts": {
@@ -18,9 +19,8 @@
   "keywords": [
     "IPFS"
   ],
-  "author": "David Dias <daviddias@ipfs.io>",
   "license": "MIT",
-  "pre-commit": [
+  "pre-push": [
     "lint",
     "test"
   ],

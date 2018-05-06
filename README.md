@@ -11,6 +11,12 @@
 
 > [IPFS](https://github.com/ipfs/ipfs) Peer ID implementation in JavaScript.
 
+## Lead Maintainer
+
+[Pedro Teixeira](https://github.com/pgte)
+
+## Table of Contents
+
 - [Description](#description)
 - [Example](#example)
 - [Installation](#installation)
