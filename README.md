@@ -201,7 +201,9 @@ Returns an `obj` of the form
 
 ### `toPrint()`
 
-Alias for `.toJSON()`.
+Returns the Peer ID as a printable string.
+
+Example: `<peer.ID xxxxxx>`
 
 ### `isEqual(id)`
 

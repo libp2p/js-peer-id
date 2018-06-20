@@ -67,9 +67,19 @@ class PeerId {
     }
   }
 
-  // pretty print
   toPrint () {
-    return this.toJSON()
+    let pid = this.toB58String()
+    // All sha256 nodes start with Qm
+    // We can skip the Qm to make the peer.ID more useful
+    if (pid.startsWith('Qm')) {
+      pid = pid.slice(2)
+    }
+    let maxRunes = 6
+    if (pid.length < maxRunes) {
+      maxRunes = pid.length
+    }
+
+    return '<peer.ID ' + pid.substr(0, maxRunes) + '>'
   }
 
   // return the jsonified version of the key, matching the formatting

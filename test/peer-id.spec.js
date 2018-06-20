@@ -136,9 +136,10 @@ describe('PeerId', () => {
   it('Pretty printing', (done) => {
     PeerId.create(testOpts, (err, id1) => {
       expect(err).to.not.exist()
-      PeerId.createFromPrivKey(id1.toPrint().privKey, (err, id2) => {
+      PeerId.createFromPrivKey(id1.toJSON().privKey, (err, id2) => {
         expect(err).to.not.exist()
         expect(id1.toPrint()).to.be.eql(id2.toPrint())
+        expect(id1.toPrint()).to.equal('<peer.ID ' + id1.toB58String().substr(2, 6) + '>')
         done()
       })
     })
