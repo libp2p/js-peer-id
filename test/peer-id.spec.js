@@ -86,6 +86,15 @@ describe('PeerId', () => {
     expect(id.marshalPubKey()).to.deep.equal(id2.marshalPubKey())
   })
 
+  it('Recreate from Protobuf', async () => {
+    const id = await PeerId.createFromProtobuf(testId.marshaled)
+    expect(testIdB58String).to.equal(id.toB58String())
+    const encoded = Buffer.from(testId.privKey, 'base64')
+    const id2 = await PeerId.createFromPrivKey(encoded)
+    expect(testIdB58String).to.equal(id2.toB58String())
+    expect(id.marshalPubKey()).to.deep.equal(id2.marshalPubKey())
+  })
+
   it('can be created from a Secp256k1 public key', async () => {
     const privKey = await crypto.keys.generateKeyPair('secp256k1', 256)
     const id = await PeerId.createFromPubKey(privKey.public.bytes)
@@ -200,7 +209,7 @@ describe('PeerId', () => {
       Buffer.from(''), 'aGVsbG93b3JsZA==', 'helloworld', ''
     ]
 
-    const fncs = ['createFromPubKey', 'createFromPrivKey', 'createFromJSON']
+    const fncs = ['createFromPubKey', 'createFromPrivKey', 'createFromJSON', 'createFromProtobuf']
 
     for (const gb of garbage) {
       for (const fn of fncs) {

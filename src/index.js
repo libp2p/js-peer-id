@@ -8,6 +8,7 @@ const mh = require('multihashes')
 const cryptoKeys = require('libp2p-crypto/src/keys')
 const assert = require('assert')
 const withIs = require('class-is')
+const {PeerIdProto} = require('./proto')
 
 class PeerId {
   constructor (id, privKey, pubKey) {
@@ -65,6 +66,15 @@ class PeerId {
     if (this.privKey) {
       return cryptoKeys.marshalPrivateKey(this.privKey)
     }
+  }
+
+  // Return the protobuf version of the peer-id
+  marshal (excludePriv) {
+    return PeerIdProto.encode({
+      id: this.toBytes(),
+      pubKey: this.marshalPubKey(),
+      privKey: excludePriv ? null : this.marshalPrivKey()
+    })
   }
 
   toPrint () {
@@ -230,6 +240,49 @@ exports.createFromJSON = async (obj) => {
   }
 
   return new PeerIdWithIs(id, privKey, pub)
+}
+
+exports.createFromProtobuf = async (buf) => {
+  if (typeof buf === 'string') {
+    buf = Buffer.from(buf, 'hex')
+  }
+
+  let {id, privKey, pubKey} = PeerIdProto.decode(buf)
+
+  privKey = privKey ? await cryptoKeys.unmarshalPrivateKey(privKey) : false
+  pubKey = pubKey ? await cryptoKeys.unmarshalPublicKey(pubKey) : false
+
+  let pubDigest
+  let privDigest
+
+  if (privKey) {
+    privDigest = await computeDigest(privKey.public)
+  }
+
+  if (pubKey) {
+    pubDigest = await computeDigest(pubKey)
+  }
+
+  if (privKey) {
+    if (pubKey) {
+      if (!privDigest.equals(pubDigest)) {
+        throw new Error('Public and private key do not match')
+      }
+    }
+    return new PeerIdWithIs(privDigest, privKey, privKey.public)
+  }
+
+  // TODO: val id and pubDigest
+
+  if (pubKey) {
+    return new PeerIdWithIs(pubDigest, null, pubKey)
+  }
+
+  if (id) {
+    return new PeerIdWithIs(id)
+  }
+
+  throw new Error('Protobuf did not contain any usable key material')
 }
 
 exports.isPeerId = (peerId) => {
