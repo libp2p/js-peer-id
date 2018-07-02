@@ -1,3 +1,13 @@
+<a name="0.11.0"></a>
+# [0.11.0](https://github.com/libp2p/js-peer-id/compare/v0.10.7...v0.11.0) (2018-07-02)
+
+
+### Features
+
+* change toPrint output to match go implementation ([e8ab1b9](https://github.com/libp2p/js-peer-id/commit/e8ab1b9))
+
+
+
 <a name="0.10.7"></a>
 ## [0.10.7](https://github.com/libp2p/js-peer-id/compare/v0.10.6...v0.10.7) (2018-04-05)
 
