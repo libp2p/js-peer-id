@@ -8,6 +8,7 @@ const mh = require('multihashes')
 const crypto = require('libp2p-crypto')
 const assert = require('assert')
 const waterfall = require('async/waterfall')
+const withIs = require('class-is')
 
 class PeerId {
   constructor (id, privKey, pubKey) {
@@ -132,7 +133,7 @@ class PeerId {
   }
 }
 
-exports = module.exports = PeerId
+exports = module.exports = withIs(PeerId, { className: 'PeerId', symbolName: '@libp2p/js-peer-id/PeerId' })
 
 // generation
 exports.create = function (opts, callback) {
