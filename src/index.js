@@ -137,17 +137,28 @@ const PeerIdWithIs = withIs(PeerId, { className: 'PeerId', symbolName: '@libp2p/
 
 exports = module.exports = PeerIdWithIs
 
-// generation
+/**
+ * Creates a new PeerId
+ *
+ * @param {object} opts
+ * @param {string} opts.type The type of key to generate. One of ['rsa', 'ed25519', 'secp256k1'], case insensitive.
+ * @param {number} opts.bits Size of the key to generate
+ * @param {function(Error, PeerId)} callback
+ * @returns {void}
+ */
 exports.create = function (opts, callback) {
   if (typeof opts === 'function') {
     callback = opts
     opts = {}
   }
-  opts = opts || {}
-  opts.bits = opts.bits || 2048
+  const defaults = {
+    bits: 2048,
+    type: 'RSA'
+  }
+  opts = Object.assign({}, defaults, opts)
 
   waterfall([
-    (cb) => crypto.keys.generateKeyPair('RSA', opts.bits, cb),
+    (cb) => crypto.keys.generateKeyPair(opts.type, opts.bits, cb),
     (privKey, cb) => privKey.public.hash((err, digest) => {
       cb(err, digest, privKey)
     })

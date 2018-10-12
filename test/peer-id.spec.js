@@ -308,4 +308,57 @@ describe('PeerId', () => {
       expect(() => new PeerId('hello world')).to.throw(/invalid id/)
     })
   })
+
+  describe('key types', () => {
+    it('should default to an rsa key based peer id', (done) => {
+      PeerId.create({
+        bits: 512
+      }, (err, peerId) => {
+        expect(err).to.not.exist()
+        expect(peerId).to.exist()
+        expect(peerId.pubKey).to.be.instanceof(crypto.keys.supportedKeys.rsa.RsaPublicKey)
+        expect(peerId.privKey).to.be.instanceof(crypto.keys.supportedKeys.rsa.RsaPrivateKey)
+        done()
+      })
+    })
+
+    it('should create an ed25519 key based peer id', (done) => {
+      PeerId.create({
+        type: 'ed25519',
+        bits: 512
+      }, (err, peerId) => {
+        expect(err).to.not.exist()
+        expect(peerId).to.exist()
+        expect(peerId.pubKey).to.be.instanceof(crypto.keys.supportedKeys.ed25519.Ed25519PublicKey)
+        expect(peerId.privKey).to.be.instanceof(crypto.keys.supportedKeys.ed25519.Ed25519PrivateKey)
+        done()
+      })
+    })
+
+    it('should create an rsa key based peer id', (done) => {
+      PeerId.create({
+        type: 'rsa',
+        bits: 512
+      }, (err, peerId) => {
+        expect(err).to.not.exist()
+        expect(peerId).to.exist()
+        expect(peerId.pubKey).to.be.instanceof(crypto.keys.supportedKeys.rsa.RsaPublicKey)
+        expect(peerId.privKey).to.be.instanceof(crypto.keys.supportedKeys.rsa.RsaPrivateKey)
+        done()
+      })
+    })
+
+    it('should create a secp256k1 key based peer id', (done) => {
+      PeerId.create({
+        type: 'secp256k1',
+        bits: 512
+      }, (err, peerId) => {
+        expect(err).to.not.exist()
+        expect(peerId).to.exist()
+        expect(peerId.pubKey).to.be.instanceof(crypto.keys.supportedKeys.secp256k1.Secp256k1PublicKey)
+        expect(peerId.privKey).to.be.instanceof(crypto.keys.supportedKeys.secp256k1.Secp256k1PrivateKey)
+        done()
+      })
+    })
+  })
 })
