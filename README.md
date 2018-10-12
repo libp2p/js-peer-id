@@ -144,6 +144,7 @@ Creates a Peer ID from hex string representing the key's multihash.
 Creates a Peer ID from a buffer representing the key's multihash.
 
 ### `createFromB58String(str)`
+
 Creates a Peer ID from a Base58 string representing the key's multihash.
 
 ### `createFromPubKey(pubKey)`
@@ -161,8 +162,8 @@ Creates a Peer ID from a buffer containing a private key.
 ### `createFromJSON(obj)`
 
 - `obj.id: String` - The multihash encoded in `base58`
-- `obj.pubKey: String` - The public key in protobuf format, encoded in 'base64'
-- `obj.privKey: String` - The private key in protobuf format, encoded in 'base 64'
+- `obj.pubKey: String` - The public key in protobuf format, encoded in `base64`
+- `obj.privKey: String` - The private key in protobuf format, encoded in `base64`
 
 ## Export
 
@@ -198,10 +199,9 @@ Returns an `obj` of the form
 - `obj.pubKey: String` - The public key in protobuf format, encoded in 'base64'
 - `obj.privKey: String` - The private key in protobuf format, encoded in 'base 64'
 
-
 ### `toPrint()`
 
-Returns the Peer ID as a printable string.
+Returns the Peer ID as a printable string without the `Qm` prefix.
 
 Example: `<peer.ID xxxxxx>`
 
