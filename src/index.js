@@ -133,7 +133,9 @@ class PeerId {
   }
 }
 
-exports = module.exports = withIs(PeerId, { className: 'PeerId', symbolName: '@libp2p/js-peer-id/PeerId' })
+const PeerIdWithIs = withIs(PeerId, { className: 'PeerId', symbolName: '@libp2p/js-peer-id/PeerId' })
+
+exports = module.exports = PeerIdWithIs
 
 // generation
 exports.create = function (opts, callback) {
@@ -154,20 +156,20 @@ exports.create = function (opts, callback) {
       return callback(err)
     }
 
-    callback(null, new PeerId(digest, privKey))
+    callback(null, new PeerIdWithIs(digest, privKey))
   })
 }
 
 exports.createFromHexString = function (str) {
-  return new PeerId(mh.fromHexString(str))
+  return new PeerIdWithIs(mh.fromHexString(str))
 }
 
 exports.createFromBytes = function (buf) {
-  return new PeerId(buf)
+  return new PeerIdWithIs(buf)
 }
 
 exports.createFromB58String = function (str) {
-  return new PeerId(mh.fromB58String(str))
+  return new PeerIdWithIs(mh.fromB58String(str))
 }
 
 // Public Key input will be a buffer
@@ -196,7 +198,7 @@ exports.createFromPubKey = function (key, callback) {
       return callback(err)
     }
 
-    callback(null, new PeerId(digest, null, pubKey))
+    callback(null, new PeerIdWithIs(digest, null, pubKey))
   })
 }
 
@@ -228,7 +230,7 @@ exports.createFromPrivKey = function (key, callback) {
       return callback(err)
     }
 
-    callback(null, new PeerId(digest, privKey, privKey.public))
+    callback(null, new PeerIdWithIs(digest, privKey, privKey.public))
   })
 }
 
@@ -279,10 +281,10 @@ exports.createFromJSON = function (obj, callback) {
         return callback(new Error('Id and private key do not match'))
       }
 
-      callback(null, new PeerId(id, priv, pub))
+      callback(null, new PeerIdWithIs(id, priv, pub))
     })
   } else {
-    callback(null, new PeerId(id, null, pub))
+    callback(null, new PeerIdWithIs(id, null, pub))
   }
 }
 
