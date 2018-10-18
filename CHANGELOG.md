@@ -1,3 +1,18 @@
+<a name="0.12.0"></a>
+# [0.12.0](https://github.com/libp2p/js-peer-id/compare/v0.11.0...v0.12.0) (2018-10-18)
+
+
+### Bug Fixes
+
+* add peerIdWithIs to the API functions using the instance ([2e5e666](https://github.com/libp2p/js-peer-id/commit/2e5e666))
+
+
+### Features
+
+* add class-is module ([6513a02](https://github.com/libp2p/js-peer-id/commit/6513a02))
+
+
+
 <a name="0.11.0"></a>
 # [0.11.0](https://github.com/libp2p/js-peer-id/compare/v0.10.7...v0.11.0) (2018-07-02)
 
