@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "async": "^2.6.1",
+    "class-is": "^1.1.0",
     "libp2p-crypto": "~0.13.0",
     "lodash": "^4.17.10",
     "multihashes": "~0.4.13"
