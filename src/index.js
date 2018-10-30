@@ -7,7 +7,6 @@
 const mh = require('multihashes')
 const cryptoKeys = require('libp2p-crypto/src/keys')
 const assert = require('assert')
-const waterfall = require('async/waterfall')
 const withIs = require('class-is')
 
 class PeerId {
@@ -119,176 +118,111 @@ class PeerId {
   /*
    * Check if this PeerId instance is valid (privKey -> pubKey -> Id)
    */
-  isValid (callback) {
-    // TODO Needs better checking
-    if (this.privKey &&
+  isValid () {
+    // TODO: needs better checking
+    return Boolean(this.privKey &&
       this.privKey.public &&
       this.privKey.public.bytes &&
       Buffer.isBuffer(this.pubKey.bytes) &&
-      this.privKey.public.bytes.equals(this.pubKey.bytes)) {
-      callback()
-    } else {
-      callback(new Error('Keys not match'))
-    }
+      this.privKey.public.bytes.equals(this.pubKey.bytes))
   }
 }
 
-const PeerIdWithIs = withIs(PeerId, { className: 'PeerId', symbolName: '@libp2p/js-peer-id/PeerId' })
+const PeerIdWithIs = withIs(PeerId, {
+  className: 'PeerId',
+  symbolName: '@libp2p/js-peer-id/PeerId'
+})
 
 exports = module.exports = PeerIdWithIs
 
 // generation
-exports.create = function (opts, callback) {
-  if (typeof opts === 'function') {
-    callback = opts
-    opts = {}
-  }
+exports.create = async (opts) => {
   opts = opts || {}
   opts.bits = opts.bits || 2048
 
-  waterfall([
-    (cb) => cryptoKeys.generateKeyPair('RSA', opts.bits, cb),
-    (privKey, cb) => privKey.public.hash((err, digest) => {
-      cb(err, digest, privKey)
-    })
-  ], (err, digest, privKey) => {
-    if (err) {
-      return callback(err)
-    }
+  const key = await cryptoKeys.generateKeyPair('RSA', opts.bits)
+  const digest = await key.public.hash()
 
-    callback(null, new PeerIdWithIs(digest, privKey))
-  })
+  return new PeerIdWithIs(digest, key)
 }
 
-exports.createFromHexString = function (str) {
+exports.createFromHexString = (str) => {
   return new PeerIdWithIs(mh.fromHexString(str))
 }
 
-exports.createFromBytes = function (buf) {
+exports.createFromBytes = (buf) => {
   return new PeerIdWithIs(buf)
 }
 
-exports.createFromB58String = function (str) {
+exports.createFromB58String = (str) => {
   return new PeerIdWithIs(mh.fromB58String(str))
 }
 
 // Public Key input will be a buffer
-exports.createFromPubKey = function (key, callback) {
-  if (typeof callback !== 'function') {
-    throw new Error('callback is required')
+exports.createFromPubKey = async (key) => {
+  let buf = key
+
+  if (typeof buf === 'string') {
+    buf = Buffer.from(key, 'base64')
   }
 
-  let pubKey
-
-  try {
-    let buf = key
-    if (typeof buf === 'string') {
-      buf = Buffer.from(key, 'base64')
-    }
-
-    if (!Buffer.isBuffer(buf)) throw new Error('Supplied key is neither a base64 string nor a buffer')
-
-    pubKey = cryptoKeys.unmarshalPublicKey(buf)
-  } catch (err) {
-    return callback(err)
+  if (!Buffer.isBuffer(buf)) {
+    throw new Error('Supplied key is neither a base64 string nor a buffer')
   }
 
-  pubKey.hash((err, digest) => {
-    if (err) {
-      return callback(err)
-    }
-
-    callback(null, new PeerIdWithIs(digest, null, pubKey))
-  })
+  const pubKey = await cryptoKeys.unmarshalPublicKey(buf)
+  const digest = await pubKey.hash()
+  return new PeerIdWithIs(digest, null, pubKey)
 }
 
 // Private key input will be a string
-exports.createFromPrivKey = function (key, callback) {
-  if (typeof callback !== 'function') {
-    throw new Error('callback is required')
-  }
-
+exports.createFromPrivKey = async (key) => {
   let buf = key
 
-  try {
-    if (typeof buf === 'string') {
-      buf = Buffer.from(key, 'base64')
-    }
-
-    if (!Buffer.isBuffer(buf)) throw new Error('Supplied key is neither a base64 string nor a buffer')
-  } catch (err) {
-    return callback(err)
+  if (typeof buf === 'string') {
+    buf = Buffer.from(key, 'base64')
   }
 
-  waterfall([
-    (cb) => cryptoKeys.unmarshalPrivateKey(buf, cb),
-    (privKey, cb) => privKey.public.hash((err, digest) => {
-      cb(err, digest, privKey)
-    })
-  ], (err, digest, privKey) => {
-    if (err) {
-      return callback(err)
-    }
+  if (!Buffer.isBuffer(buf)) {
+    throw new Error('Supplied key is neither a base64 string nor a buffer')
+  }
 
-    callback(null, new PeerIdWithIs(digest, privKey, privKey.public))
-  })
+  const privKey = await cryptoKeys.unmarshalPrivateKey(buf)
+  const digest = await privKey.public.hash()
+
+  return new PeerIdWithIs(digest, privKey, privKey.public)
 }
 
-exports.createFromJSON = function (obj, callback) {
-  if (typeof callback !== 'function') {
-    throw new Error('callback is required')
+exports.createFromJSON = async (obj) => {
+  let id = mh.fromB58String(obj.id)
+  let rawPrivKey = obj.privKey && Buffer.from(obj.privKey, 'base64')
+  let rawPubKey = obj.pubKey && Buffer.from(obj.pubKey, 'base64')
+  let pub = rawPubKey && await cryptoKeys.unmarshalPublicKey(rawPubKey)
+
+  if (!rawPrivKey) {
+    return new PeerIdWithIs(id, null, pub)
   }
 
-  let id
-  let rawPrivKey
-  let rawPubKey
-  let pub
+  const privKey = await cryptoKeys.unmarshalPrivateKey(rawPrivKey)
+  const privDigest = await privKey.public.hash()
+  let pubDigest
 
-  try {
-    id = mh.fromB58String(obj.id)
-    rawPrivKey = obj.privKey && Buffer.from(obj.privKey, 'base64')
-    rawPubKey = obj.pubKey && Buffer.from(obj.pubKey, 'base64')
-    pub = rawPubKey && cryptoKeys.unmarshalPublicKey(rawPubKey)
-  } catch (err) {
-    return callback(err)
+  if (pub) {
+    pubDigest = await pub.hash()
   }
 
-  if (rawPrivKey) {
-    waterfall([
-      (cb) => cryptoKeys.unmarshalPrivateKey(rawPrivKey, cb),
-      (priv, cb) => priv.public.hash((err, digest) => {
-        cb(err, digest, priv)
-      }),
-      (privDigest, priv, cb) => {
-        if (pub) {
-          pub.hash((err, pubDigest) => {
-            cb(err, privDigest, priv, pubDigest)
-          })
-        } else {
-          cb(null, privDigest, priv)
-        }
-      }
-    ], (err, privDigest, priv, pubDigest) => {
-      if (err) {
-        return callback(err)
-      }
-
-      if (pub && !privDigest.equals(pubDigest)) {
-        return callback(new Error('Public and private key do not match'))
-      }
-
-      if (id && !privDigest.equals(id)) {
-        return callback(new Error('Id and private key do not match'))
-      }
-
-      callback(null, new PeerIdWithIs(id, priv, pub))
-    })
-  } else {
-    callback(null, new PeerIdWithIs(id, null, pub))
+  if (pub && !privDigest.equals(pubDigest)) {
+    throw new Error('Public and private key do not match')
   }
+
+  if (id && !privDigest.equals(id)) {
+    throw new Error('Id and private key do not match')
+  }
+
+  return new PeerIdWithIs(id, privKey, pub)
 }
 
-exports.isPeerId = function (peerId) {
+exports.isPeerId = (peerId) => {
   return Boolean(typeof peerId === 'object' &&
     peerId._id &&
     peerId._idB58String)
