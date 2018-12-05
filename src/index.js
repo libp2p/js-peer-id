@@ -5,7 +5,7 @@
 'use strict'
 
 const mh = require('multihashes')
-const crypto = require('libp2p-crypto')
+const cryptoKeys = require('libp2p-crypto/src/keys')
 const assert = require('assert')
 const waterfall = require('async/waterfall')
 const withIs = require('class-is')
@@ -57,14 +57,14 @@ class PeerId {
   // Return the protobuf version of the public key, matching go ipfs formatting
   marshalPubKey () {
     if (this.pubKey) {
-      return crypto.keys.marshalPublicKey(this.pubKey)
+      return cryptoKeys.marshalPublicKey(this.pubKey)
     }
   }
 
   // Return the protobuf version of the private key, matching go ipfs formatting
   marshalPrivKey () {
     if (this.privKey) {
-      return crypto.keys.marshalPrivateKey(this.privKey)
+      return cryptoKeys.marshalPrivateKey(this.privKey)
     }
   }
 
@@ -147,7 +147,7 @@ exports.create = function (opts, callback) {
   opts.bits = opts.bits || 2048
 
   waterfall([
-    (cb) => crypto.keys.generateKeyPair('RSA', opts.bits, cb),
+    (cb) => cryptoKeys.generateKeyPair('RSA', opts.bits, cb),
     (privKey, cb) => privKey.public.hash((err, digest) => {
       cb(err, digest, privKey)
     })
@@ -188,7 +188,7 @@ exports.createFromPubKey = function (key, callback) {
 
     if (!Buffer.isBuffer(buf)) throw new Error('Supplied key is neither a base64 string nor a buffer')
 
-    pubKey = crypto.keys.unmarshalPublicKey(buf)
+    pubKey = cryptoKeys.unmarshalPublicKey(buf)
   } catch (err) {
     return callback(err)
   }
@@ -221,7 +221,7 @@ exports.createFromPrivKey = function (key, callback) {
   }
 
   waterfall([
-    (cb) => crypto.keys.unmarshalPrivateKey(buf, cb),
+    (cb) => cryptoKeys.unmarshalPrivateKey(buf, cb),
     (privKey, cb) => privKey.public.hash((err, digest) => {
       cb(err, digest, privKey)
     })
@@ -248,14 +248,14 @@ exports.createFromJSON = function (obj, callback) {
     id = mh.fromB58String(obj.id)
     rawPrivKey = obj.privKey && Buffer.from(obj.privKey, 'base64')
     rawPubKey = obj.pubKey && Buffer.from(obj.pubKey, 'base64')
-    pub = rawPubKey && crypto.keys.unmarshalPublicKey(rawPubKey)
+    pub = rawPubKey && cryptoKeys.unmarshalPublicKey(rawPubKey)
   } catch (err) {
     return callback(err)
   }
 
   if (rawPrivKey) {
     waterfall([
-      (cb) => crypto.keys.unmarshalPrivateKey(rawPrivKey, cb),
+      (cb) => cryptoKeys.unmarshalPrivateKey(rawPrivKey, cb),
       (priv, cb) => priv.public.hash((err, digest) => {
         cb(err, digest, priv)
       }),

@@ -14,19 +14,20 @@
     "release": "aegir release",
     "release-minor": "aegir release --type minor",
     "release-major": "aegir release --type major",
-    "coverage": "aegir coverage"
+    "coverage": "aegir coverage",
+    "size": "bundlesize -f dist/index.min.js -s 140kB"
   },
+  "files": [
+    "src",
+    "dist"
+  ],
   "keywords": [
     "IPFS"
   ],
   "license": "MIT",
-  "pre-push": [
-    "lint",
-    "test"
-  ],
   "engines": {
-    "node": ">=6.0.0",
-    "npm": ">=3.0.0"
+    "node": ">=10.0.0",
+    "npm": ">=6.0.0"
   },
   "bugs": {
     "url": "https://github.com/libp2p/js-peer-id/issues"
@@ -34,15 +35,15 @@
   "homepage": "https://github.com/libp2p/js-peer-id",
   "devDependencies": {
     "aegir": "^18.0.2",
+    "bundlesize": "^0.17.0",
     "chai": "^4.2.0",
     "dirty-chai": "^2.0.1"
   },
   "dependencies": {
     "async": "^2.6.1",
     "class-is": "^1.1.0",
-    "libp2p-crypto": "~0.15.0",
-    "lodash": "^4.17.11",
-    "multihashes": "~0.4.14"
+    "libp2p-crypto": "libp2p/js-libp2p-crypto#feat/bundle-size",
+    "multihashes": "~0.4.13"
   },
   "repository": {
     "type": "git",
