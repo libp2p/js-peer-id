@@ -1,3 +1,13 @@
+<a name="0.12.2"></a>
+## [0.12.2](https://github.com/libp2p/js-peer-id/compare/v0.12.1...v0.12.2) (2019-01-09)
+
+
+### Bug Fixes
+
+* clean repo and bundle size reduction ([cd20993](https://github.com/libp2p/js-peer-id/commit/cd20993))
+
+
+
 <a name="0.12.1"></a>
 ## [0.12.1](https://github.com/libp2p/js-peer-id/compare/v0.12.0...v0.12.1) (2019-01-03)
 
