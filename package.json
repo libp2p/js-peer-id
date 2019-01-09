@@ -35,7 +35,7 @@
   "homepage": "https://github.com/libp2p/js-peer-id",
   "devDependencies": {
     "aegir": "^18.0.2",
-    "bundlesize": "^0.17.0",
+    "bundlesize": "~0.17.0",
     "chai": "^4.2.0",
     "dirty-chai": "^2.0.1"
   },
