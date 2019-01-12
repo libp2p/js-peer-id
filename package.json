@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "class-is": "^1.1.0",
-    "libp2p-crypto": "~0.17.0",
+    "libp2p-crypto": "github:libp2p/js-libp2p-crypto#feat/rsa-enc-dec",
     "multihashes": "~0.4.15",
     "protons": "^1.0.1"
   },
