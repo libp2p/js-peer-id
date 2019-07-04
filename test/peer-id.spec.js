@@ -36,6 +36,12 @@ describe('PeerId', () => {
     expect(id.toB58String().length).to.equal(46)
   })
 
+  it('can be created for a Secp256k1 key', async () => {
+    const id = await PeerId.create({ keyType: 'secp256k1', bits: 256 })
+    const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+    expect(id.toB58String()).to.equal(expB58)
+  })
+
   it('isPeerId', async () => {
     const id = await PeerId.create(testOpts)
     expect(PeerId.isPeerId(id)).to.equal(true)
@@ -78,6 +84,20 @@ describe('PeerId', () => {
     const id2 = await PeerId.createFromPrivKey(encoded)
     expect(testIdB58String).to.equal(id2.toB58String())
     expect(id.marshalPubKey()).to.deep.equal(id2.marshalPubKey())
+  })
+
+  it('can be created from a Secp256k1 public key', async () => {
+    const privKey = await crypto.keys.generateKeyPair('secp256k1', 256)
+    const id = await PeerId.createFromPubKey(privKey.public.bytes)
+    const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+    expect(id.toB58String()).to.equal(expB58)
+  })
+
+  it('can be created from a Secp256k1 private key', async () => {
+    const privKey = await crypto.keys.generateKeyPair('secp256k1', 256)
+    const id = await PeerId.createFromPrivKey(privKey.bytes)
+    const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+    expect(id.toB58String()).to.equal(expB58)
   })
 
   it('Compare generated ID with one created from PubKey', async () => {

@@ -135,15 +135,27 @@ const PeerIdWithIs = withIs(PeerId, {
 
 exports = module.exports = PeerIdWithIs
 
+const computeDigest = (pubKey) => {
+  if (pubKey.bytes.length <= 42) {
+    return mh.encode(pubKey.bytes, 'identity')
+  } else {
+    return pubKey.hash()
+  }
+}
+
+const computePeerId = async (privKey, pubKey) => {
+  const digest = await computeDigest(pubKey)
+  return new PeerIdWithIs(digest, privKey, pubKey)
+}
+
 // generation
 exports.create = async (opts) => {
   opts = opts || {}
   opts.bits = opts.bits || 2048
+  opts.keyType = opts.keyType || 'RSA'
 
-  const key = await cryptoKeys.generateKeyPair('RSA', opts.bits)
-  const digest = await key.public.hash()
-
-  return new PeerIdWithIs(digest, key)
+  const key = await cryptoKeys.generateKeyPair(opts.keyType, opts.bits)
+  return computePeerId(key, key.public)
 }
 
 exports.createFromHexString = (str) => {
@@ -171,8 +183,7 @@ exports.createFromPubKey = async (key) => {
   }
 
   const pubKey = await cryptoKeys.unmarshalPublicKey(buf)
-  const digest = await pubKey.hash()
-  return new PeerIdWithIs(digest, null, pubKey)
+  return computePeerId(null, pubKey)
 }
 
 // Private key input will be a string
@@ -188,9 +199,7 @@ exports.createFromPrivKey = async (key) => {
   }
 
   const privKey = await cryptoKeys.unmarshalPrivateKey(buf)
-  const digest = await privKey.public.hash()
-
-  return new PeerIdWithIs(digest, privKey, privKey.public)
+  return computePeerId(privKey, privKey.public)
 }
 
 exports.createFromJSON = async (obj) => {
@@ -204,11 +213,12 @@ exports.createFromJSON = async (obj) => {
   }
 
   const privKey = await cryptoKeys.unmarshalPrivateKey(rawPrivKey)
-  const privDigest = await privKey.public.hash()
+  const privDigest = await computeDigest(privKey.public)
+
   let pubDigest
 
   if (pub) {
-    pubDigest = await pub.hash()
+    pubDigest = await computeDigest(pub)
   }
 
   if (pub && !privDigest.equals(pubDigest)) {
