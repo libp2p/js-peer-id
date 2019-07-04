@@ -57,7 +57,7 @@ The public key is a base64 encoded string of a protobuf containing an RSA DER bu
 ```JavaScript
 const PeerId = require('peer-id')
 
-PeerId.create({ bits: 1024 }, (err, id) => {
+PeerId.create({ bits: 1024, keyType: 'rsa' }, (err, id) => {
   if (err) { throw err }
   console.log(JSON.stringify(id.toJSON(), null, 2))
 })
@@ -128,7 +128,7 @@ The key format is detailed in [libp2p-crypto](https://github.com/libp2p/js-libp2
 
 Generates a new Peer ID, complete with public/private keypair.
 
-- `opts: Object`: Default: `{bits: 2048}`
+- `opts: Object`: Default: `{bits: 2048, keyType: 'rsa'}`
 - `callback: Function`
 
 Calls back `callback` with `err, id`.

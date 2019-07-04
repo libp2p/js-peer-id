@@ -9,6 +9,7 @@ const expect = chai.expect
 const crypto = require('libp2p-crypto')
 const mh = require('multihashes')
 const parallel = require('async/parallel')
+const waterfall = require('async/waterfall')
 
 const PeerId = require('../src')
 
@@ -36,6 +37,15 @@ describe('PeerId', () => {
     PeerId.create(testOpts, (err, id) => {
       expect(err).to.not.exist()
       expect(id.toB58String().length).to.equal(46)
+      done()
+    })
+  })
+
+  it('can be created for a Secp256k1 key', (done) => {
+    PeerId.create({ keyType: 'secp256k1', bits: 256 }, (err, id) => {
+      const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+      expect(err).to.not.exist()
+      expect(id.toB58String()).to.equal(expB58)
       done()
     })
   })
@@ -85,6 +95,22 @@ describe('PeerId', () => {
     })
   })
 
+  it('can be created from a Secp256k1 public key', (done) => {
+    waterfall([
+      (cb) => {
+        crypto.keys.generateKeyPair('secp256k1', 256, cb)
+      },
+      (privKey, cb) => {
+        PeerId.createFromPubKey(privKey.public.bytes, cb)
+      }
+    ], (err, id) => {
+      expect(err).to.not.exist()
+      const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+      expect(id.toB58String()).to.equal(expB58)
+      done()
+    })
+  })
+
   it('Recreate from a Private Key', (done) => {
     PeerId.createFromPrivKey(testId.privKey, (err, id) => {
       expect(err).to.not.exist()
@@ -97,6 +123,22 @@ describe('PeerId', () => {
         expect(id.marshalPubKey()).to.deep.equal(id2.marshalPubKey())
         done()
       })
+    })
+  })
+
+  it('can be created from a Secp256k1 private key', (done) => {
+    waterfall([
+      (cb) => {
+        crypto.keys.generateKeyPair('secp256k1', 256, cb)
+      },
+      (privKey, cb) => {
+        PeerId.createFromPrivKey(privKey.bytes, cb)
+      }
+    ], (err, id) => {
+      expect(err).to.not.exist()
+      const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+      expect(id.toB58String()).to.equal(expB58)
+      done()
     })
   })
 
