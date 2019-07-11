@@ -1,3 +1,13 @@
+<a name="0.13.1"></a>
+## [0.13.1](https://github.com/libp2p/js-peer-id/compare/v0.13.0...v0.13.1) (2019-07-11)
+
+
+### Features
+
+* **peerid:** support creating from secp256k1; harmonize algo with Go ([#95](https://github.com/libp2p/js-peer-id/issues/95)) ([17440a3](https://github.com/libp2p/js-peer-id/commit/17440a3))
+
+
+
 <a name="0.13.0"></a>
 # [0.13.0](https://github.com/libp2p/js-peer-id/compare/v0.12.2...v0.13.0) (2019-07-11)
 
