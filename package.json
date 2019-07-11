@@ -1,6 +1,6 @@
 {
   "name": "peer-id",
-  "version": "0.12.2",
+  "version": "0.13.0",
   "description": "IPFS Peer Id implementation in Node.js",
   "leadMaintainer": "Pedro Teixeira <i@pgte.me>",
   "main": "src/index.js",
@@ -52,6 +52,7 @@
     "David Dias <daviddias.p@gmail.com>",
     "David Dias <mail@daviddias.me>",
     "Friedel Ziegelmayer <dignifiedquire@gmail.com>",
+    "Henrique Dias <hacdias@gmail.com>",
     "Hugo Dias <hugomrdias@gmail.com>",
     "Maciej Krüger <mkg20001@gmail.com>",
     "Michael Garvin <gar+gh@danger.computer>",
@@ -60,6 +61,7 @@
     "Richard Littauer <richard.littauer@gmail.com>",
     "Richard Schneider <makaretu@gmail.com>",
     "Stephen Whitmore <stephen.whitmore@gmail.com>",
+    "Vasco Santos <vasco.santos@ua.pt>",
     "Vasco Santos <vasco.santos@moxy.studio>",
     "Yahya <ya7yaz@gmail.com>",
     "greenkeeperio-bot <support@greenkeeper.io>",
