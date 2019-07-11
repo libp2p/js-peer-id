@@ -28,7 +28,7 @@
 - [API](#api)
   - [Create](#create)
     - [`new PeerId(id[, privKey, pubKey])`](#new-peeridid-privkey-pubkey)
-    - [`create([opts], callback)`](#createopts-callback)
+    - [`create([opts])`](#createopts)
   - [Import](#import)
     - [`createFromHexString(str)`](#createfromhexstringstr)
     - [`createFromBytes(buf)`](#createfrombytesbuf)
@@ -57,11 +57,10 @@ The public key is a base64 encoded string of a protobuf containing an RSA DER bu
 ```JavaScript
 const PeerId = require('peer-id')
 
-PeerId.create({ bits: 1024 }, (err, id) => {
-  if (err) { throw err }
-  console.log(JSON.stringify(id.toJSON(), null, 2))
-})
+const id = await PeerId.create({ bits: 1024 })
+console.log(JSON.stringify(id.toJSON(), null, 2))
 ```
+
 ```bash
 {
   "id": "Qma9T5YraSnpRDZqRR4krcSJabThc8nwZuJV3LercPHufi",
@@ -124,14 +123,13 @@ const PeerId = require('peer-id')
 
 The key format is detailed in [libp2p-crypto](https://github.com/libp2p/js-libp2p-crypto).
 
-### `create([opts], callback)`
+### `create([opts])`
 
 Generates a new Peer ID, complete with public/private keypair.
 
 - `opts: Object`: Default: `{bits: 2048}`
-- `callback: Function`
 
-Calls back `callback` with `err, id`.
+Returns `Promise<PeerId>`.
 
 ## Import
 
@@ -139,13 +137,19 @@ Calls back `callback` with `err, id`.
 
 Creates a Peer ID from hex string representing the key's multihash.
 
+Returns `PeerId.
+
 ### `createFromBytes(buf)`
 
 Creates a Peer ID from a buffer representing the key's multihash.
 
+Returns `PeerId`.
+
 ### `createFromB58String(str)`
 
 Creates a Peer ID from a Base58 string representing the key's multihash.
+
+Returns `PeerId`.
 
 ### `createFromPubKey(pubKey)`
 
@@ -153,17 +157,23 @@ Creates a Peer ID from a Base58 string representing the key's multihash.
 
 Creates a Peer ID from a buffer containing a public key.
 
+Returns `Promise<PeerId>`.
+
 ### `createFromPrivKey(privKey)`
 
 - `privKey: Buffer`
 
 Creates a Peer ID from a buffer containing a private key.
 
+Returns `Promise<PeerId>`.
+
 ### `createFromJSON(obj)`
 
 - `obj.id: String` - The multihash encoded in `base58`
 - `obj.pubKey: String` - The public key in protobuf format, encoded in `base64`
 - `obj.privKey: String` - The private key in protobuf format, encoded in `base64`
+
+Returns `Promise<PeerId>`.
 
 ## Export
 
