@@ -1,3 +1,18 @@
+<a name="0.13.0"></a>
+# [0.13.0](https://github.com/libp2p/js-peer-id/compare/v0.12.2...v0.13.0) (2019-07-11)
+
+
+### Features
+
+* async await ([#87](https://github.com/libp2p/js-peer-id/issues/87)) ([c3463c7](https://github.com/libp2p/js-peer-id/commit/c3463c7))
+
+
+### BREAKING CHANGES
+
+* API refactored to use async/await
+
+
+
 <a name="0.12.2"></a>
 ## [0.12.2](https://github.com/libp2p/js-peer-id/compare/v0.12.1...v0.12.2) (2019-01-09)
 
