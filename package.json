@@ -1,6 +1,6 @@
 {
   "name": "peer-id",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "description": "IPFS Peer Id implementation in Node.js",
   "leadMaintainer": "Pedro Teixeira <i@pgte.me>",
   "main": "src/index.js",
@@ -50,6 +50,7 @@
     "url": "https://github.com/libp2p/js-peer-id.git"
   },
   "contributors": [
+    "Arve Knudsen <arve.knudsen@gmail.com>",
     "David Dias <daviddias.p@gmail.com>",
     "David Dias <mail@daviddias.me>",
     "Friedel Ziegelmayer <dignifiedquire@gmail.com>",
@@ -61,6 +62,7 @@
     "Richard Littauer <richard.littauer@gmail.com>",
     "Richard Schneider <makaretu@gmail.com>",
     "Stephen Whitmore <stephen.whitmore@gmail.com>",
+    "Vasco Santos <vasco.santos@ua.pt>",
     "Vasco Santos <vasco.santos@moxy.studio>",
     "Yahya <ya7yaz@gmail.com>",
     "greenkeeperio-bot <support@greenkeeper.io>",
