@@ -42,7 +42,8 @@
   "dependencies": {
     "class-is": "^1.1.0",
     "libp2p-crypto": "~0.17.0",
-    "multihashes": "~0.4.15"
+    "multihashes": "~0.4.15",
+    "protons": "^1.0.1"
   },
   "repository": {
     "type": "git",
