@@ -8,7 +8,7 @@ const mh = require('multihashes')
 const cryptoKeys = require('libp2p-crypto/src/keys')
 const assert = require('assert')
 const withIs = require('class-is')
-const {PeerIdProto} = require('./proto')
+const { PeerIdProto } = require('./proto')
 
 class PeerId {
   constructor (id, privKey, pubKey) {
@@ -247,7 +247,7 @@ exports.createFromProtobuf = async (buf) => {
     buf = Buffer.from(buf, 'hex')
   }
 
-  let {id, privKey, pubKey} = PeerIdProto.decode(buf)
+  let { id, privKey, pubKey } = PeerIdProto.decode(buf)
 
   privKey = privKey ? await cryptoKeys.unmarshalPrivateKey(privKey) : false
   pubKey = pubKey ? await cryptoKeys.unmarshalPublicKey(pubKey) : false
