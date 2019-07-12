@@ -1,3 +1,13 @@
+<a name="0.13.2"></a>
+## [0.13.2](https://github.com/libp2p/js-peer-id/compare/v0.13.1...v0.13.2) (2019-07-12)
+
+
+### Features
+
+* add compact protobuf format ([#76](https://github.com/libp2p/js-peer-id/issues/76)) ([7686418](https://github.com/libp2p/js-peer-id/commit/7686418))
+
+
+
 <a name="0.13.1"></a>
 ## [0.13.1](https://github.com/libp2p/js-peer-id/compare/v0.13.0...v0.13.1) (2019-07-11)
 
