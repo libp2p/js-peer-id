@@ -93,6 +93,7 @@ describe('PeerId', () => {
     const id2 = await PeerId.createFromPrivKey(encoded)
     expect(testIdB58String).to.equal(id2.toB58String())
     expect(id.marshalPubKey()).to.deep.equal(id2.marshalPubKey())
+    expect(id.marshal().toString('hex')).to.deep.equal(testId.marshaled)
   })
 
   it('can be created from a Secp256k1 public key', async () => {
