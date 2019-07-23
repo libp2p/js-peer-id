@@ -9,5 +9,6 @@ PeerId.create((err, id) => {
     throw err
   }
 
+  // eslint-disable-next-line
   console.log(JSON.stringify(id.toJSON(), null, 2))
 })
