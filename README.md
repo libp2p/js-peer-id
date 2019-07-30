@@ -13,7 +13,7 @@
 
 ## Lead Maintainer
 
-[Pedro Teixeira](https://github.com/pgte)
+[Vasco Santos](https://github.com/vasco-santos)
 
 ## Table of Contents
 

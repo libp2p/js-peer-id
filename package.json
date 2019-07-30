@@ -2,7 +2,7 @@
   "name": "peer-id",
   "version": "0.13.2",
   "description": "IPFS Peer Id implementation in Node.js",
-  "leadMaintainer": "Pedro Teixeira <i@pgte.me>",
+  "leadMaintainer": "Vasco Santos <santos.vasco10@gmail.com>",
   "main": "src/index.js",
   "bin": "src/bin.js",
   "scripts": {
@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/libp2p/js-peer-id",
   "devDependencies": {
-    "aegir": "^19.0.5",
+    "aegir": "^20.0.0",
     "bundlesize": "~0.18.0",
     "chai": "^4.2.0",
     "dirty-chai": "^2.0.1"
