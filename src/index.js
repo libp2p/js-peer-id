@@ -213,10 +213,10 @@ exports.createFromPrivKey = async (key) => {
 }
 
 exports.createFromJSON = async (obj) => {
-  let id = mh.fromB58String(obj.id)
-  let rawPrivKey = obj.privKey && Buffer.from(obj.privKey, 'base64')
-  let rawPubKey = obj.pubKey && Buffer.from(obj.pubKey, 'base64')
-  let pub = rawPubKey && await cryptoKeys.unmarshalPublicKey(rawPubKey)
+  const id = mh.fromB58String(obj.id)
+  const rawPrivKey = obj.privKey && Buffer.from(obj.privKey, 'base64')
+  const rawPubKey = obj.pubKey && Buffer.from(obj.pubKey, 'base64')
+  const pub = rawPubKey && await cryptoKeys.unmarshalPublicKey(rawPubKey)
 
   if (!rawPrivKey) {
     return new PeerIdWithIs(id, null, pub)
