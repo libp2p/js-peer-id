@@ -1,3 +1,13 @@
+<a name="0.12.5"></a>
+## [0.12.5](https://github.com/libp2p/js-peer-id/compare/v0.12.4...v0.12.5) (2019-09-25)
+
+
+### Features
+
+* inline public key handling for the 0.12.x line ([#102](https://github.com/libp2p/js-peer-id/issues/102)) ([ceeff13](https://github.com/libp2p/js-peer-id/commit/ceeff13))
+
+
+
 <a name="0.12.4"></a>
 ## [0.12.4](https://github.com/libp2p/js-peer-id/compare/v0.12.3...v0.12.4) (2019-07-23)
 
