@@ -1,3 +1,13 @@
+<a name="0.13.3"></a>
+## [0.13.3](https://github.com/libp2p/js-peer-id/compare/v0.13.2...v0.13.3) (2019-09-25)
+
+
+### Features
+
+* allow nested PeerIds to support pubKey function when using identity encoding ([#101](https://github.com/libp2p/js-peer-id/issues/101)) ([f39fb24](https://github.com/libp2p/js-peer-id/commit/f39fb24))
+
+
+
 <a name="0.13.2"></a>
 ## [0.13.2](https://github.com/libp2p/js-peer-id/compare/v0.13.1...v0.13.2) (2019-07-12)
 
