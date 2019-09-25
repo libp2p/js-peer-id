@@ -42,6 +42,12 @@ describe('PeerId', () => {
     expect(id.toB58String()).to.equal(expB58)
   })
 
+  it('can get the public key from a Secp256k1 key', async () => {
+    const original = await PeerId.create({ keyType: 'secp256k1', bits: 256 })
+    const newId = PeerId.createFromB58String(original.toB58String())
+    expect(original.pubKey.bytes).to.eql(newId.pubKey.bytes)
+  })
+
   it('isPeerId', async () => {
     const id = await PeerId.create(testOpts)
     expect(PeerId.isPeerId(id)).to.equal(true)
