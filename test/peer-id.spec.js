@@ -50,6 +50,16 @@ describe('PeerId', () => {
     })
   })
 
+  it('can get the public key from a Secp256k1 key', (done) => {
+    PeerId.create({ keyType: 'secp256k1', bits: 256 }, (err, original) => {
+      expect(err).to.not.exist()
+
+      const newId = PeerId.createFromB58String(original.toB58String())
+      expect(original.pubKey.bytes).to.eql(newId.pubKey.bytes)
+      done()
+    })
+  })
+
   it('isPeerId', (done) => {
     PeerId.create(testOpts, (err, id) => {
       expect(err).to.not.exist()
