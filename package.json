@@ -1,6 +1,6 @@
 {
   "name": "peer-id",
-  "version": "0.12.4",
+  "version": "0.12.5",
   "description": "IPFS Peer Id implementation in Node.js",
   "leadMaintainer": "Pedro Teixeira <i@pgte.me>",
   "main": "src/index.js",
@@ -63,6 +63,7 @@
     "Richard Littauer <richard.littauer@gmail.com>",
     "Richard Schneider <makaretu@gmail.com>",
     "Stephen Whitmore <stephen.whitmore@gmail.com>",
+    "Topper Bowers <topper@toppingdesign.com>",
     "Vasco Santos <vasco.santos@ua.pt>",
     "Vasco Santos <vasco.santos@moxy.studio>",
     "Yahya <ya7yaz@gmail.com>",
