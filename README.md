@@ -217,6 +217,20 @@ Returns an `obj` of the form
 
 Returns a protocol-buffers encoded version of the id, public key and, if `excludePrivateKey` is not set, the private key.
 
+### `marshalPubKey()`
+
+Returns a protobuf of just the public key, compatible with `libp2p-crypto` (unlike `marshal` above).
+
+For example:
+```js
+const crypto = require('libp2p-crypto')
+
+PeerId.create({ bits: 256, keyType: 'ed25519' }).then( pid => {
+  let pk = crypto.keys.unmarshalPublicKey(pid.marshalPubKey())
+  // your code here
+}
+```
+
 ### `toPrint()`
 
 Returns the Peer ID as a printable string without the `Qm` prefix.
