@@ -213,7 +213,7 @@ Returns an `obj` of the form
 - `obj.pubKey: String` - The public key in protobuf format, encoded in 'base64'
 - `obj.privKey: String` - The private key in protobuf format, encoded in 'base 64'
 
-### `marshal(excludePrivatKey)`
+### `marshal(excludePrivateKey)`
 
 Returns a protocol-buffers encoded version of the id, public key and, if `excludePrivateKey` is not set, the private key.
 
