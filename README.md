@@ -32,6 +32,7 @@
   - [Import](#import)
     - [`createFromHexString(str)`](#createfromhexstringstr)
     - [`createFromBytes(buf)`](#createfrombytesbuf)
+    - [`createFromCID(cid)`](#createfromcidcid)
     - [`createFromB58String(str)`](#createfromb58stringstr)
     - [`createFromPubKey(pubKey)`](#createfrompubkeypubkey)
     - [`createFromPrivKey(privKey)`](#createfromprivkeyprivkey)
@@ -39,6 +40,7 @@
   - [Export](#export)
     - [`toHexString()`](#tohexstring)
     - [`toBytes()`](#tobytes)
+    - [`toCIDString()`](#tob58string)
     - [`toB58String()`](#tob58string)
     - [`toJSON()`](#tojson)
     - [`toPrint()`](#toprint)
@@ -145,6 +147,14 @@ Creates a Peer ID from a buffer representing the key's multihash.
 
 Returns `PeerId`.
 
+### `createFromCID(cid)`
+
+- `cid: CID|String|Buffer` - The multihash encoded as [CID](https://github.com/ipld/js-cid) (object, `String` or `Buffer`)
+
+Creates a Peer ID from a CID representation of the key's multihash ([RFC 0001](https://github.com/libp2p/specs/blob/master/RFC/0001-text-peerid-cid.md)).
+
+Returns `PeerId`.
+
 ### `createFromB58String(str)`
 
 Creates a Peer ID from a Base58 string representing the key's multihash.
@@ -195,6 +205,15 @@ Returns the Peer ID's `id` as a buffer.
 
 ```
 <Buffer 12 20 d6 24 39 98 f2 fc 56 34 3a d7 ed 03 42 ab 78 86 a4 eb 18 d7 36 f1 b6 7d 44 b3 7f cc 81 e0 f3 9f>
+```
+
+
+### `toCIDString()`
+
+Returns the Peer ID's `id` as a self-describing CIDv1 in Base32 ([RFC 0001](https://github.com/libp2p/specs/blob/master/RFC/0001-text-peerid-cid.md))
+
+```
+bafzbeigweq4zr4x4ky2dvv7nanbkw6egutvrrvzw6g3h2rftp7gidyhtt4
 ```
 
 ### `toB58String()`

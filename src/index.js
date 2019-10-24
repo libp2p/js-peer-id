@@ -5,6 +5,7 @@
 'use strict'
 
 const mh = require('multihashes')
+const CID = require('cids')
 const cryptoKeys = require('libp2p-crypto/src/keys')
 const assert = require('assert')
 const withIs = require('class-is')
@@ -122,6 +123,12 @@ class PeerId {
     return this._idB58String
   }
 
+  // return string representation from RFC 0001: https://github.com/libp2p/specs/pull/209
+  toCIDString () {
+    const cid = new CID(1, 'libp2p-key', this.id, 'base32')
+    return cid.toBaseEncodedString('base32')
+  }
+
   isEqual (id) {
     if (Buffer.isBuffer(id)) {
       return this.id.equals(id)
@@ -185,6 +192,18 @@ exports.createFromBytes = (buf) => {
 
 exports.createFromB58String = (str) => {
   return new PeerIdWithIs(mh.fromB58String(str))
+}
+
+exports.createFromCID = (cid) => {
+  if (typeof cid === 'string' || Buffer.isBuffer(cid)) {
+    cid = new CID(cid)
+  } else if (CID.isCID(cid)) {
+    CID.validateCID(cid) // throws on error
+  } else {
+    // provide more meaningful error than the one in CID.validateCID
+    throw new Error('Supplied cid value is neither String|CID|Buffer')
+  }
+  return new PeerIdWithIs(cid.multihash)
 }
 
 // Public Key input will be a buffer
