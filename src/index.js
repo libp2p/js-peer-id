@@ -123,10 +123,14 @@ class PeerId {
     return this._idB58String
   }
 
-  // return string representation from RFC 0001: https://github.com/libp2p/specs/pull/209
-  toCIDString () {
-    const cid = new CID(1, 'libp2p-key', this.id, 'base32')
-    return cid.toBaseEncodedString('base32')
+  // return self-describing String representation
+  // in default format from RFC 0001: https://github.com/libp2p/specs/pull/209
+  toString () {
+    if (!this._idCIDString) {
+      const cid = new CID(1, 'libp2p-key', this.id, 'base32')
+      this._idCIDString = cid.toBaseEncodedString('base32')
+    }
+    return this._idCIDString
   }
 
   isEqual (id) {
@@ -191,7 +195,7 @@ exports.createFromBytes = (buf) => {
 }
 
 exports.createFromB58String = (str) => {
-  return new PeerIdWithIs(mh.fromB58String(str))
+  return exports.createFromCID(str) // B58String is CIDv0
 }
 
 exports.createFromCID = (cid) => {

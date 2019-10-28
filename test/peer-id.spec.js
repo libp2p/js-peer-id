@@ -85,25 +85,25 @@ describe('PeerId', () => {
 
   it('recreate from CID object', () => {
     const id = PeerId.createFromCID(testIdCID)
-    expect(testIdCIDString).to.equal(id.toCIDString())
+    expect(testIdCIDString).to.equal(id.toString())
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
   it('recreate from Base58 String (CIDv0))', () => {
     const id = PeerId.createFromCID(testIdB58String)
-    expect(testIdCIDString).to.equal(id.toCIDString())
+    expect(testIdCIDString).to.equal(id.toString())
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
   it('recreate from CIDv1 Base32', () => {
     const id = PeerId.createFromCID(testIdCIDString)
-    expect(testIdCIDString).to.equal(id.toCIDString())
+    expect(testIdCIDString).to.equal(id.toString())
     expect(testId.id).to.equal(id.toHexString())
   })
 
   it('recreate from CID Buffer', () => {
     const id = PeerId.createFromCID(testIdCID.buffer)
-    expect(testIdCIDString).to.equal(id.toCIDString())
+    expect(testIdCIDString).to.equal(id.toString())
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 

@@ -38,10 +38,10 @@
     - [`createFromPrivKey(privKey)`](#createfromprivkeyprivkey)
     - [`createFromJSON(obj)`](#createfromjsonobj)
   - [Export](#export)
-    - [`toHexString()`](#tohexstring)
     - [`toBytes()`](#tobytes)
-    - [`toCIDString()`](#tob58string)
+    - [`toString()`](#tostring)
     - [`toB58String()`](#tob58string)
+    - [`toHexString()`](#tohexstring)
     - [`toJSON()`](#tojson)
     - [`toPrint()`](#toprint)
 - [License](#license)
@@ -208,7 +208,7 @@ Returns the Peer ID's `id` as a buffer.
 ```
 
 
-### `toCIDString()`
+### `toString()`
 
 Returns the Peer ID's `id` as a self-describing CIDv1 in Base32 ([RFC 0001](https://github.com/libp2p/specs/blob/master/RFC/0001-text-peerid-cid.md))
 
@@ -218,7 +218,7 @@ bafzbeigweq4zr4x4ky2dvv7nanbkw6egutvrrvzw6g3h2rftp7gidyhtt4
 
 ### `toB58String()`
 
-Returns the Peer ID's `id` as a base58 string.
+Returns the Peer ID's `id` as a base58 string (multihash/CIDv0).
 
 ```
 QmckZzdVd72h9QUFuJJpQqhsZqGLwjhh81qSvZ9BhB2FQi
