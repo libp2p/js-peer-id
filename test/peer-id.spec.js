@@ -108,6 +108,8 @@ describe('PeerId', () => {
   })
 
   it('throws on invalid CID value', () => {
+    // using function code that does not represent valid hash function
+    // https://github.com/multiformats/js-multihash/blob/b85999d5768bf06f1b0f16b926ef2cb6d9c14265/src/constants.js#L345
     const invalidCID = 'QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L'
     expect(() => {
       PeerId.createFromCID(invalidCID)
