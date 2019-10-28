@@ -95,16 +95,35 @@ describe('PeerId', () => {
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
-  it('recreate from CIDv1 Base32', () => {
-    const id = PeerId.createFromCID(testIdCIDString)
-    expect(testIdCIDString).to.equal(id.toString())
-    expect(testId.id).to.equal(id.toHexString())
+  it('recreate from CIDv1 Base32 (libp2p-key multicodec)', () => {
+    const cid = new CID(1, 'libp2p-key', testIdBytes)
+    const cidString = cid.toBaseEncodedString('base32')
+    const id = PeerId.createFromCID(cidString)
+    expect(cidString).to.equal(id.toString())
+    expect(testIdBytes).to.deep.equal(id.toBytes())
+  })
+
+  it('recreate from CIDv1 Base32 (dag-pb multicodec)', () => {
+    const cid = new CID(1, 'dag-pb', testIdBytes)
+    const cidString = cid.toBaseEncodedString('base32')
+    const id = PeerId.createFromCID(cidString)
+    // toString should return CID with multicodec set to libp2p-key
+    expect(new CID(id.toString()).codec).to.equal('libp2p-key')
+    expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
   it('recreate from CID Buffer', () => {
     const id = PeerId.createFromCID(testIdCID.buffer)
     expect(testIdCIDString).to.equal(id.toString())
     expect(testIdBytes).to.deep.equal(id.toBytes())
+  })
+
+  it('throws on invalid CID multicodec', () => {
+    // only libp2p and dag-pb are supported
+    const invalidCID = new CID(1, 'raw', testIdBytes).toBaseEncodedString('base32')
+    expect(() => {
+      PeerId.createFromCID(invalidCID)
+    }).to.throw(/Supplied PeerID CID has invalid multicodec: raw/)
   })
 
   it('throws on invalid CID value', () => {
@@ -120,7 +139,14 @@ describe('PeerId', () => {
     const invalidCID = {}
     expect(() => {
       PeerId.createFromCID(invalidCID)
-    }).to.throw(/Supplied cid value is neither String|CID|Buffer/)
+    }).to.throw(/Invalid version, must be a number equal to 1 or 0/)
+  })
+
+  it('throws on invalid CID object', () => {
+    const invalidCID = {}
+    expect(() => {
+      PeerId.createFromCID(invalidCID)
+    }).to.throw(/Invalid version, must be a number equal to 1 or 0/)
   })
 
   it('recreate from a Public Key', async () => {

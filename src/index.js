@@ -198,15 +198,14 @@ exports.createFromB58String = (str) => {
   return exports.createFromCID(str) // B58String is CIDv0
 }
 
+const validMulticodec = (cid) => {
+  // supported: 'libp2p-key' (CIDv1) and 'dag-pb' (CIDv0 converted to CIDv1)
+  return cid.codec === 'libp2p-key' || cid.codec === 'dag-pb'
+}
+
 exports.createFromCID = (cid) => {
-  if (typeof cid === 'string' || Buffer.isBuffer(cid)) {
-    cid = new CID(cid)
-  } else if (CID.isCID(cid)) {
-    CID.validateCID(cid) // throws on error
-  } else {
-    // provide more meaningful error than the one in CID.validateCID
-    throw new Error('Supplied cid value is neither String|CID|Buffer')
-  }
+  cid = CID.isCID(cid) ? cid : new CID(cid)
+  if (!validMulticodec(cid)) throw new Error('Supplied PeerID CID has invalid multicodec: ' + cid.codec)
   return new PeerIdWithIs(cid.multihash)
 }
 
