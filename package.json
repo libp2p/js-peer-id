@@ -1,6 +1,6 @@
 {
   "name": "peer-id",
-  "version": "0.13.3",
+  "version": "0.13.4",
   "description": "IPFS Peer Id implementation in Node.js",
   "leadMaintainer": "Vasco Santos <santos.vasco10@gmail.com>",
   "main": "src/index.js",
@@ -59,7 +59,9 @@
     "Hugo Dias <hugomrdias@gmail.com>",
     "Jacob Heun <jacobheun@gmail.com>",
     "Maciej Krüger <mkg20001@gmail.com>",
+    "Marcin Rataj <lidel@lidel.org>",
     "Michael Garvin <gar+gh@danger.computer>",
+    "Nate Foss <npfoss@gmail.com>",
     "Pedro Teixeira <i@pgte.me>",
     "Prashanth Chandra <coolshanth94@gmail.com>",
     "Richard Littauer <richard.littauer@gmail.com>",
