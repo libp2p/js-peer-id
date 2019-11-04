@@ -1,3 +1,18 @@
+<a name="0.13.4"></a>
+## [0.13.4](https://github.com/libp2p/js-peer-id/compare/v0.13.3...v0.13.4) (2019-11-04)
+
+
+### Bug Fixes
+
+* bang in bin.js ([#106](https://github.com/libp2p/js-peer-id/issues/106)) ([11d4ec1](https://github.com/libp2p/js-peer-id/commit/11d4ec1))
+
+
+### Features
+
+* support Peer ID represented as CID ([#105](https://github.com/libp2p/js-peer-id/issues/105)) ([544ca7d](https://github.com/libp2p/js-peer-id/commit/544ca7d))
+
+
+
 <a name="0.13.3"></a>
 ## [0.13.3](https://github.com/libp2p/js-peer-id/compare/v0.13.2...v0.13.3) (2019-09-25)
 
