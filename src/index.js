@@ -5,6 +5,7 @@
 'use strict'
 
 const mh = require('multihashes')
+const CID = require('cids')
 const cryptoKeys = require('libp2p-crypto/src/keys')
 const assert = require('assert')
 const withIs = require('class-is')
@@ -122,6 +123,16 @@ class PeerId {
     return this._idB58String
   }
 
+  // return self-describing String representation
+  // in default format from RFC 0001: https://github.com/libp2p/specs/pull/209
+  toString () {
+    if (!this._idCIDString) {
+      const cid = new CID(1, 'libp2p-key', this.id, 'base32')
+      this._idCIDString = cid.toBaseEncodedString('base32')
+    }
+    return this._idCIDString
+  }
+
   isEqual (id) {
     if (Buffer.isBuffer(id)) {
       return this.id.equals(id)
@@ -184,7 +195,18 @@ exports.createFromBytes = (buf) => {
 }
 
 exports.createFromB58String = (str) => {
-  return new PeerIdWithIs(mh.fromB58String(str))
+  return exports.createFromCID(str) // B58String is CIDv0
+}
+
+const validMulticodec = (cid) => {
+  // supported: 'libp2p-key' (CIDv1) and 'dag-pb' (CIDv0 converted to CIDv1)
+  return cid.codec === 'libp2p-key' || cid.codec === 'dag-pb'
+}
+
+exports.createFromCID = (cid) => {
+  cid = CID.isCID(cid) ? cid : new CID(cid)
+  if (!validMulticodec(cid)) throw new Error('Supplied PeerID CID has invalid multicodec: ' + cid.codec)
+  return new PeerIdWithIs(cid.multihash)
 }
 
 // Public Key input will be a buffer
