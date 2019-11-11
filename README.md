@@ -17,6 +17,9 @@
 
 ## Table of Contents
 
+- [peer-id](#peer-id)
+  - [Lead Maintainer](#lead-maintainer)
+  - [Table of Contents](#table-of-contents)
 - [Description](#description)
 - [Example](#example)
 - [Installation](#installation)
@@ -37,13 +40,18 @@
     - [`createFromPubKey(pubKey)`](#createfrompubkeypubkey)
     - [`createFromPrivKey(privKey)`](#createfromprivkeyprivkey)
     - [`createFromJSON(obj)`](#createfromjsonobj)
+    - [`createFromProtobuf(buf)`](#createfromprotobufbuf)
   - [Export](#export)
+    - [`toHexString()`](#tohexstring)
     - [`toBytes()`](#tobytes)
     - [`toString()`](#tostring)
     - [`toB58String()`](#tob58string)
-    - [`toHexString()`](#tohexstring)
     - [`toJSON()`](#tojson)
+    - [`marshal(excludePrivateKey)`](#marshalexcludeprivatekey)
+    - [`marshalPubKey()`](#marshalpubkey)
     - [`toPrint()`](#toprint)
+    - [`equals(id)`](#equalsid)
+    - [`isEqual(id)`](#isequalid)
 - [License](#license)
 
 # Description
@@ -256,7 +264,14 @@ Returns the Peer ID as a printable string without the `Qm` prefix.
 
 Example: `<peer.ID xxxxxx>`
 
+### `equals(id)`
+
+Returns `true` if the given PeerId is equal to the current instance.
+
+- `id` can be a PeerId or a Buffer containing the id
+
 ### `isEqual(id)`
+**Deprecation Notice**: Use [`equals`](#equalsid), `isEqual` will be removed in 0.14.0.
 
 - `id` can be a PeerId or a Buffer containing the id
 

@@ -133,7 +133,12 @@ class PeerId {
     return this._idCIDString
   }
 
-  isEqual (id) {
+  /**
+   * Checks the equality of `this` peer against a given PeerId.
+   * @param {Buffer|PeerId} id
+   * @returns {boolean}
+   */
+  equals (id) {
     if (Buffer.isBuffer(id)) {
       return this.id.equals(id)
     } else if (id.id) {
@@ -141,6 +146,16 @@ class PeerId {
     } else {
       throw new Error('not valid Id')
     }
+  }
+
+  /**
+   * Checks the equality of `this` peer against a given PeerId.
+   * @deprecated Use `.equals`
+   * @param {Buffer|PeerId} id
+   * @returns {boolean}
+   */
+  isEqual (id) {
+    return this.equals(id)
   }
 
   /*

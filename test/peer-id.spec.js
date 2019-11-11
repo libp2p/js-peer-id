@@ -231,6 +231,18 @@ describe('PeerId', () => {
     expect(ids[0].isEqual(ids[1].id)).to.equal(false)
   })
 
+  it('equals', async () => {
+    const ids = await Promise.all([
+      PeerId.create(testOpts),
+      PeerId.create(testOpts)
+    ])
+
+    expect(ids[0].equals(ids[0])).to.equal(true)
+    expect(ids[0].equals(ids[1])).to.equal(false)
+    expect(ids[0].equals(ids[0].id)).to.equal(true)
+    expect(ids[0].equals(ids[1].id)).to.equal(false)
+  })
+
   describe('fromJSON', () => {
     it('full node', async () => {
       const id = await PeerId.create(testOpts)
