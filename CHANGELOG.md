@@ -1,3 +1,13 @@
+<a name="0.13.5"></a>
+## [0.13.5](https://github.com/libp2p/js-peer-id/compare/v0.13.4...v0.13.5) (2019-11-12)
+
+
+### Features
+
+* deprecate isEqual in favor of equals ([#107](https://github.com/libp2p/js-peer-id/issues/107)) ([bbf0416](https://github.com/libp2p/js-peer-id/commit/bbf0416))
+
+
+
 <a name="0.13.4"></a>
 ## [0.13.4](https://github.com/libp2p/js-peer-id/compare/v0.13.3...v0.13.4) (2019-11-04)
 
