@@ -127,7 +127,7 @@ const PeerId = require('peer-id')
 
 ### `new PeerId(id[, privKey, pubKey])`
 
-- `id: Buffer` - The multihash of the publick key as `Buffer`
+- `id: Buffer` - The multihash of the public key as `Buffer`
 - `privKey: RsaPrivateKey` - The private key
 - `pubKey: RsaPublicKey` - The public key
 
