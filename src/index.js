@@ -50,11 +50,15 @@ class PeerId {
       return this._privKey.public
     }
 
-    const decoded = mh.decode(this.id)
+    try {
+      const decoded = mh.decode(this.id)
 
-    if (decoded.name === 'identity') {
-      this._pubKey = cryptoKeys.unmarshalPublicKey(decoded.digest)
-      return this._pubKey
+      if (decoded.name === 'identity') {
+        this._pubKey = cryptoKeys.unmarshalPublicKey(decoded.digest)
+        return this._pubKey
+      }
+    } catch (_) {
+      // Ignore, there is no valid public key
     }
   }
 
