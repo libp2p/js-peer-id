@@ -1,3 +1,13 @@
+<a name="0.13.6"></a>
+## [0.13.6](https://github.com/libp2p/js-peer-id/compare/v0.13.5...v0.13.6) (2019-12-18)
+
+
+### Bug Fixes
+
+* catch errors thrown by multihash decode ([#109](https://github.com/libp2p/js-peer-id/issues/109)) ([65e0b74](https://github.com/libp2p/js-peer-id/commit/65e0b74))
+
+
+
 <a name="0.13.5"></a>
 ## [0.13.5](https://github.com/libp2p/js-peer-id/compare/v0.13.4...v0.13.5) (2019-11-12)
 
