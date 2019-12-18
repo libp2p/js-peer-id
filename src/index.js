@@ -55,11 +55,12 @@ class PeerId {
 
       if (decoded.name === 'identity') {
         this._pubKey = cryptoKeys.unmarshalPublicKey(decoded.digest)
-        return this._pubKey
       }
     } catch (_) {
       // Ignore, there is no valid public key
     }
+
+    return this._pubKey
   }
 
   set pubKey (pubKey) {
