@@ -45,7 +45,7 @@
     "dirty-chai": "^2.0.1"
   },
   "dependencies": {
-    "cids": "^0.7.2",
+    "cids": "^0.7.3",
     "class-is": "^1.1.0",
     "libp2p-crypto": "~0.17.2",
     "multihashes": "~0.4.15",
