@@ -67,8 +67,10 @@ The public key is a base64 encoded string of a protobuf containing an RSA DER bu
 ```JavaScript
 const PeerId = require('peer-id')
 
-const id = await PeerId.create({ bits: 1024, keyType: 'rsa' })
-console.log(JSON.stringify(id.toJSON(), null, 2))
+PeerId.create({ bits: 1024, keyType: 'rsa' }, (data, keys) => {
+    console.log(JSON.stringify(keys.toJSON(), null, 2));
+})
+
 ```
 
 ```bash
