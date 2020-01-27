@@ -271,24 +271,28 @@ describe('PeerId', () => {
 
   it('set privKey (valid)', async () => {
     const peerId = await PeerId.create(testOpts)
+    // @ts-ignore
     peerId.privKey = peerId._privKey
     expect(peerId.isValid()).to.equal(true)
   })
 
   it('set pubKey (valid)', async () => {
     const peerId = await PeerId.create(testOpts)
+    // @ts-ignore
     peerId.pubKey = peerId._pubKey
     expect(peerId.isValid()).to.equal(true)
   })
 
   it('set privKey (invalid)', async () => {
     const peerId = await PeerId.create(testOpts)
+    // @ts-ignore
     peerId.privKey = Buffer.from('bufff')
     expect(peerId.isValid()).to.equal(false)
   })
 
   it('set pubKey (invalid)', async () => {
     const peerId = await PeerId.create(testOpts)
+    // @ts-ignore
     peerId.pubKey = Buffer.from('bufff')
     expect(peerId.isValid()).to.equal(false)
   })
