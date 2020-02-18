@@ -105,7 +105,7 @@ declare class PeerId {
   /**
    * Raw id.
    */
-  id: Buffer;
+  readonly id: Buffer;
 
   /**
    * Private key.
