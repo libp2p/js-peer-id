@@ -7,16 +7,17 @@
 const mh = require('multihashes')
 const CID = require('cids')
 const cryptoKeys = require('libp2p-crypto/src/keys')
-const assert = require('assert')
 const withIs = require('class-is')
 const { PeerIdProto } = require('./proto')
 
 class PeerId {
   constructor (id, privKey, pubKey) {
-    assert(Buffer.isBuffer(id), 'invalid id provided')
+    if (!Buffer.isBuffer(id)) {
+      throw new Error('invalid id provided')
+    }
 
-    if (privKey && pubKey) {
-      assert(privKey.public.bytes.equals(pubKey.bytes), 'inconsistent arguments')
+    if (privKey && pubKey && !privKey.public.bytes.equals(pubKey.bytes)) {
+      throw new Error('inconsistent arguments')
     }
 
     this._id = id
