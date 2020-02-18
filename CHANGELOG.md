@@ -1,3 +1,18 @@
+<a name="0.13.8"></a>
+## [0.13.8](https://github.com/libp2p/js-peer-id/compare/v0.13.6...v0.13.8) (2020-02-18)
+
+
+### Bug Fixes
+
+* remove use of assert module ([#117](https://github.com/libp2p/js-peer-id/issues/117)) ([f44645e](https://github.com/libp2p/js-peer-id/commit/f44645e))
+
+
+### Features
+
+* adds typescript types + type tests ([#110](https://github.com/libp2p/js-peer-id/issues/110)) ([a5070ae](https://github.com/libp2p/js-peer-id/commit/a5070ae))
+
+
+
 <a name="0.13.7"></a>
 ## [0.13.7](https://github.com/libp2p/js-peer-id/compare/v0.13.6...v0.13.7) (2020-01-27)
 
