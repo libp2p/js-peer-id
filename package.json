@@ -1,6 +1,6 @@
 {
   "name": "peer-id",
-  "version": "0.13.7",
+  "version": "0.13.8",
   "description": "IPFS Peer Id implementation in Node.js",
   "leadMaintainer": "Vasco Santos <santos.vasco10@gmail.com>",
   "main": "src/index.js",
@@ -56,6 +56,7 @@
     "url": "https://github.com/libp2p/js-peer-id.git"
   },
   "contributors": [
+    "Alex Potsides <alex@achingbrain.net>",
     "Arve Knudsen <arve.knudsen@gmail.com>",
     "Carson Farmer <carson.farmer@gmail.com>",
     "Christian Paul <info@jaller.de>",
