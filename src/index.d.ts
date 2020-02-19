@@ -38,7 +38,7 @@ declare namespace PeerId {
    * Checks if a value is an instance of PeerId.
    * @param id The value to check.
    */
-  function isPeerId(id: any): boolean
+  function isPeerId(id: any): id is PeerId
 
   /**
    * Create a new PeerId.
