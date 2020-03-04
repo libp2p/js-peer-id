@@ -38,7 +38,7 @@
   "devDependencies": {
     "@types/chai": "^4.2.7",
     "@types/dirty-chai": "^2.0.2",
-    "@types/mocha": "^5.2.7",
+    "@types/mocha": "^7.0.2",
     "aegir": "^21.2.0",
     "bundlesize": "~0.18.0",
     "chai": "^4.2.0",
