@@ -4,6 +4,7 @@
 
 'use strict'
 
+const { Buffer } = require('buffer')
 const mh = require('multihashes')
 const CID = require('cids')
 const cryptoKeys = require('libp2p-crypto/src/keys')

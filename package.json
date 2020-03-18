@@ -45,11 +45,12 @@
     "dirty-chai": "^2.0.1"
   },
   "dependencies": {
+    "buffer": "^5.5.0",
     "cids": "^0.7.3",
     "class-is": "^1.1.0",
-    "libp2p-crypto": "~0.17.2",
+    "libp2p-crypto": "~0.17.3",
     "multihashes": "~0.4.15",
-    "protons": "^1.0.1"
+    "protons": "^1.0.2"
   },
   "repository": {
     "type": "git",
