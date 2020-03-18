@@ -1,3 +1,13 @@
+<a name="0.13.10"></a>
+## [0.13.10](https://github.com/libp2p/js-peer-id/compare/v0.13.9...v0.13.10) (2020-03-18)
+
+
+### Bug Fixes
+
+* add buffer ([#120](https://github.com/libp2p/js-peer-id/issues/120)) ([c305c36](https://github.com/libp2p/js-peer-id/commit/c305c36))
+
+
+
 <a name="0.13.9"></a>
 ## [0.13.9](https://github.com/libp2p/js-peer-id/compare/v0.13.8...v0.13.9) (2020-02-19)
 
