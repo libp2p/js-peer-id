@@ -1,3 +1,13 @@
+<a name="0.13.12"></a>
+## [0.13.12](https://github.com/libp2p/js-peer-id/compare/v0.13.11...v0.13.12) (2020-04-22)
+
+
+### Features
+
+* **cli:** add support for specifying type and size ([#122](https://github.com/libp2p/js-peer-id/issues/122)) ([8cd9dfb](https://github.com/libp2p/js-peer-id/commit/8cd9dfb))
+
+
+
 <a name="0.13.11"></a>
 ## [0.13.11](https://github.com/libp2p/js-peer-id/compare/v0.13.10...v0.13.11) (2020-03-26)
 
