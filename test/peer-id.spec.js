@@ -63,6 +63,7 @@ describe('PeerId', () => {
     const id = await PeerId.create(testOpts)
     expect(id.toB58String().length).to.equal(46)
     expect(() => {
+      // @ts-ignore
       id.id = Buffer.from('hello')
     }).to.throw(/immutable/)
   })

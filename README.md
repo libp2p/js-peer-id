@@ -28,6 +28,7 @@
   - [Node.js](#nodejs)
   - [Browser: Browserify, Webpack, other bundlers](#browser-browserify-webpack-other-bundlers)
   - [Browser: `<script>` Tag](#browser-script-tag)
+- [CLI](#cli)
 - [API](#api)
   - [Create](#create)
     - [`new PeerId(id[, privKey, pubKey])`](#new-peeridid-privkey-pubkey)
@@ -117,6 +118,14 @@ the global namespace.
 <script src="https://unpkg.com/peer-id/dist/index.js"></script>
 ```
 
+# CLI
+
+After installing `peer-id`, `npm install peer-id`, you can leverage the cli to generate keys exported as JSON. You can specify the type for the key and size, as detailed in [`create([opts])`](#createopts). The defaults are shown here.
+
+```sh
+> peer-id --type rsa --bits 2048
+```
+
 # API
 
 ```js
@@ -137,7 +146,8 @@ The key format is detailed in [libp2p-crypto](https://github.com/libp2p/js-libp2
 
 Generates a new Peer ID, complete with public/private keypair.
 
-- `opts: Object`: Default: `{bits: 2048, keyType: 'rsa'}`
+- `opts.bits: number` - The size of the key. Default: `2048`
+- `opts.keyType: string` - The key type, one of: `['rsa', 'ed25519', 'secp256k1']`. Default: `rsa`
 
 Returns `Promise<PeerId>`.
 
