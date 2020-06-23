@@ -48,9 +48,9 @@
     "buffer": "^5.5.0",
     "cids": "^0.8.0",
     "class-is": "^1.1.0",
-    "libp2p-crypto": "~0.17.3",
+    "libp2p-crypto": "^0.17.7",
     "minimist": "^1.2.5",
-    "multihashes": "~0.4.15",
+    "multihashes": "^1.0.1",
     "protons": "^1.0.2"
   },
   "repository": {
