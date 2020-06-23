@@ -1,3 +1,8 @@
+<a name="0.13.13"></a>
+## [0.13.13](https://github.com/libp2p/js-peer-id/compare/v0.13.12...v0.13.13) (2020-06-23)
+
+
+
 <a name="0.13.12"></a>
 ## [0.13.12](https://github.com/libp2p/js-peer-id/compare/v0.13.11...v0.13.12) (2020-04-22)
 
