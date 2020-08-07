@@ -1,3 +1,20 @@
+<a name="0.14.0"></a>
+# [0.14.0](https://github.com/libp2p/js-peer-id/compare/v0.13.13...v0.14.0) (2020-08-07)
+
+
+### Bug Fixes
+
+* replace node buffers with uint8arrays ([#127](https://github.com/libp2p/js-peer-id/issues/127)) ([d16ce9c](https://github.com/libp2p/js-peer-id/commit/d16ce9c))
+
+
+### BREAKING CHANGES
+
+* - Where node Buffers were returned, now Uint8Arrays are
+
+* chore: remove gh dep
+
+
+
 <a name="0.13.13"></a>
 ## [0.13.13](https://github.com/libp2p/js-peer-id/compare/v0.13.12...v0.13.13) (2020-06-23)
 
