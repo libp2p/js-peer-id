@@ -2,14 +2,12 @@
 /* eslint-env mocha */
 'use strict'
 
-const { Buffer } = require('buffer')
-const chai = require('chai')
-const dirtyChai = require('dirty-chai')
-chai.use(dirtyChai)
-const expect = chai.expect
+const { expect } = require('aegir/utils/chai')
 const crypto = require('libp2p-crypto')
 const mh = require('multihashes')
 const CID = require('cids')
+const uint8ArrayFromString = require('uint8arrays/from-string')
+const uint8ArrayToString = require('uint8arrays/to-string')
 
 const PeerId = require('../src')
 
@@ -56,7 +54,7 @@ describe('PeerId', () => {
     const id = await PeerId.create(testOpts)
     expect(PeerId.isPeerId(id)).to.equal(true)
     expect(PeerId.isPeerId('aaa')).to.equal(false)
-    expect(PeerId.isPeerId(Buffer.from('batatas'))).to.equal(false)
+    expect(PeerId.isPeerId(uint8ArrayFromString('batatas'))).to.equal(false)
   })
 
   it('throws on changing the id', async () => {
@@ -64,7 +62,7 @@ describe('PeerId', () => {
     expect(id.toB58String().length).to.equal(46)
     expect(() => {
       // @ts-ignore
-      id.id = Buffer.from('hello')
+      id.id = uint8ArrayFromString('hello')
     }).to.throw(/immutable/)
   })
 
@@ -73,7 +71,7 @@ describe('PeerId', () => {
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
-  it('recreate from a Buffer', () => {
+  it('recreate from a Uint8Array', () => {
     const id = PeerId.createFromBytes(testIdBytes)
     expect(testId.id).to.equal(id.toHexString())
     expect(testIdBytes).to.deep.equal(id.toBytes())
@@ -114,8 +112,8 @@ describe('PeerId', () => {
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
-  it('recreate from CID Buffer', () => {
-    const id = PeerId.createFromCID(testIdCID.buffer)
+  it('recreate from CID Uint8Array', () => {
+    const id = PeerId.createFromCID(testIdCID.bytes)
     expect(testIdCIDString).to.equal(id.toString())
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
@@ -160,7 +158,7 @@ describe('PeerId', () => {
   it('recreate from a Private Key', async () => {
     const id = await PeerId.createFromPrivKey(testId.privKey)
     expect(testIdB58String).to.equal(id.toB58String())
-    const encoded = Buffer.from(testId.privKey, 'base64')
+    const encoded = uint8ArrayFromString(testId.privKey, 'base64pad')
     const id2 = await PeerId.createFromPrivKey(encoded)
     expect(testIdB58String).to.equal(id2.toB58String())
     expect(id.marshalPubKey()).to.deep.equal(id2.marshalPubKey())
@@ -169,11 +167,11 @@ describe('PeerId', () => {
   it('recreate from Protobuf', async () => {
     const id = await PeerId.createFromProtobuf(testId.marshaled)
     expect(testIdB58String).to.equal(id.toB58String())
-    const encoded = Buffer.from(testId.privKey, 'base64')
+    const encoded = uint8ArrayFromString(testId.privKey, 'base64pad')
     const id2 = await PeerId.createFromPrivKey(encoded)
     expect(testIdB58String).to.equal(id2.toB58String())
     expect(id.marshalPubKey()).to.deep.equal(id2.marshalPubKey())
-    expect(id.marshal().toString('hex')).to.deep.equal(testId.marshaled)
+    expect(uint8ArrayToString(id.marshal(), 'base16')).to.deep.equal(testId.marshaled)
   })
 
   it('can be created from a Secp256k1 public key', async () => {
@@ -218,7 +216,7 @@ describe('PeerId', () => {
 
   it('toBytes', () => {
     const id = PeerId.createFromHexString(testIdHex)
-    expect(id.toBytes().toString('hex')).to.equal(testIdBytes.toString('hex'))
+    expect(uint8ArrayToString(id.toBytes(), 'base16')).to.equal(uint8ArrayToString(testIdBytes, 'base16'))
   })
 
   it('isEqual', async () => {
@@ -288,22 +286,22 @@ describe('PeerId', () => {
   it('set privKey (invalid)', async () => {
     const peerId = await PeerId.create(testOpts)
     // @ts-ignore
-    peerId.privKey = Buffer.from('bufff')
+    peerId.privKey = uint8ArrayFromString('bufff')
     expect(peerId.isValid()).to.equal(false)
   })
 
   it('set pubKey (invalid)', async () => {
     const peerId = await PeerId.create(testOpts)
     // @ts-ignore
-    peerId.pubKey = Buffer.from('bufff')
+    peerId.pubKey = uint8ArrayFromString('bufff')
     expect(peerId.isValid()).to.equal(false)
   })
 
   describe('returns error via cb instead of crashing', () => {
     const garbage = [
-      Buffer.from('00010203040506070809', 'hex'),
+      uint8ArrayFromString('00010203040506070809', 'base16'),
       {}, null, false, undefined, true, 1, 0,
-      Buffer.from(''), 'aGVsbG93b3JsZA==', 'helloworld', ''
+      uint8ArrayFromString(''), 'aGVsbG93b3JsZA==', 'helloworld', ''
     ]
 
     const fncs = ['createFromPubKey', 'createFromPrivKey', 'createFromJSON', 'createFromProtobuf']
