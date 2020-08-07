@@ -44,7 +44,7 @@
   "dependencies": {
     "cids": "^1.0.0",
     "class-is": "^1.1.0",
-    "libp2p-crypto": "libp2p/js-libp2p-crypto#fix/replace-node-buffers-with-uint8arrays",
+    "libp2p-crypto": "^0.18.0",
     "minimist": "^1.2.5",
     "multihashes": "^3.0.1",
     "protons": "^2.0.0",
