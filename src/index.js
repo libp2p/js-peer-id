@@ -4,20 +4,22 @@
 
 'use strict'
 
-const { Buffer } = require('buffer')
 const mh = require('multihashes')
 const CID = require('cids')
 const cryptoKeys = require('libp2p-crypto/src/keys')
 const withIs = require('class-is')
 const { PeerIdProto } = require('./proto')
+const uint8ArrayEquals = require('uint8arrays/equals')
+const uint8ArrayFromString = require('uint8arrays/from-string')
+const uint8ArrayToString = require('uint8arrays/to-string')
 
 class PeerId {
   constructor (id, privKey, pubKey) {
-    if (!Buffer.isBuffer(id)) {
+    if (!(id instanceof Uint8Array)) {
       throw new Error('invalid id provided')
     }
 
-    if (privKey && pubKey && !privKey.public.bytes.equals(pubKey.bytes)) {
+    if (privKey && pubKey && !uint8ArrayEquals(privKey.public.bytes, pubKey.bytes)) {
       throw new Error('inconsistent arguments')
     }
 
@@ -142,14 +144,14 @@ class PeerId {
 
   /**
    * Checks the equality of `this` peer against a given PeerId.
-   * @param {Buffer|PeerId} id
+   * @param {Uint8Array|PeerId} id
    * @returns {boolean}
    */
   equals (id) {
-    if (Buffer.isBuffer(id)) {
-      return this.id.equals(id)
+    if (id instanceof Uint8Array) {
+      return uint8ArrayEquals(this.id, id)
     } else if (id.id) {
-      return this.id.equals(id.id)
+      return uint8ArrayEquals(this.id, id.id)
     } else {
       throw new Error('not valid Id')
     }
@@ -158,7 +160,7 @@ class PeerId {
   /**
    * Checks the equality of `this` peer against a given PeerId.
    * @deprecated Use `.equals`
-   * @param {Buffer|PeerId} id
+   * @param {Uint8Array|PeerId} id
    * @returns {boolean}
    */
   isEqual (id) {
@@ -173,8 +175,8 @@ class PeerId {
     return Boolean(this.privKey &&
       this.privKey.public &&
       this.privKey.public.bytes &&
-      Buffer.isBuffer(this.pubKey.bytes) &&
-      this.privKey.public.bytes.equals(this.pubKey.bytes))
+      this.pubKey.bytes instanceof Uint8Array &&
+        uint8ArrayEquals(this.privKey.public.bytes, this.pubKey.bytes))
   }
 }
 
@@ -231,16 +233,16 @@ exports.createFromCID = (cid) => {
   return new PeerIdWithIs(cid.multihash)
 }
 
-// Public Key input will be a buffer
+// Public Key input will be a Uint8Array
 exports.createFromPubKey = async (key) => {
   let buf = key
 
   if (typeof buf === 'string') {
-    buf = Buffer.from(key, 'base64')
+    buf = uint8ArrayFromString(key, 'base64pad')
   }
 
-  if (!Buffer.isBuffer(buf)) {
-    throw new Error('Supplied key is neither a base64 string nor a buffer')
+  if (!(buf instanceof Uint8Array)) {
+    throw new Error('Supplied key is neither a base64 string nor a Uint8Array')
   }
 
   const pubKey = await cryptoKeys.unmarshalPublicKey(buf)
@@ -249,24 +251,22 @@ exports.createFromPubKey = async (key) => {
 
 // Private key input will be a string
 exports.createFromPrivKey = async (key) => {
-  let buf = key
-
-  if (typeof buf === 'string') {
-    buf = Buffer.from(key, 'base64')
+  if (typeof key === 'string') {
+    key = uint8ArrayFromString(key, 'base64pad')
   }
 
-  if (!Buffer.isBuffer(buf)) {
-    throw new Error('Supplied key is neither a base64 string nor a buffer')
+  if (!(key instanceof Uint8Array)) {
+    throw new Error('Supplied key is neither a base64 string nor a Uint8Array')
   }
 
-  const privKey = await cryptoKeys.unmarshalPrivateKey(buf)
+  const privKey = await cryptoKeys.unmarshalPrivateKey(key)
   return computePeerId(privKey, privKey.public)
 }
 
 exports.createFromJSON = async (obj) => {
   const id = mh.fromB58String(obj.id)
-  const rawPrivKey = obj.privKey && Buffer.from(obj.privKey, 'base64')
-  const rawPubKey = obj.pubKey && Buffer.from(obj.pubKey, 'base64')
+  const rawPrivKey = obj.privKey && uint8ArrayFromString(obj.privKey, 'base64pad')
+  const rawPubKey = obj.pubKey && uint8ArrayFromString(obj.pubKey, 'base64pad')
   const pub = rawPubKey && await cryptoKeys.unmarshalPublicKey(rawPubKey)
 
   if (!rawPrivKey) {
@@ -282,11 +282,11 @@ exports.createFromJSON = async (obj) => {
     pubDigest = await computeDigest(pub)
   }
 
-  if (pub && !privDigest.equals(pubDigest)) {
+  if (pub && !uint8ArrayEquals(privDigest, pubDigest)) {
     throw new Error('Public and private key do not match')
   }
 
-  if (id && !privDigest.equals(id)) {
+  if (id && !uint8ArrayEquals(privDigest, id)) {
     throw new Error('Id and private key do not match')
   }
 
@@ -295,7 +295,7 @@ exports.createFromJSON = async (obj) => {
 
 exports.createFromProtobuf = async (buf) => {
   if (typeof buf === 'string') {
-    buf = Buffer.from(buf, 'hex')
+    buf = uint8ArrayFromString(buf, 'base16')
   }
 
   let { id, privKey, pubKey } = PeerIdProto.decode(buf)
@@ -316,7 +316,7 @@ exports.createFromProtobuf = async (buf) => {
 
   if (privKey) {
     if (pubKey) {
-      if (!privDigest.equals(pubDigest)) {
+      if (!uint8ArrayEquals(privDigest, pubDigest)) {
         throw new Error('Public and private key do not match')
       }
     }
@@ -344,6 +344,6 @@ exports.isPeerId = (peerId) => {
 
 function toB64Opt (val) {
   if (val) {
-    return val.toString('base64')
+    return uint8ArrayToString(val, 'base64pad')
   }
 }

@@ -17,7 +17,7 @@
     "release-minor": "aegir release --type minor",
     "release-major": "aegir release --type major",
     "coverage": "aegir coverage",
-    "size": "bundlesize -f dist/index.min.js -s 140kB"
+    "size": "aegir build -b"
   },
   "files": [
     "src",
@@ -38,20 +38,17 @@
   "devDependencies": {
     "@types/chai": "^4.2.7",
     "@types/dirty-chai": "^2.0.2",
-    "@types/mocha": "^7.0.2",
-    "aegir": "^22.0.0",
-    "bundlesize": "~0.18.0",
-    "chai": "^4.2.0",
-    "dirty-chai": "^2.0.1"
+    "@types/mocha": "^8.0.1",
+    "aegir": "^25.0.0"
   },
   "dependencies": {
-    "buffer": "^5.5.0",
-    "cids": "^0.8.0",
+    "cids": "^1.0.0",
     "class-is": "^1.1.0",
-    "libp2p-crypto": "^0.17.7",
+    "libp2p-crypto": "libp2p/js-libp2p-crypto#fix/replace-node-buffers-with-uint8arrays",
     "minimist": "^1.2.5",
-    "multihashes": "^1.0.1",
-    "protons": "^1.0.2"
+    "multihashes": "^3.0.1",
+    "protons": "^2.0.0",
+    "uint8arrays": "^1.1.0"
   },
   "repository": {
     "type": "git",
