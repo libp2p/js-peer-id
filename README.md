@@ -157,7 +157,7 @@ Returns `Promise<PeerId>`.
 
 Creates a Peer ID from hex string representing the key's multihash.
 
-Returns `PeerId.
+Returns `PeerId`.
 
 ### `createFromBytes(buf)`
 
