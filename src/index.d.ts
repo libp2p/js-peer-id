@@ -31,7 +31,7 @@ declare namespace PeerId {
     /**
      * Private key.
      */
-    privKey: string;
+    privKey?: string;
   };
 
   /**
