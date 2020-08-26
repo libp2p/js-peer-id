@@ -100,7 +100,7 @@ declare namespace PeerId {
  * PeerId is an object representation of a peer identifier.
  */
 declare class PeerId {
-  constructor(id: Uint8Array | string, privKey?: PrivateKey, pubKey?: PublicKey);
+  constructor(id: Uint8Array, privKey?: PrivateKey, pubKey?: PublicKey);
 
   /**
    * Raw id.
