@@ -1,3 +1,23 @@
+<a name="0.14.1"></a>
+## [0.14.1](https://github.com/libp2p/js-peer-id/compare/v0.13.13...v0.14.1) (2020-09-03)
+
+
+### Bug Fixes
+
+* privKey possible undefined ([#129](https://github.com/libp2p/js-peer-id/issues/129)) ([224b30c](https://github.com/libp2p/js-peer-id/commit/224b30c))
+* replace node buffers with uint8arrays ([#127](https://github.com/libp2p/js-peer-id/issues/127)) ([d16ce9c](https://github.com/libp2p/js-peer-id/commit/d16ce9c))
+* ts constructor types ([#130](https://github.com/libp2p/js-peer-id/issues/130)) ([d40d588](https://github.com/libp2p/js-peer-id/commit/d40d588))
+* typo in readme ([#128](https://github.com/libp2p/js-peer-id/issues/128)) ([6d571ae](https://github.com/libp2p/js-peer-id/commit/6d571ae))
+
+
+### BREAKING CHANGES
+
+* - Where node Buffers were returned, now Uint8Arrays are
+
+* chore: remove gh dep
+
+
+
 <a name="0.14.0"></a>
 # [0.14.0](https://github.com/libp2p/js-peer-id/compare/v0.13.13...v0.14.0) (2020-08-07)
 
