@@ -183,6 +183,11 @@ declare class PeerId {
    * Check if this PeerId instance is valid (privKey -> pubKey -> Id)
    */
   isValid(): boolean;
+
+  /**
+   * Check if the PeerId has an inline public key.
+   */
+  hasInlinePublicKey(): boolean;
 }
 
 export = PeerId;

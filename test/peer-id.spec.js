@@ -243,6 +243,18 @@ describe('PeerId', () => {
     expect(ids[0].equals(ids[1].id)).to.equal(false)
   })
 
+  describe('hasInlinePublicKey', () => {
+    it('returns true if uses a key type with inline public key', async () => {
+      const peerId = await PeerId.create({ keyType: 'secp256k1' })
+      expect(peerId.hasInlinePublicKey()).to.equal(true)
+    })
+
+    it('returns false if uses a key type with no inline public key', async () => {
+      const peerId = await PeerId.create({ keyType: 'RSA' })
+      expect(peerId.hasInlinePublicKey()).to.equal(false)
+    })
+  })
+
   describe('fromJSON', () => {
     it('full node', async () => {
       const id = await PeerId.create(testOpts)

@@ -178,6 +178,23 @@ class PeerId {
       this.pubKey.bytes instanceof Uint8Array &&
         uint8ArrayEquals(this.privKey.public.bytes, this.pubKey.bytes))
   }
+
+  /**
+   * Check if the PeerId has an inline public key.
+   * @returns {boolean}
+   */
+  hasInlinePublicKey () {
+    try {
+      const decoded = mh.decode(this.id)
+      if (decoded.name === 'identity') {
+        return true
+      }
+    } catch (_) {
+      // Ignore, there is no valid public key
+    }
+
+    return false
+  }
 }
 
 const PeerIdWithIs = withIs(PeerId, {
