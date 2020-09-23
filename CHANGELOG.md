@@ -1,3 +1,13 @@
+<a name="0.14.2"></a>
+## [0.14.2](https://github.com/libp2p/js-peer-id/compare/v0.14.1...v0.14.2) (2020-09-23)
+
+
+### Features
+
+* has inline public key method ([#132](https://github.com/libp2p/js-peer-id/issues/132)) ([b2ee342](https://github.com/libp2p/js-peer-id/commit/b2ee342))
+
+
+
 <a name="0.14.1"></a>
 ## [0.14.1](https://github.com/libp2p/js-peer-id/compare/v0.13.13...v0.14.1) (2020-09-03)
 
