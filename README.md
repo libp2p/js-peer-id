@@ -53,6 +53,8 @@
     - [`toPrint()`](#toprint)
     - [`equals(id)`](#equalsid)
     - [`isEqual(id)`](#isequalid)
+  - [Others](#others)
+    - [`isPeerId(id)`](#ispeeridid)
 - [License](#license)
 
 # Description
@@ -284,6 +286,14 @@ Returns `true` if the given PeerId is equal to the current instance.
 **Deprecation Notice**: Use [`equals`](#equalsid), `isEqual` will be removed in 0.14.0.
 
 - `id` can be a PeerId or a Buffer containing the id
+
+## Others
+
+### `isPeerId(id)`
+
+Returns `true` if the given id is an instance of PeerId
+
+- `id` should be an instance of PeerId
 
 # License
 
