@@ -144,6 +144,7 @@ class PeerId {
 
   /**
    * Checks the equality of `this` peer against a given PeerId.
+   *
    * @param {Uint8Array|PeerId} id
    * @returns {boolean}
    */
@@ -159,6 +160,7 @@ class PeerId {
 
   /**
    * Checks the equality of `this` peer against a given PeerId.
+   *
    * @deprecated Use `.equals`
    * @param {Uint8Array|PeerId} id
    * @returns {boolean}
@@ -181,6 +183,7 @@ class PeerId {
 
   /**
    * Check if the PeerId has an inline public key.
+   *
    * @returns {boolean}
    */
   hasInlinePublicKey () {
