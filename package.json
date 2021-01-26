@@ -8,7 +8,7 @@
   "bin": "src/bin.js",
   "scripts": {
     "lint": "aegir lint",
-    "build": "aegir build",
+    "build": "aegir build --no-types",
     "test": "aegir test",
     "test:node": "aegir test -t node",
     "test:browser": "aegir test -t browser -t webworker",
@@ -36,19 +36,19 @@
   },
   "homepage": "https://github.com/libp2p/js-peer-id",
   "devDependencies": {
-    "@types/chai": "^4.2.7",
+    "@types/chai": "^4.2.14",
     "@types/dirty-chai": "^2.0.2",
-    "@types/mocha": "^8.0.1",
-    "aegir": "^25.0.0"
+    "@types/mocha": "^8.2.0",
+    "aegir": "^30.3.0"
   },
   "dependencies": {
-    "cids": "^1.0.0",
+    "cids": "^1.1.5",
     "class-is": "^1.1.0",
-    "libp2p-crypto": "^0.18.0",
+    "libp2p-crypto": "^0.19.0",
     "minimist": "^1.2.5",
-    "multihashes": "^3.0.1",
+    "multihashes": "^3.1.1",
     "protons": "^2.0.0",
-    "uint8arrays": "^1.1.0"
+    "uint8arrays": "^2.0.5"
   },
   "repository": {
     "type": "git",
