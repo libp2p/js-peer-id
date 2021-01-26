@@ -1,6 +1,6 @@
 {
   "name": "peer-id",
-  "version": "0.14.2",
+  "version": "0.14.3",
   "description": "IPFS Peer Id implementation in Node.js",
   "leadMaintainer": "Vasco Santos <santos.vasco10@gmail.com>",
   "main": "src/index.js",
@@ -67,6 +67,7 @@
     "Alex Potsides <alex@achingbrain.net>",
     "Nate Foss <npfoss@gmail.com>",
     "Robert Kiel <robert.kiel@validitylabs.org>",
+    "Adam Uhlíř <adam@uhlir.dev>",
     "ᴠɪᴄᴛᴏʀ ʙᴊᴇʟᴋʜᴏʟᴍ <victorbjelkholm@gmail.com>",
     "Arve Knudsen <arve.knudsen@gmail.com>",
     "Carson Farmer <carson.farmer@gmail.com>",
@@ -80,6 +81,6 @@
     "Topper Bowers <topper@quorumcontrol.com>",
     "Vojtech Simetka <vojtech@simetka.cz>",
     "Yahya <ya7yaz@gmail.com>",
-    "Adam Uhlíř <adam@uhlir.dev>"
+    "a1300 <matthias-knopp@gmx.net>"
   ]
 }
