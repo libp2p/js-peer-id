@@ -309,6 +309,18 @@ describe('PeerId', () => {
     expect(peerId.isValid()).to.equal(false)
   })
 
+  it('keys are equal after one is stringified', async () => {
+    const peerId = await PeerId.create(testOpts)
+    const peerId1 = PeerId.createFromB58String(peerId.toB58String())
+    const peerId2 = PeerId.createFromB58String(peerId.toB58String())
+
+    expect(peerId1).to.deep.equal(peerId2)
+
+    peerId1.toString()
+
+    expect(peerId1).to.deep.equal(peerId2)
+  })
+
   describe('returns error via cb instead of crashing', () => {
     const garbage = [
       uint8ArrayFromString('00010203040506070809', 'base16'),
