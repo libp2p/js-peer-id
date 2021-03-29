@@ -137,7 +137,11 @@ class PeerId {
   toString () {
     if (!this._idCIDString) {
       const cid = new CID(1, 'libp2p-key', this.id, 'base32')
-      this._idCIDString = cid.toBaseEncodedString('base32')
+
+      Object.defineProperty(this, '_idCIDString', {
+        value: cid.toBaseEncodedString('base32'),
+        enumerable: false
+      })
     }
     return this._idCIDString
   }
