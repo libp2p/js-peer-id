@@ -1,3 +1,12 @@
+## [0.14.4](https://github.com/libp2p/js-peer-id/compare/v0.14.3...v0.14.4) (2021-03-29)
+
+
+### Bug Fixes
+
+* remove toString side effect that breaks deep equals ([#142](https://github.com/libp2p/js-peer-id/issues/142)) ([eeb5330](https://github.com/libp2p/js-peer-id/commit/eeb53305c8767a6a2b3f610fe9e45a589b4fa972)), closes [#141](https://github.com/libp2p/js-peer-id/issues/141)
+
+
+
 ## [0.14.3](https://github.com/libp2p/js-peer-id/compare/v0.14.2...v0.14.3) (2021-01-26)
 
 
