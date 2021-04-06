@@ -13,7 +13,7 @@
     "test:node": "aegir test -t node",
     "test:browser": "aegir test -t browser -t webworker",
     "test:types": "npx tsc",
-    "release": "aegir release",
+    "release": "aegir release --no-types",
     "release-minor": "aegir release --type minor",
     "release-major": "aegir release --type major",
     "coverage": "aegir coverage",
