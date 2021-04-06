@@ -39,14 +39,14 @@
     "@types/chai": "^4.2.14",
     "@types/dirty-chai": "^2.0.2",
     "@types/mocha": "^8.2.0",
-    "aegir": "^30.3.0"
+    "aegir": "^32.2.0"
   },
   "dependencies": {
     "cids": "^1.1.5",
     "class-is": "^1.1.0",
     "libp2p-crypto": "^0.19.0",
     "minimist": "^1.2.5",
-    "multihashes": "^3.1.1",
+    "multihashes": "^4.0.2",
     "protons": "^2.0.0",
     "uint8arrays": "^2.0.5"
   },
