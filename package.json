@@ -28,8 +28,7 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=10.0.0",
-    "npm": ">=6.0.0"
+    "node": ">=14.0.0"
   },
   "bugs": {
     "url": "https://github.com/libp2p/js-peer-id/issues"
@@ -39,7 +38,7 @@
     "@types/chai": "^4.2.14",
     "@types/dirty-chai": "^2.0.2",
     "@types/mocha": "^8.2.0",
-    "aegir": "^32.2.0"
+    "aegir": "^33.0.0"
   },
   "dependencies": {
     "cids": "^1.1.5",
