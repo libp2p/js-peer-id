@@ -91,7 +91,7 @@ class PeerId {
       id: this.toBytes(),
       pubKey: this.marshalPubKey(),
       privKey: excludePriv ? null : this.marshalPrivKey()
-    })
+    }).finish()
   }
 
   toPrint () {

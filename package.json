@@ -8,7 +8,9 @@
   "bin": "src/bin.js",
   "scripts": {
     "lint": "aegir lint",
-    "build": "aegir build --no-types",
+    "build": "npm run build:proto && npm run build:proto-types && aegir build --no-types",
+    "build:proto": "pbjs -t static-module -w commonjs --force-number --no-verify --no-delimited --no-create --no-beautify --no-defaults --lint eslint-disable -o src/proto.js ./src/proto.proto",
+    "build:proto-types": "pbts -o src/proto.d.ts src/proto.js",
     "test": "aegir test",
     "test:node": "aegir test -t node",
     "test:browser": "aegir test -t browser -t webworker",
@@ -38,7 +40,8 @@
     "@types/chai": "^4.2.14",
     "@types/dirty-chai": "^2.0.2",
     "@types/mocha": "^8.2.0",
-    "aegir": "^33.0.0"
+    "aegir": "^33.0.0",
+    "util": "^0.12.3"
   },
   "dependencies": {
     "cids": "^1.1.5",
@@ -46,7 +49,7 @@
     "libp2p-crypto": "^0.19.0",
     "minimist": "^1.2.5",
     "multihashes": "^4.0.2",
-    "protons": "^2.0.0",
+    "protobufjs": "^6.10.2",
     "uint8arrays": "^2.0.5"
   },
   "repository": {
