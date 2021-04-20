@@ -1,3 +1,12 @@
+## [0.14.8](https://github.com/libp2p/js-peer-id/compare/v0.14.7...v0.14.8) (2021-04-20)
+
+
+### Bug Fixes
+
+* specify pbjs root ([#147](https://github.com/libp2p/js-peer-id/issues/147)) ([a125e87](https://github.com/libp2p/js-peer-id/commit/a125e875437f4e36a6a40ba596d819e3f15e519a))
+
+
+
 ## [0.14.7](https://github.com/libp2p/js-peer-id/compare/v0.14.6...v0.14.7) (2021-04-13)
 
 
