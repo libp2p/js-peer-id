@@ -5,7 +5,8 @@
 const { expect } = require('aegir/utils/chai')
 const crypto = require('libp2p-crypto')
 const mh = require('multihashes')
-const CID = require('cids')
+const { CID } = require('multiformats/cid')
+const Digest = require('multiformats/hashes/digest')
 const uint8ArrayFromString = require('uint8arrays/from-string')
 const uint8ArrayToString = require('uint8arrays/to-string')
 
@@ -13,12 +14,17 @@ const PeerId = require('../src')
 
 const util = require('util')
 
+const DAG_PB_CODE = 0x70
+const LIBP2P_KEY_CODE = 0x72
+const RAW_CODE = 0x55
+
 const testId = require('./fixtures/sample-id')
 const testIdHex = testId.id
 const testIdBytes = mh.fromHexString(testId.id)
+const testIdDigest = Digest.decode(testIdBytes)
 const testIdB58String = mh.toB58String(testIdBytes)
-const testIdCID = new CID(1, 'libp2p-key', testIdBytes)
-const testIdCIDString = testIdCID.toBaseEncodedString('base32')
+const testIdCID = CID.createV1(LIBP2P_KEY_CODE, testIdDigest)
+const testIdCIDString = testIdCID.toString()
 
 const goId = require('./fixtures/go-private-key')
 
@@ -96,19 +102,19 @@ describe('PeerId', () => {
   })
 
   it('recreate from CIDv1 Base32 (libp2p-key multicodec)', () => {
-    const cid = new CID(1, 'libp2p-key', testIdBytes)
-    const cidString = cid.toBaseEncodedString('base32')
+    const cid = CID.createV1(LIBP2P_KEY_CODE, testIdDigest)
+    const cidString = cid.toString()
     const id = PeerId.createFromCID(cidString)
     expect(cidString).to.equal(id.toString())
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
   it('recreate from CIDv1 Base32 (dag-pb multicodec)', () => {
-    const cid = new CID(1, 'dag-pb', testIdBytes)
-    const cidString = cid.toBaseEncodedString('base32')
+    const cid = CID.createV1(DAG_PB_CODE, testIdDigest)
+    const cidString = cid.toString()
     const id = PeerId.createFromCID(cidString)
     // toString should return CID with multicodec set to libp2p-key
-    expect(new CID(id.toString()).codec).to.equal('libp2p-key')
+    expect(CID.parse(id.toString()).code).to.equal(LIBP2P_KEY_CODE)
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
@@ -120,10 +126,10 @@ describe('PeerId', () => {
 
   it('throws on invalid CID multicodec', () => {
     // only libp2p and dag-pb are supported
-    const invalidCID = new CID(1, 'raw', testIdBytes).toBaseEncodedString('base32')
+    const invalidCID = CID.createV1(RAW_CODE, testIdDigest).toString()
     expect(() => {
       PeerId.createFromCID(invalidCID)
-    }).to.throw(/Supplied PeerID CID has invalid multicodec: raw/)
+    }).to.throw(/invalid/i)
   })
 
   it('throws on invalid CID value', () => {
@@ -132,21 +138,21 @@ describe('PeerId', () => {
     const invalidCID = 'QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L'
     expect(() => {
       PeerId.createFromCID(invalidCID)
-    }).to.throw(/multihash unknown function code: 0x50/)
+    }).to.throw(/invalid/i)
   })
 
   it('throws on invalid CID object', () => {
     const invalidCID = {}
     expect(() => {
       PeerId.createFromCID(invalidCID)
-    }).to.throw(/Invalid version, must be a number equal to 1 or 0/)
+    }).to.throw(/invalid/i)
   })
 
   it('throws on invalid CID object', () => {
     const invalidCID = {}
     expect(() => {
       PeerId.createFromCID(invalidCID)
-    }).to.throw(/Invalid version, must be a number equal to 1 or 0/)
+    }).to.throw(/invalid/i)
   })
 
   it('recreate from a Public Key', async () => {
@@ -209,7 +215,8 @@ describe('PeerId', () => {
 
   it('Pretty printing', async () => {
     const id1 = await PeerId.create(testOpts)
-    const id2 = await PeerId.createFromPrivKey((id1.toJSON()).privKey)
+    const json = id1.toJSON()
+    const id2 = await PeerId.createFromPrivKey(json.privKey || 'invalid, should not happen')
     expect(id1.toPrint()).to.be.eql(id2.toPrint())
     expect(id1.toPrint()).to.equal('<peer.ID ' + id1.toB58String().substr(2, 6) + '>')
   })
@@ -375,6 +382,7 @@ describe('PeerId', () => {
     })
 
     it('invalid id', () => {
+      // @ts-expect-error incorrect constructor arg type
       expect(() => new PeerId('hello world')).to.throw(/invalid id/)
     })
   })

@@ -1,5 +1,5 @@
 import { PrivateKey, PublicKey, KeyType } from "libp2p-crypto";
-import CID from 'cids'
+import { CID } from 'multiformats/cid'
 
 declare namespace PeerId {
   /**

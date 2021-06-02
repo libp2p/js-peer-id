@@ -4,14 +4,20 @@
 
 'use strict'
 
-const mh = require('multihashes')
-const CID = require('cids')
+const { CID } = require('multiformats/cid')
+const { base58btc } = require('multiformats/bases/base58')
+const { base16 } = require('multiformats/bases/base16')
+const Digest = require('multiformats/hashes/digest')
 const cryptoKeys = require('libp2p-crypto/src/keys')
 const withIs = require('class-is')
 const { PeerIdProto } = require('./proto')
 const uint8ArrayEquals = require('uint8arrays/equals')
 const uint8ArrayFromString = require('uint8arrays/from-string')
 const uint8ArrayToString = require('uint8arrays/to-string')
+
+const IDENTITY_CODE = 0x00
+const DAG_PB_CODE = 0x70
+const LIBP2P_KEY_CODE = 0x72
 
 class PeerId {
   constructor (id, privKey, pubKey) {
@@ -24,7 +30,7 @@ class PeerId {
     }
 
     this._id = id
-    this._idB58String = mh.toB58String(this.id)
+    this._idB58String = base58btc.encode(this.id).substring(1)
     this._privKey = privKey
     this._pubKey = pubKey
   }
@@ -55,9 +61,9 @@ class PeerId {
     }
 
     try {
-      const decoded = mh.decode(this.id)
+      const decoded = Digest.decode(this.id)
 
-      if (decoded.name === 'identity') {
+      if (decoded.code === IDENTITY_CODE) {
         this._pubKey = cryptoKeys.unmarshalPublicKey(decoded.digest)
       }
     } catch (_) {
@@ -121,7 +127,7 @@ class PeerId {
 
   // encode/decode functions
   toHexString () {
-    return mh.toHexString(this.id)
+    return base16.encode(this.id).substring(1)
   }
 
   toBytes () {
@@ -136,10 +142,10 @@ class PeerId {
   // in default format from RFC 0001: https://github.com/libp2p/specs/pull/209
   toString () {
     if (!this._idCIDString) {
-      const cid = new CID(1, 'libp2p-key', this.id, 'base32')
+      const cid = CID.createV1(LIBP2P_KEY_CODE, Digest.decode(this.id))
 
       Object.defineProperty(this, '_idCIDString', {
-        value: cid.toBaseEncodedString('base32'),
+        value: cid.toString(),
         enumerable: false
       })
     }
@@ -192,8 +198,9 @@ class PeerId {
    */
   hasInlinePublicKey () {
     try {
-      const decoded = mh.decode(this.id)
-      if (decoded.name === 'identity') {
+      const decoded = Digest.decode(this.id)
+
+      if (decoded.code === IDENTITY_CODE) {
         return true
       }
     } catch (_) {
@@ -213,7 +220,7 @@ exports = module.exports = PeerIdWithIs
 
 const computeDigest = (pubKey) => {
   if (pubKey.bytes.length <= 42) {
-    return mh.encode(pubKey.bytes, 'identity')
+    return Digest.create(IDENTITY_CODE, pubKey.bytes).bytes
   } else {
     return pubKey.hash()
   }
@@ -235,7 +242,7 @@ exports.create = async (opts) => {
 }
 
 exports.createFromHexString = (str) => {
-  return new PeerIdWithIs(mh.fromHexString(str))
+  return new PeerIdWithIs(base16.decode('f' + str))
 }
 
 exports.createFromBytes = (buf) => {
@@ -243,18 +250,28 @@ exports.createFromBytes = (buf) => {
 }
 
 exports.createFromB58String = (str) => {
-  return exports.createFromCID(str) // B58String is CIDv0
+  return exports.createFromBytes(base58btc.decode('z' + str))
 }
 
 const validMulticodec = (cid) => {
   // supported: 'libp2p-key' (CIDv1) and 'dag-pb' (CIDv0 converted to CIDv1)
-  return cid.codec === 'libp2p-key' || cid.codec === 'dag-pb'
+  return cid.code === LIBP2P_KEY_CODE || cid.code === DAG_PB_CODE
 }
 
 exports.createFromCID = (cid) => {
-  cid = CID.isCID(cid) ? cid : new CID(cid)
-  if (!validMulticodec(cid)) throw new Error('Supplied PeerID CID has invalid multicodec: ' + cid.codec)
-  return new PeerIdWithIs(cid.multihash)
+  if (typeof cid === 'string') {
+    cid = CID.parse(cid)
+  } else if (cid instanceof Uint8Array) {
+    cid = CID.decode(cid)
+  } else {
+    cid = CID.asCID(cid)
+  }
+
+  if (!cid || !validMulticodec(cid)) {
+    throw new Error('Supplied PeerID CID is invalid')
+  }
+
+  return new PeerIdWithIs(cid.multihash.bytes)
 }
 
 // Public Key input will be a Uint8Array
@@ -288,7 +305,7 @@ exports.createFromPrivKey = async (key) => {
 }
 
 exports.createFromJSON = async (obj) => {
-  const id = mh.fromB58String(obj.id)
+  const id = base58btc.decode('z' + obj.id)
   const rawPrivKey = obj.privKey && uint8ArrayFromString(obj.privKey, 'base64pad')
   const rawPubKey = obj.pubKey && uint8ArrayFromString(obj.pubKey, 'base64pad')
   const pub = rawPubKey && await cryptoKeys.unmarshalPublicKey(rawPubKey)
