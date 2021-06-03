@@ -68,7 +68,7 @@ declare namespace PeerId {
    * Create PeerId from CID.
    * @param cid The CID.
    */
-  function createFromCID(cid: CID | Uint8Array | string | object): PeerId;
+  function createFromCID(cid: CID): PeerId;
 
   /**
    * Create PeerId from public key.

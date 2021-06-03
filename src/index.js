@@ -247,7 +247,23 @@ exports.createFromHexString = (str) => {
 }
 
 exports.createFromBytes = (buf) => {
-  return new PeerIdWithIs(buf)
+  try {
+    const cid = CID.decode(buf)
+
+    if (!validMulticodec(cid)) {
+      throw new Error('Supplied PeerID CID is invalid')
+    }
+
+    return exports.createFromCID(cid)
+  } catch {
+    const digest = Digest.decode(buf)
+
+    if (digest.code !== IDENTITY_CODE) {
+      throw new Error('Supplied PeerID CID is invalid')
+    }
+
+    return new PeerIdWithIs(buf)
+  }
 }
 
 exports.createFromB58String = (str) => {
@@ -260,13 +276,7 @@ const validMulticodec = (cid) => {
 }
 
 exports.createFromCID = (cid) => {
-  if (typeof cid === 'string') {
-    cid = CID.parse(cid)
-  } else if (cid instanceof Uint8Array) {
-    cid = CID.decode(cid)
-  } else {
-    cid = CID.asCID(cid)
-  }
+  cid = CID.asCID(cid)
 
   if (!cid || !validMulticodec(cid)) {
     throw new Error('Supplied PeerID CID is invalid')

@@ -96,61 +96,53 @@ describe('PeerId', () => {
   })
 
   it('recreate from Base58 String (CIDv0))', () => {
-    const id = PeerId.createFromCID(testIdB58String)
+    const id = PeerId.createFromCID(CID.parse(testIdB58String))
     expect(testIdCIDString).to.equal(id.toString())
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
   it('recreate from CIDv1 Base32 (libp2p-key multicodec)', () => {
     const cid = CID.createV1(LIBP2P_KEY_CODE, testIdDigest)
-    const cidString = cid.toString()
-    const id = PeerId.createFromCID(cidString)
-    expect(cidString).to.equal(id.toString())
+    const id = PeerId.createFromCID(cid)
+    expect(cid.toString()).to.equal(id.toString())
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
   it('recreate from CIDv1 Base32 (dag-pb multicodec)', () => {
     const cid = CID.createV1(DAG_PB_CODE, testIdDigest)
-    const cidString = cid.toString()
-    const id = PeerId.createFromCID(cidString)
+    const id = PeerId.createFromCID(cid)
     // toString should return CID with multicodec set to libp2p-key
     expect(CID.parse(id.toString()).code).to.equal(LIBP2P_KEY_CODE)
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
   it('recreate from CID Uint8Array', () => {
-    const id = PeerId.createFromCID(testIdCID.bytes)
+    const id = PeerId.createFromBytes(testIdCID.bytes)
     expect(testIdCIDString).to.equal(id.toString())
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
   it('throws on invalid CID multicodec', () => {
     // only libp2p and dag-pb are supported
-    const invalidCID = CID.createV1(RAW_CODE, testIdDigest).toString()
+    const invalidCID = CID.createV1(RAW_CODE, testIdDigest)
     expect(() => {
       PeerId.createFromCID(invalidCID)
     }).to.throw(/invalid/i)
   })
 
-  it('throws on invalid CID value', () => {
-    // using function code that does not represent valid hash function
+  it('throws on invalid multihash value', () => {
+    // using function code 0x50 that does not represent valid hash function
     // https://github.com/multiformats/js-multihash/blob/b85999d5768bf06f1b0f16b926ef2cb6d9c14265/src/constants.js#L345
-    const invalidCID = 'QmaozNR7DZHQK1ZcU9p7QdrshMvXqWK6gpu5rmrkPdT3L'
+    const invalidMultihash = uint8ArrayToString(Uint8Array.from([0x50, 0x1, 0x0]), 'base58btc')
     expect(() => {
-      PeerId.createFromCID(invalidCID)
+      PeerId.createFromB58String(invalidMultihash)
     }).to.throw(/invalid/i)
   })
 
   it('throws on invalid CID object', () => {
     const invalidCID = {}
     expect(() => {
-      PeerId.createFromCID(invalidCID)
-    }).to.throw(/invalid/i)
-  })
-
-  it('throws on invalid CID object', () => {
-    const invalidCID = {}
-    expect(() => {
+      // @ts-expect-error invalid cid is invalid type
       PeerId.createFromCID(invalidCID)
     }).to.throw(/invalid/i)
   })
