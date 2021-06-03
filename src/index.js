@@ -15,6 +15,7 @@ const uint8ArrayEquals = require('uint8arrays/equals')
 const uint8ArrayFromString = require('uint8arrays/from-string')
 const uint8ArrayToString = require('uint8arrays/to-string')
 
+// these values are from https://github.com/multiformats/multicodec/blob/master/table.csv
 const IDENTITY_CODE = 0x00
 const DAG_PB_CODE = 0x70
 const LIBP2P_KEY_CODE = 0x72
