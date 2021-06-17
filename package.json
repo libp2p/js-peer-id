@@ -45,7 +45,6 @@
   },
   "dependencies": {
     "cids": "^1.1.5",
-    "class-is": "^1.1.0",
     "libp2p-crypto": "^0.19.0",
     "minimist": "^1.2.5",
     "multihashes": "^4.0.2",

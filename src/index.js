@@ -5,9 +5,6 @@ const CID = require('cids')
 // TODO: Fix missing type
 // @ts-ignore
 const cryptoKeys = require('libp2p-crypto/src/keys')
-// TODO: Fix missing type
-// @ts-ignore
-const withIs = require('class-is')
 const { PeerIdProto } = require('./proto')
 const uint8ArrayEquals = require('uint8arrays/equals')
 const uint8ArrayFromString = require('uint8arrays/from-string')
@@ -489,26 +486,18 @@ class PeerId {
 
     throw new Error('Protobuf did not contain any usable key material')
   }
+
+  /**
+  * Checks if a value is an instance of PeerId.
+  * 
+  * @param {any} peerId - The value to check.
+  * @returns {boolean}
+  */
+  static isPeerId (peerId) {
+    return Boolean(typeof peerId === 'object' && peerId._id && peerId._idB58String)
+  } 
 }
 
-/**
- * @type {typeof PeerId & {isPeerId: (id: any)=> boolean}}
- */
-module.exports = withIs(PeerId, {
-  className: 'PeerId',
-  symbolName: '@libp2p/js-peer-id/PeerId'
-})
-
-// TODO: withIs is creating "isPeerId" so not sure if its really needed any further.
-/**
- * Checks if a value is an instance of PeerId.
- * 
- * @param {any} peerId - The value to check.
- * @returns {boolean}
- */
-module.exports.isPeerId = (peerId) => {
-  return Boolean(typeof peerId === 'object' && peerId._id && peerId._idB58String)
-} 
 
 /**
  * Compute digest.
@@ -558,3 +547,5 @@ const toB64Opt = (val) => {
 
   return ''
 }
+
+module.exports = PeerId;
