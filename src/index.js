@@ -10,6 +10,8 @@ const uint8ArrayEquals = require('uint8arrays/equals')
 const uint8ArrayFromString = require('uint8arrays/from-string')
 const uint8ArrayToString = require('uint8arrays/to-string')
 
+const symbol = Symbol.for('@libp2p/js-multiaddr/peer-id')
+
 /**
  * @typedef {import('libp2p-crypto').PrivateKey} PrivateKey
  * @typedef {import('libp2p-crypto').PublicKey} PublicKey
@@ -53,13 +55,16 @@ class PeerId {
       throw new Error('inconsistent arguments')
     }
 
+    // Define symbol
+    Object.defineProperty(this, symbol, { value: true })
+
     this._id = id
     this._idB58String = mh.toB58String(this.id)
     this._privKey = privKey
     this._pubKey = pubKey
 
     /**
-     * @type {string | undefined}
+     * @type {!string}
      */
     this._idCIDString
   }
@@ -177,10 +182,13 @@ class PeerId {
    * @returns {PeerIdJSON}
    */
   toJSON () {
+    const privKey = this.marshalPrivKey()
+    const pubKey = this.marshalPubKey()
+
     return {
       id: this.toB58String(),
-      privKey: toB64Opt(this.marshalPrivKey()),
-      pubKey: toB64Opt(this.marshalPubKey())
+      privKey: privKey && toB64Opt(privKey),
+      pubKey: pubKey && toB64Opt(pubKey)
     }
   }
 
@@ -227,7 +235,7 @@ class PeerId {
       })
     }
 
-    return this._idCIDString ? this._idCIDString : ''
+    return this._idCIDString
   }
 
   /**
@@ -293,15 +301,11 @@ class PeerId {
   /**
    * Create a new PeerId.
    *
-   * @param {CreateOptions} opts - Options
+   * @param {CreateOptions} [opts] - Options
    * @returns {Promise<PeerId>}
    */
-  static async create (opts) {
-    opts = opts || {}
-    opts.bits = opts.bits || 2048
-    opts.keyType = opts.keyType || 'RSA'
-
-    const key = await cryptoKeys.generateKeyPair(opts.keyType, opts.bits)
+  static async create ({ bits = 2048, keyType = 'RSA' } = {}) {
+    const key = await cryptoKeys.generateKeyPair(keyType, bits)
     return computePeerId(key.public, key)
   }
 
@@ -406,17 +410,12 @@ class PeerId {
     const privKey = await cryptoKeys.unmarshalPrivateKey(rawPrivKey)
     const privDigest = await computeDigest(privKey.public)
 
-    /**
-     * @type {Uint8Array}
-     */
-    let pubDigest = new Uint8Array()
-
     if (pub) {
-      pubDigest = await computeDigest(pub)
-    }
+      const pubDigest = await computeDigest(pub)
 
-    if (pub && !uint8ArrayEquals(privDigest, pubDigest)) {
-      throw new Error('Public and private key do not match')
+      if (!uint8ArrayEquals(privDigest, pubDigest)) {
+        throw new Error('Public and private key do not match')
+      }
     }
 
     if (id && !uint8ArrayEquals(privDigest, id)) {
@@ -437,49 +436,33 @@ class PeerId {
       buf = uint8ArrayFromString(buf, 'base16')
     }
 
-    const { id, privKey: privKeyArray, pubKey: pubKeyArray } = PeerIdProto.decode(buf)
+    const { id, privKey: privKeyBytes, pubKey: pubKeyBytes } = PeerIdProto.decode(buf)
 
     /**
      * @type {PrivateKey | false}
      */
-    const privKey = privKeyArray ? await cryptoKeys.unmarshalPrivateKey(privKeyArray) : false
+    const privKey = privKeyBytes ? await cryptoKeys.unmarshalPrivateKey(privKeyBytes) : false
 
     /**
      * @type {PublicKey | false}
      */
-    const pubKey = pubKeyArray ? await cryptoKeys.unmarshalPublicKey(pubKeyArray) : false
+    const pubKey = pubKeyBytes ? await cryptoKeys.unmarshalPublicKey(pubKeyBytes) : false
 
-    /**
-     * @type {Uint8Array}
-     */
-    let pubDigest = new Uint8Array()
+    if (privKey && pubKey) {
+      const privDigest = await computeDigest(privKey.public)
+      const pubDigest = await computeDigest(pubKey)
 
-    /**
-     * @type {Uint8Array}
-     */
-    let privDigest = new Uint8Array()
-
-    if (privKey) {
-      // @ts-ignore
-      privDigest = await computeDigest(privKey.public)
-    }
-
-    if (pubKey) {
-      pubDigest = await computeDigest(pubKey)
-    }
-
-    if (privKey) {
-      if (pubKey) {
-        if (!uint8ArrayEquals(privDigest, pubDigest)) {
-          throw new Error('Public and private key do not match')
-        }
+      if (!uint8ArrayEquals(privDigest, pubDigest)) {
+        throw new Error('Public and private key do not match')
       }
-      // @ts-ignore
+
       return new PeerId(privDigest, privKey, privKey.public)
     }
 
     // TODO: val id and pubDigest
     if (pubKey) {
+      const pubDigest = await computeDigest(pubKey)
+
       return new PeerId(pubDigest, undefined, pubKey)
     }
 
@@ -497,7 +480,7 @@ class PeerId {
    * @returns {boolean}
    */
   static isPeerId (peerId) {
-    return Boolean(typeof peerId === 'object' && peerId._id && peerId._idB58String)
+    return peerId instanceof PeerId || Boolean(peerId && peerId[symbol])
   }
 }
 
@@ -539,15 +522,11 @@ const validMulticodec = (cid) => {
 }
 
 /**
- * @param {Uint8Array | undefined} val
+ * @param {Uint8Array} val
  * @returns {string}
  */
 const toB64Opt = (val) => {
-  if (val) {
-    return uint8ArrayToString(val, 'base64pad')
-  }
-
-  return ''
+  return uint8ArrayToString(val, 'base64pad')
 }
 
 module.exports = PeerId
