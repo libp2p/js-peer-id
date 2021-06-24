@@ -19,7 +19,8 @@ const uint8ArrayToString = require('uint8arrays/to-string')
 
 /**
  * PeerId JSON format.
- * @typedef {Object} PeerIdJSON 
+ *
+ * @typedef {Object} PeerIdJSON
  * @property {string} id - String representation of PeerId.
  * @property {string} [pubKey] - Public key.
  * @property {string} [privKey] - Private key.
@@ -27,7 +28,8 @@ const uint8ArrayToString = require('uint8arrays/to-string')
 
 /**
  * Options for PeerId creation.
- * @typedef {Object} CreateOptions 
+ *
+ * @typedef {Object} CreateOptions
  * @property {number} [bits] - The number of bits to use.
  * @property {KeyType} [keyType] - The type of key to use.
  */
@@ -35,9 +37,10 @@ const uint8ArrayToString = require('uint8arrays/to-string')
 class PeerId {
   /**
    * Create PeerId object
-   * @constructor
-   * 
-   * @param {Uint8Array} id 
+   *
+   * @class
+   *
+   * @param {Uint8Array} id
    * @param {PrivateKey} [privKey]
    * @param {PublicKey} [pubKey]
    */
@@ -114,7 +117,7 @@ class PeerId {
 
   /**
    * Return the protobuf version of the public key, matching go ipfs formatting
-   * 
+   *
    * @returns {Uint8Array | undefined}
    */
   marshalPubKey () {
@@ -125,7 +128,7 @@ class PeerId {
 
   /**
    * Return the protobuf version of the private key, matching go ipfs formatting
-   * 
+   *
    * @returns {Uint8Array | undefined}
    */
   marshalPrivKey () {
@@ -136,7 +139,7 @@ class PeerId {
 
   /**
    * Return the protobuf version of the peer-id
-   * 
+   *
    * @param {boolean} [excludePriv] - Whether to exclude the private key information from the output.
    * @returns {Uint8Array}
    */
@@ -150,7 +153,7 @@ class PeerId {
 
   /**
    * String representation
-   * 
+   *
    * @returns {string}
    */
   toPrint () {
@@ -170,7 +173,7 @@ class PeerId {
 
   /**
    * The jsonified version of the key, matching the formatting of go-ipfs for its config file
-   * 
+   *
    * @returns {PeerIdJSON}
    */
   toJSON () {
@@ -183,7 +186,7 @@ class PeerId {
 
   /**
    * Encode to hex.
-   * 
+   *
    * @returns {string}
    */
   toHexString () {
@@ -191,8 +194,8 @@ class PeerId {
   }
 
   /**
-   * Return raw id bytes 
-   * 
+   * Return raw id bytes
+   *
    * @returns {Uint8Array}
    */
   toBytes () {
@@ -200,8 +203,8 @@ class PeerId {
   }
 
   /**
-   * Encode to base58 string. 
-   * 
+   * Encode to base58 string.
+   *
    * @returns {string}
    */
   toB58String () {
@@ -211,7 +214,7 @@ class PeerId {
   /**
    * Self-describing String representation
    * in default format from RFC 0001: https://github.com/libp2p/specs/pull/209
-   * 
+   *
    * @returns {string}
    */
   toString () {
@@ -256,7 +259,7 @@ class PeerId {
 
   /**
    * Check if this PeerId instance is valid (privKey -> pubKey -> Id)
-   * 
+   *
    * @returns {boolean}
    */
   isValid () {
@@ -289,7 +292,7 @@ class PeerId {
 
   /**
    * Create a new PeerId.
-   * 
+   *
    * @param {CreateOptions} opts - Options
    * @returns {Promise<PeerId>}
    */
@@ -304,7 +307,7 @@ class PeerId {
 
   /**
    * Create PeerId from raw bytes.
-   * 
+   *
    * @param {Uint8Array} buf - The raw bytes.
    * @returns {PeerId}
    */
@@ -314,7 +317,7 @@ class PeerId {
 
   /**
    * Create PeerId from base58-encoded string.
-   * 
+   *
    * @param {string} str - The base58-encoded string.
    * @returns {PeerId}
    */
@@ -324,7 +327,7 @@ class PeerId {
 
   /**
    * Create PeerId from hex string.
-   * 
+   *
    * @param {string} str - The hex string.
    * @returns {PeerId}
    */
@@ -334,7 +337,7 @@ class PeerId {
 
   /**
    * Create PeerId from CID.
-   * 
+   *
    * @param {CID | CIDVersion | Uint8Array | string} cid - The CID.
    * @returns {PeerId}
    */
@@ -346,7 +349,7 @@ class PeerId {
 
   /**
    * Create PeerId from public key.
-   * 
+   *
    * @param {Uint8Array | string} key - Public key, as Uint8Array or base64-encoded string.
    * @returns {Promise<PeerId>}
    */
@@ -367,7 +370,7 @@ class PeerId {
 
   /**
    * Create PeerId from private key.
-   * 
+   *
    * @param {Uint8Array | string} key - Private key, as Uint8Array or base64-encoded string.
    * @returns {Promise<PeerId>}
    */
@@ -386,8 +389,8 @@ class PeerId {
 
   /**
    * Create PeerId from PeerId JSON formatted object.
-   * 
-   * @param {PeerIdJSON} obj 
+   *
+   * @param {PeerIdJSON} obj
    * @returns {Promise<PeerId>}
    */
   static async createFromJSON (obj) {
@@ -424,8 +427,8 @@ class PeerId {
   }
 
   /**
-   * Create PeerId from Protobuf bytes. 
-   * 
+   * Create PeerId from Protobuf bytes.
+   *
    * @param {Uint8Array | string} buf - Protobuf bytes, as Uint8Array or hex-encoded string.
    * @returns {Promise<PeerId>}
    */
@@ -434,7 +437,7 @@ class PeerId {
       buf = uint8ArrayFromString(buf, 'base16')
     }
 
-    let { id, privKey: privKeyArray, pubKey: pubKeyArray } = PeerIdProto.decode(buf)
+    const { id, privKey: privKeyArray, pubKey: pubKeyArray } = PeerIdProto.decode(buf)
 
     /**
      * @type {PrivateKey | false}
@@ -488,21 +491,20 @@ class PeerId {
   }
 
   /**
-  * Checks if a value is an instance of PeerId.
-  * 
-  * @param {any} peerId - The value to check.
-  * @returns {boolean}
-  */
+   * Checks if a value is an instance of PeerId.
+   *
+   * @param {any} peerId - The value to check.
+   * @returns {boolean}
+   */
   static isPeerId (peerId) {
     return Boolean(typeof peerId === 'object' && peerId._id && peerId._idB58String)
-  } 
+  }
 }
-
 
 /**
  * Compute digest.
- * 
- * @param {PublicKey} pubKey 
+ *
+ * @param {PublicKey} pubKey
  * @returns {Promise<Uint8Array>}
  */
 const computeDigest = async (pubKey) => {
@@ -515,8 +517,8 @@ const computeDigest = async (pubKey) => {
 
 /**
  * Compute PeerId.
- * 
- * @param {PublicKey} pubKey 
+ *
+ * @param {PublicKey} pubKey
  * @param {PrivateKey} [privKey]
  * @returns {Promise<PeerId>}
  */
@@ -527,7 +529,7 @@ const computePeerId = async (pubKey, privKey) => {
 
 /**
  * Create PeerId from CID.
- * 
+ *
  * @param {CID | {codec: string}} cid - The CID.
  * @returns {boolean}
  */
@@ -537,7 +539,7 @@ const validMulticodec = (cid) => {
 }
 
 /**
- * @param {Uint8Array | undefined} val 
+ * @param {Uint8Array | undefined} val
  * @returns {string}
  */
 const toB64Opt = (val) => {
@@ -548,4 +550,4 @@ const toB64Opt = (val) => {
   return ''
 }
 
-module.exports = PeerId;
+module.exports = PeerId
