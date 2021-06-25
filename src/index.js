@@ -4,13 +4,14 @@ const mh = require('multihashes')
 const CID = require('cids')
 // TODO: Fix missing type
 // @ts-ignore
+// @ts-ignore
 const cryptoKeys = require('libp2p-crypto/src/keys')
 const { PeerIdProto } = require('./proto')
 const uint8ArrayEquals = require('uint8arrays/equals')
 const uint8ArrayFromString = require('uint8arrays/from-string')
 const uint8ArrayToString = require('uint8arrays/to-string')
 
-const symbol = Symbol.for('@libp2p/js-multiaddr/peer-id')
+const symbol = Symbol.for('@libp2p/peer-id')
 
 /**
  * @typedef {import('libp2p-crypto').PrivateKey} PrivateKey
@@ -62,11 +63,6 @@ class PeerId {
     this._idB58String = mh.toB58String(this.id)
     this._privKey = privKey
     this._pubKey = pubKey
-
-    /**
-     * @type {!string}
-     */
-    this._idCIDString
   }
 
   /**
@@ -76,6 +72,7 @@ class PeerId {
     return this._id
   }
 
+  // @ts-ignore
   set id (val) {
     throw new Error('Id is immutable')
   }
@@ -226,6 +223,8 @@ class PeerId {
    * @returns {string}
    */
   toString () {
+    // We will create the property right here
+    // @ts-ignore
     if (!this._idCIDString) {
       const cid = new CID(1, 'libp2p-key', this.id, 'base32')
 
@@ -235,6 +234,8 @@ class PeerId {
       })
     }
 
+    // This property is just created
+    // @ts-ignore
     return this._idCIDString
   }
 
@@ -441,12 +442,12 @@ class PeerId {
     /**
      * @type {PrivateKey | false}
      */
-    const privKey = privKeyBytes ? await cryptoKeys.unmarshalPrivateKey(privKeyBytes) : false
+    const privKey = privKeyBytes && await cryptoKeys.unmarshalPrivateKey(privKeyBytes)
 
     /**
      * @type {PublicKey | false}
      */
-    const pubKey = pubKeyBytes ? await cryptoKeys.unmarshalPublicKey(pubKeyBytes) : false
+    const pubKey = pubKeyBytes && await cryptoKeys.unmarshalPublicKey(pubKeyBytes)
 
     if (privKey && pubKey) {
       const privDigest = await computeDigest(privKey.public)
