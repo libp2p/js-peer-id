@@ -1,5 +1,5 @@
 import { PrivateKey, PublicKey, KeyType } from "libp2p-crypto";
-import CID from 'cids'
+import { CID } from 'multiformats/cid'
 
 declare namespace PeerId {
   /**
@@ -68,7 +68,7 @@ declare namespace PeerId {
    * Create PeerId from CID.
    * @param cid The CID.
    */
-  function createFromCID(cid: CID | Uint8Array | string | object): PeerId;
+  function createFromCID(cid: CID): PeerId;
 
   /**
    * Create PeerId from public key.
@@ -94,6 +94,12 @@ declare namespace PeerId {
    * @param buf Protobuf bytes, as Uint8Array or hex-encoded string.
    */
   function createFromProtobuf(buf: Uint8Array | string): Promise<PeerId>;
+
+  /**
+   * Parse a PeerId from a string.
+   * @param str encoded public key string.
+   */
+   function parse(str: string): PeerId;
 }
 
 /**
