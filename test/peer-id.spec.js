@@ -172,6 +172,28 @@ describe('PeerId', () => {
     expect(uint8ArrayToString(id.marshal(), 'base16')).to.deep.equal(testId.marshaled)
   })
 
+  it('recreate from embedded ed25519 key', async () => {
+    const key = '12D3KooWRm8J3iL796zPFi2EtGGtUJn58AG67gcqzMFHZnnsTzqD'
+    const id = await PeerId.parse(key)
+    expect(id.toB58String()).to.equal(key)
+    const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+    expect(id.toB58String()).to.equal(expB58)
+  })
+
+  it('recreate from embedded secp256k1 key', async () => {
+    const key = '16Uiu2HAm5qw8UyXP2RLxQUx5KvtSN8DsTKz8quRGqGNC3SYiaB8E'
+    const id = await PeerId.parse(key)
+    expect(id.toB58String()).to.equal(key)
+    const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+    expect(id.toB58String()).to.equal(expB58)
+  })
+
+  it('recreate from string key', async () => {
+    const key = 'QmRsooYQasV5f5r834NSpdUtmejdQcpxXkK6qsozZWEihC'
+    const id = await PeerId.parse(key)
+    expect(id.toB58String()).to.equal(key)
+  })
+
   it('can be created from a Secp256k1 public key', async () => {
     const privKey = await crypto.keys.generateKeyPair('secp256k1', 256)
     const id = await PeerId.createFromPubKey(privKey.public.bytes)

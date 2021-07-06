@@ -388,6 +388,16 @@ exports.createFromProtobuf = async (buf) => {
   throw new Error('Protobuf did not contain any usable key material')
 }
 
+exports.parse = (str) => {
+  if (str.charAt(0) === '1') {
+    // base58btc encoded public key
+    return exports.createFromBytes(base58btc.decode(`z${str}`))
+  }
+
+  // try to parse it as a regular base58btc multihash or base32 encoded CID
+  return exports.createFromCID(CID.parse(str))
+}
+
 exports.isPeerId = (peerId) => {
   return Boolean(typeof peerId === 'object' &&
     peerId._id &&

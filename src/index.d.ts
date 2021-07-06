@@ -94,6 +94,12 @@ declare namespace PeerId {
    * @param buf Protobuf bytes, as Uint8Array or hex-encoded string.
    */
   function createFromProtobuf(buf: Uint8Array | string): Promise<PeerId>;
+
+  /**
+   * Create PeerId from Protobuf bytes.
+   * @param buf Protobuf bytes, as Uint8Array or hex-encoded string.
+   */
+   function parse(str: string): Promise<PeerId>;
 }
 
 /**
