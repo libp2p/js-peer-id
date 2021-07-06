@@ -1,3 +1,19 @@
+# [0.15.0](https://github.com/libp2p/js-peer-id/compare/v0.14.8...v0.15.0) (2021-07-06)
+
+
+### chore
+
+* update to new multiformats ([#149](https://github.com/libp2p/js-peer-id/issues/149)) ([69d7a01](https://github.com/libp2p/js-peer-id/commit/69d7a012cb5efffcc13afe3c75fa1acc8bda1f54))
+
+
+### BREAKING CHANGES
+
+* uses the CID class from the new multiformats module
+
+Co-authored-by: Vasco Santos <vasco.santos@moxy.studio>
+
+
+
 ## [0.14.8](https://github.com/libp2p/js-peer-id/compare/v0.14.7...v0.14.8) (2021-04-20)
 
 
