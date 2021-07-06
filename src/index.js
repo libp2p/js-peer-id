@@ -14,7 +14,7 @@ const { PeerIdProto } = require('./proto')
 const uint8ArrayEquals = require('uint8arrays/equals')
 const uint8ArrayFromString = require('uint8arrays/from-string')
 const uint8ArrayToString = require('uint8arrays/to-string')
-const identity = require('multiformats/hashes/identity')
+const { identity } = require('multiformats/hashes/identity')
 
 // these values are from https://github.com/multiformats/multicodec/blob/master/table.csv
 const DAG_PB_CODE = 0x70
