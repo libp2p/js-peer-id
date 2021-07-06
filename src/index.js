@@ -14,9 +14,9 @@ const { PeerIdProto } = require('./proto')
 const uint8ArrayEquals = require('uint8arrays/equals')
 const uint8ArrayFromString = require('uint8arrays/from-string')
 const uint8ArrayToString = require('uint8arrays/to-string')
+const identity = require('multiformats/hashes/identity')
 
 // these values are from https://github.com/multiformats/multicodec/blob/master/table.csv
-const IDENTITY_CODE = 0x00
 const DAG_PB_CODE = 0x70
 const LIBP2P_KEY_CODE = 0x72
 
@@ -64,7 +64,7 @@ class PeerId {
     try {
       const decoded = Digest.decode(this.id)
 
-      if (decoded.code === IDENTITY_CODE) {
+      if (decoded.code === identity.code) {
         this._pubKey = cryptoKeys.unmarshalPublicKey(decoded.digest)
       }
     } catch (_) {
@@ -201,7 +201,7 @@ class PeerId {
     try {
       const decoded = Digest.decode(this.id)
 
-      if (decoded.code === IDENTITY_CODE) {
+      if (decoded.code === identity.code) {
         return true
       }
     } catch (_) {
@@ -221,7 +221,7 @@ exports = module.exports = PeerIdWithIs
 
 const computeDigest = (pubKey) => {
   if (pubKey.bytes.length <= 42) {
-    return Digest.create(IDENTITY_CODE, pubKey.bytes).bytes
+    return Digest.create(identity.code, pubKey.bytes).bytes
   } else {
     return pubKey.hash()
   }
@@ -258,7 +258,7 @@ exports.createFromBytes = (buf) => {
   } catch {
     const digest = Digest.decode(buf)
 
-    if (digest.code !== IDENTITY_CODE) {
+    if (digest.code !== identity.code) {
       throw new Error('Supplied PeerID CID is invalid')
     }
 
