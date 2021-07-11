@@ -42,7 +42,6 @@
     "@types/dirty-chai": "^2.0.2",
     "@types/mocha": "^8.2.0",
     "aegir": "^33.0.0",
-    "multihashes": "^4.0.2",
     "util": "^0.12.3"
   },
   "dependencies": {
