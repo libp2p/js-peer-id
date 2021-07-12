@@ -4,9 +4,12 @@
 
 const { expect } = require('aegir/utils/chai')
 const crypto = require('libp2p-crypto')
-const mh = require('multihashes')
 const { CID } = require('multiformats/cid')
 const Digest = require('multiformats/hashes/digest')
+const { base16 } = require('multiformats/bases/base16')
+const { base36 } = require('multiformats/bases/base36')
+const { base58btc } = require('multiformats/bases/base58')
+const { identity } = require('multiformats/hashes/identity')
 const uint8ArrayFromString = require('uint8arrays/from-string')
 const uint8ArrayToString = require('uint8arrays/to-string')
 
@@ -20,9 +23,10 @@ const RAW_CODE = 0x55
 
 const testId = require('./fixtures/sample-id')
 const testIdHex = testId.id
-const testIdBytes = mh.fromHexString(testId.id)
+const testIdBytes = base16.decode(`f${testId.id}`)
 const testIdDigest = Digest.decode(testIdBytes)
-const testIdB58String = mh.toB58String(testIdBytes)
+const testIdB58String = base58btc.encode(testIdBytes).substring(1)
+const testIdB36String = base36.encode(testIdBytes)
 const testIdCID = CID.createV1(LIBP2P_KEY_CODE, testIdDigest)
 const testIdCIDString = testIdCID.toString()
 
@@ -46,7 +50,7 @@ describe('PeerId', () => {
 
   it('can be created for a Secp256k1 key', async () => {
     const id = await PeerId.create({ keyType: 'secp256k1', bits: 256 })
-    const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+    const expB58 = base58btc.encode((await identity.digest(id.pubKey.bytes)).bytes).slice(1)
     expect(id.toB58String()).to.equal(expB58)
   })
 
@@ -95,8 +99,14 @@ describe('PeerId', () => {
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
 
-  it('recreate from Base58 String (CIDv0))', () => {
+  it('recreate from Base58 String (CIDv0)', () => {
     const id = PeerId.createFromCID(CID.parse(testIdB58String))
+    expect(testIdCIDString).to.equal(id.toString())
+    expect(testIdBytes).to.deep.equal(id.toBytes())
+  })
+
+  it('recreate from Base36 String', () => {
+    const id = PeerId.parse(testIdB36String)
     expect(testIdCIDString).to.equal(id.toString())
     expect(testIdBytes).to.deep.equal(id.toBytes())
   })
@@ -176,7 +186,7 @@ describe('PeerId', () => {
     const key = '12D3KooWRm8J3iL796zPFi2EtGGtUJn58AG67gcqzMFHZnnsTzqD'
     const id = await PeerId.parse(key)
     expect(id.toB58String()).to.equal(key)
-    const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+    const expB58 = base58btc.encode((await identity.digest(id.pubKey.bytes)).bytes).slice(1)
     expect(id.toB58String()).to.equal(expB58)
   })
 
@@ -184,7 +194,7 @@ describe('PeerId', () => {
     const key = '16Uiu2HAm5qw8UyXP2RLxQUx5KvtSN8DsTKz8quRGqGNC3SYiaB8E'
     const id = await PeerId.parse(key)
     expect(id.toB58String()).to.equal(key)
-    const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+    const expB58 = base58btc.encode((await identity.digest(id.pubKey.bytes)).bytes).slice(1)
     expect(id.toB58String()).to.equal(expB58)
   })
 
@@ -197,14 +207,14 @@ describe('PeerId', () => {
   it('can be created from a Secp256k1 public key', async () => {
     const privKey = await crypto.keys.generateKeyPair('secp256k1', 256)
     const id = await PeerId.createFromPubKey(privKey.public.bytes)
-    const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+    const expB58 = base58btc.encode((await identity.digest(id.pubKey.bytes)).bytes).slice(1)
     expect(id.toB58String()).to.equal(expB58)
   })
 
   it('can be created from a Secp256k1 private key', async () => {
     const privKey = await crypto.keys.generateKeyPair('secp256k1', 256)
     const id = await PeerId.createFromPrivKey(privKey.bytes)
-    const expB58 = mh.toB58String(mh.encode(id.pubKey.bytes, 'identity'))
+    const expB58 = base58btc.encode((await identity.digest(id.pubKey.bytes)).bytes).slice(1)
     expect(id.toB58String()).to.equal(expB58)
   })
 
@@ -298,7 +308,7 @@ describe('PeerId', () => {
     it('go interop', async () => {
       const id = await PeerId.createFromJSON(goId)
       const digest = await id.privKey.public.hash()
-      expect(mh.toB58String(digest)).to.eql(goId.id)
+      expect(base58btc.encode(digest).slice(1)).to.eql(goId.id)
     })
   })
 

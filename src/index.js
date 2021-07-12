@@ -5,7 +5,12 @@
 'use strict'
 
 const { CID } = require('multiformats/cid')
+const b32 = require('multiformats/bases/base32')
+const b36 = require('multiformats/bases/base36')
+const b58 = require('multiformats/bases/base58')
+const b64 = require('multiformats/bases/base64')
 const { base58btc } = require('multiformats/bases/base58')
+const { base32 } = require('multiformats/bases/base32')
 const { base16 } = require('multiformats/bases/base16')
 const Digest = require('multiformats/hashes/digest')
 const cryptoKeys = require('libp2p-crypto/src/keys')
@@ -15,6 +20,17 @@ const uint8ArrayEquals = require('uint8arrays/equals')
 const uint8ArrayFromString = require('uint8arrays/from-string')
 const uint8ArrayToString = require('uint8arrays/to-string')
 const { identity } = require('multiformats/hashes/identity')
+
+const bases = {
+  ...b32,
+  ...b36,
+  ...b58,
+  ...b64
+}
+const baseDecoder = Object.keys(bases).reduce(
+  (acc, curr) => acc.or(bases[curr]),
+  base32.decoder
+)
 
 // these values are from https://github.com/multiformats/multicodec/blob/master/table.csv
 const DAG_PB_CODE = 0x70
@@ -389,13 +405,13 @@ exports.createFromProtobuf = async (buf) => {
 }
 
 exports.parse = (str) => {
-  if (str.charAt(0) === '1') {
-    // base58btc encoded public key
-    return exports.createFromBytes(base58btc.decode(`z${str}`))
+  if (str.charAt(0) === '1' || str.charAt(0) === 'Q') {
+    // identity hash ed25519 key or sha2-256 hash of rsa public key
+    // base58btc encoded either way
+    str = `z${str}`
   }
 
-  // try to parse it as a regular base58btc multihash or base32 encoded CID
-  return exports.createFromCID(CID.parse(str))
+  return exports.createFromBytes(baseDecoder.decode(str))
 }
 
 exports.isPeerId = (peerId) => {
