@@ -1,3 +1,12 @@
+## [0.15.1](https://github.com/libp2p/js-peer-id/compare/v0.15.0...v0.15.1) (2021-07-12)
+
+
+### Bug Fixes
+
+* decode more multibase types ([#152](https://github.com/libp2p/js-peer-id/issues/152)) ([4d74274](https://github.com/libp2p/js-peer-id/commit/4d742746b614f9d0ef29bfb01af7b6ff1fa68cf3))
+
+
+
 # [0.15.0](https://github.com/libp2p/js-peer-id/compare/v0.14.8...v0.15.0) (2021-07-06)
 
 
