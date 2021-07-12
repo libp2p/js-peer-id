@@ -1,199 +1,214 @@
-import { PrivateKey, PublicKey, KeyType } from "libp2p-crypto";
+import { PrivateKey, PublicKey, KeyType } from 'libp2p-crypto'
 import { CID } from 'multiformats/cid'
 
 declare namespace PeerId {
   /**
    * Options for PeerId creation.
    */
-  type CreateOptions = {
+  interface CreateOptions {
     /**
      * The number of bits to use.
      */
-    bits?: number;
+    bits?: number
     /**
      * The type of key to use.
      */
-    keyType?: KeyType;
-  };
+    keyType?: KeyType
+  }
 
   /**
    * PeerId JSON format.
    */
-  type JSONPeerId = {
+  interface JSONPeerId {
     /**
      * String representation of PeerId.
      */
-    id: string;
+    id: string
     /**
      * Public key.
      */
-    pubKey?: string;
+    pubKey?: string
     /**
      * Private key.
      */
-    privKey?: string;
-  };
+    privKey?: string
+  }
 
   /**
    * Checks if a value is an instance of PeerId.
-   * @param id The value to check.
+   *
+   * @param id - The value to check.
    */
-  function isPeerId(id: any): id is PeerId
+  function isPeerId (id: any): id is PeerId
 
   /**
    * Create a new PeerId.
-   * @param opts Options.
+   *
+   * @param opts - Options.
    */
-  function create(opts?: PeerId.CreateOptions): Promise<PeerId>;
+  function create (opts?: PeerId.CreateOptions): Promise<PeerId>
 
   /**
    * Create PeerId from hex string.
-   * @param str The input hex string.
+   *
+   * @param str - The input hex string.
    */
-  function createFromHexString(str: string): PeerId;
+  function createFromHexString (str: string): PeerId
 
   /**
    * Create PeerId from raw bytes.
-   * @param buf The raw bytes.
+   *
+   * @param buf - The raw bytes.
    */
-  function createFromBytes(buf: Uint8Array): PeerId;
+  function createFromBytes (buf: Uint8Array): PeerId
 
   /**
    * Create PeerId from base58-encoded string.
-   * @param str The base58-encoded string.
+   *
+   * @param str - The base58-encoded string.
    */
-  function createFromB58String(str: string): PeerId;
+  function createFromB58String (str: string): PeerId
 
   /**
    * Create PeerId from CID.
-   * @param cid The CID.
+   *
+   * @param cid - The CID.
    */
-  function createFromCID(cid: CID): PeerId;
+  function createFromCID (cid: CID): PeerId
 
   /**
    * Create PeerId from public key.
-   * @param key Public key, as Uint8Array or base64-encoded string.
+   *
+   * @param key - Public key, as Uint8Array or base64-encoded string.
    */
-  function createFromPubKey(key: Uint8Array | string): Promise<PeerId>;
+  function createFromPubKey (key: Uint8Array | string): Promise<PeerId>
 
   /**
    * Create PeerId from private key.
-   * @param key Private key, as Uint8Array or base64-encoded string.
+   *
+   * @param key - Private key, as Uint8Array or base64-encoded string.
    */
-  function createFromPrivKey(key: Uint8Array | string): Promise<PeerId>;
+  function createFromPrivKey (key: Uint8Array | string): Promise<PeerId>
 
   /**
    * Create PeerId from PeerId JSON formatted object.
+   *
    * @see {@link PeerId#toJSON}
-   * @param json PeerId in JSON format.
+   * @param json - PeerId in JSON format.
    */
-  function createFromJSON(json: JSONPeerId): Promise<PeerId>;
+  function createFromJSON (json: JSONPeerId): Promise<PeerId>
 
   /**
    * Create PeerId from Protobuf bytes.
-   * @param buf Protobuf bytes, as Uint8Array or hex-encoded string.
+   *
+   * @param buf - Protobuf bytes, as Uint8Array or hex-encoded string.
    */
-  function createFromProtobuf(buf: Uint8Array | string): Promise<PeerId>;
+  function createFromProtobuf (buf: Uint8Array | string): Promise<PeerId>
 
   /**
    * Parse a PeerId from a string.
-   * @param str encoded public key string.
+   *
+   * @param str - encoded public key string.
    */
-   function parse(str: string): PeerId;
+  function parse (str: string): PeerId
 }
 
 /**
  * PeerId is an object representation of a peer identifier.
  */
 declare class PeerId {
-  constructor(id: Uint8Array, privKey?: PrivateKey, pubKey?: PublicKey);
+  constructor (id: Uint8Array, privKey?: PrivateKey, pubKey?: PublicKey);
 
   /**
    * Raw id.
    */
-  readonly id: Uint8Array;
+  readonly id: Uint8Array
 
   /**
    * Private key.
    */
-  privKey: PrivateKey;
+  privKey: PrivateKey
 
   /**
    * Public key.
    */
-  pubKey: PublicKey;
+  pubKey: PublicKey
 
   /**
    * Return the protobuf version of the public key, matching go ipfs formatting.
    */
-  marshalPubKey(): Uint8Array;
+  marshalPubKey (): Uint8Array;
 
   /**
    * Return the protobuf version of the private key, matching go ipfs formatting.
    */
-  marshalPrivKey(): Uint8Array;
+  marshalPrivKey (): Uint8Array;
 
   /**
    * Return the protobuf version of the peer-id.
-   * @param excludePriv Whether to exclude the private key information from the output.
+   *
+   * @param excludePriv - Whether to exclude the private key information from the output.
    */
-  marshal(excludePriv?: boolean): Uint8Array;
+  marshal (excludePriv?: boolean): Uint8Array;
 
   /**
    * String representation.
    */
-  toPrint(): string;
+  toPrint (): string;
 
   /**
    * Return the jsonified version of the key.
    * Matches the formatting of go-ipfs for its config file.
+   *
    * @see {@link PeerId.createFromJSON}
    */
-  toJSON(): PeerId.JSONPeerId;
+  toJSON (): PeerId.JSONPeerId;
 
   /**
    * Encode to hex.
    */
-  toHexString(): string;
+  toHexString (): string;
 
   /**
    * Return raw id bytes.
    */
-  toBytes(): Uint8Array;
+  toBytes (): Uint8Array;
 
   /**
    * Encode to base58 string.
    */
-  toB58String(): string;
+  toB58String (): string;
 
   /**
    * Return self-describing string representation.
    * Uses default format from RFC 0001: https://github.com/libp2p/specs/pull/209
    */
-  toString(): string;
+  toString (): string;
 
   /**
    * Checks the equality of `this` peer against a given PeerId.
-   * @param id The other PeerId.
+   *
+   * @param id - The other PeerId.
    */
-  equals(id: PeerId | Uint8Array): boolean;
+  equals (id: PeerId | Uint8Array): boolean;
 
   /**
    * Checks the equality of `this` peer against a given PeerId.
+   *
    * @deprecated Use {.equals}
-   * @param id The other PeerId.
+   * @param id - The other PeerId.
    */
-  isEqual(id: PeerId | Uint8Array): boolean;
+  isEqual (id: PeerId | Uint8Array): boolean;
 
   /**
    * Check if this PeerId instance is valid (privKey -> pubKey -> Id)
    */
-  isValid(): boolean;
+  isValid (): boolean;
 
   /**
    * Check if the PeerId has an inline public key.
    */
-  hasInlinePublicKey(): boolean;
+  hasInlinePublicKey (): boolean;
 }
 
-export = PeerId;
+export = PeerId
