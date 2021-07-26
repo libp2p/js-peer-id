@@ -1,3 +1,12 @@
+## [0.15.2](https://github.com/libp2p/js-peer-id/compare/v0.15.1...v0.15.2) (2021-07-26)
+
+
+### Bug Fixes
+
+* use undefined instead of null privKey ([#154](https://github.com/libp2p/js-peer-id/issues/154)) ([35faac2](https://github.com/libp2p/js-peer-id/commit/35faac28f576daf2b7b4d59f8eeacfd0d80cc3af))
+
+
+
 ## [0.15.1](https://github.com/libp2p/js-peer-id/compare/v0.15.0...v0.15.1) (2021-07-12)
 
 
