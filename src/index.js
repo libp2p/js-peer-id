@@ -314,7 +314,7 @@ exports.createFromPubKey = async (key) => {
   }
 
   const pubKey = await cryptoKeys.unmarshalPublicKey(buf)
-  return computePeerId(null, pubKey)
+  return computePeerId(undefined, pubKey)
 }
 
 // Private key input will be a string
@@ -338,7 +338,7 @@ exports.createFromJSON = async (obj) => {
   const pub = rawPubKey && await cryptoKeys.unmarshalPublicKey(rawPubKey)
 
   if (!rawPrivKey) {
-    return new PeerIdWithIs(id, null, pub)
+    return new PeerIdWithIs(id, undefined, pub)
   }
 
   const privKey = await cryptoKeys.unmarshalPrivateKey(rawPrivKey)
@@ -394,7 +394,7 @@ exports.createFromProtobuf = async (buf) => {
   // TODO: val id and pubDigest
 
   if (pubKey) {
-    return new PeerIdWithIs(pubDigest, null, pubKey)
+    return new PeerIdWithIs(pubDigest, undefined, pubKey)
   }
 
   if (id) {
