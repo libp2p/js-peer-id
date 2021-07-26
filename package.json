@@ -1,6 +1,6 @@
 {
   "name": "peer-id",
-  "version": "0.15.1",
+  "version": "0.15.2",
   "description": "IPFS Peer Id implementation in Node.js",
   "leadMaintainer": "Vasco Santos <santos.vasco10@gmail.com>",
   "main": "src/index.js",
@@ -79,6 +79,7 @@
     "ᴠɪᴄᴛᴏʀ ʙᴊᴇʟᴋʜᴏʟᴍ <victorbjelkholm@gmail.com>",
     "Arve Knudsen <arve.knudsen@gmail.com>",
     "Carson Farmer <carson.farmer@gmail.com>",
+    "Cayman <caymannava@gmail.com>",
     "Christian Paul <info@jaller.de>",
     "Henrique Dias <hacdias@gmail.com>",
     "Marcin Rataj <lidel@lidel.org>",
