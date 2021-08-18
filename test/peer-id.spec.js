@@ -10,8 +10,8 @@ const { base16 } = require('multiformats/bases/base16')
 const { base36 } = require('multiformats/bases/base36')
 const { base58btc } = require('multiformats/bases/base58')
 const { identity } = require('multiformats/hashes/identity')
-const uint8ArrayFromString = require('uint8arrays/from-string')
-const uint8ArrayToString = require('uint8arrays/to-string')
+const { fromString: uint8ArrayFromString } = require('uint8arrays/from-string')
+const { toString: uint8ArrayToString } = require('uint8arrays/to-string')
 
 const PeerId = require('../src')
 

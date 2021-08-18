@@ -16,9 +16,9 @@ const Digest = require('multiformats/hashes/digest')
 const cryptoKeys = require('libp2p-crypto/src/keys')
 const withIs = require('class-is')
 const { PeerIdProto } = require('./proto')
-const uint8ArrayEquals = require('uint8arrays/equals')
-const uint8ArrayFromString = require('uint8arrays/from-string')
-const uint8ArrayToString = require('uint8arrays/to-string')
+const { equals: uint8ArrayEquals } = require('uint8arrays/equals')
+const { fromString: uint8ArrayFromString } = require('uint8arrays/from-string')
+const { toString: uint8ArrayToString } = require('uint8arrays/to-string')
 const { identity } = require('multiformats/hashes/identity')
 
 const bases = {
