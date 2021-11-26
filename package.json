@@ -38,9 +38,6 @@
   },
   "homepage": "https://github.com/libp2p/js-peer-id",
   "devDependencies": {
-    "@types/chai": "^4.2.21",
-    "@types/dirty-chai": "^2.0.2",
-    "@types/mocha": "^9.0.0",
     "aegir": "^36.0.1",
     "util": "^0.12.3"
   },
