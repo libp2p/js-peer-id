@@ -8,8 +8,8 @@
   "bin": "src/bin.js",
   "scripts": {
     "lint": "aegir lint",
-    "prepare": "npm run build",
-    "build": "npm run build:proto && npm run build:proto-types && aegir build --no-types",
+    "prepare": "npm run build --types false",
+    "build": "npm run build:proto && npm run build:proto-types && aegir build --types false",
     "build:proto": "pbjs -t static-module -w commonjs -r libp2p-peer-id --force-number --no-verify --no-delimited --no-create --no-beautify --no-defaults --lint eslint-disable -o src/proto.js ./src/proto.proto",
     "build:proto-types": "pbts -o src/proto.d.ts src/proto.js",
     "test": "aegir test",
