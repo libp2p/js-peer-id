@@ -1,3 +1,7 @@
+## [0.15.4](https://github.com/libp2p/js-peer-id/compare/v0.15.3...v0.15.4) (2021-11-26)
+
+
+
 ## [0.15.3](https://github.com/libp2p/js-peer-id/compare/v0.15.2...v0.15.3) (2021-08-18)
 
 
