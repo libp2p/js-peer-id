@@ -1,6 +1,6 @@
 {
   "name": "peer-id",
-  "version": "0.15.3",
+  "version": "0.15.4",
   "description": "IPFS Peer Id implementation in Node.js",
   "leadMaintainer": "Vasco Santos <santos.vasco10@gmail.com>",
   "main": "src/index.js",
@@ -65,13 +65,14 @@
     "nginnever <ginneversource@gmail.com>",
     "dignifiedquire <dignifiedquire@gmail.com>",
     "Jacob Heun <jacobheun@gmail.com>",
+    "Alex Potsides <alex@achingbrain.net>",
     "Pedro Teixeira <i@pgte.me>",
     "Stephen Whitmore <stephen.whitmore@gmail.com>",
-    "Alex Potsides <alex@achingbrain.net>",
     "Hugo Dias <hugomrdias@gmail.com>",
     "Maciej Krüger <mkg20001@gmail.com>",
-    "Nate Foss <npfoss@gmail.com>",
     "Robert Kiel <robert.kiel@validitylabs.org>",
+    "Nate Foss <npfoss@gmail.com>",
+    "acolytec3 <17355484+acolytec3@users.noreply.github.com>",
     "Adam Uhlíř <adam@uhlir.dev>",
     "ᴠɪᴄᴛᴏʀ ʙᴊᴇʟᴋʜᴏʟᴍ <victorbjelkholm@gmail.com>",
     "Arve Knudsen <arve.knudsen@gmail.com>",
@@ -87,7 +88,6 @@
     "Topper Bowers <topper@quorumcontrol.com>",
     "Vojtech Simetka <vojtech@simetka.cz>",
     "Yahya <ya7yaz@gmail.com>",
-    "a1300 <matthias-knopp@gmx.net>",
-    "acolytec3 <17355484+acolytec3@users.noreply.github.com>"
+    "a1300 <matthias-knopp@gmx.net>"
   ]
 }
