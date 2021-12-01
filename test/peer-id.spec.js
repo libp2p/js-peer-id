@@ -365,6 +365,7 @@ describe('PeerId', () => {
       for (const fn of fncs) {
         it(`${fn} (${util.inspect(gb)})`, async () => {
           try {
+            // @ts-expect-error cannot use a string to index PeerId
             await PeerId[fn](gb)
           } catch (err) {
             expect(err).to.exist()
@@ -375,8 +376,11 @@ describe('PeerId', () => {
   })
 
   describe('throws on inconsistent data', () => {
+    /** @type {crypto.keys.supportedKeys.rsa.RsaPrivateKey} */
     let k1
+    /** @type {crypto.keys.supportedKeys.rsa.RsaPrivateKey} */
     let k2
+    /** @type {crypto.keys.supportedKeys.rsa.RsaPrivateKey} */
     let k3
 
     before(async () => {

@@ -4,7 +4,7 @@
     "outDir": "dist"
   },
   "include": [
-    "./test/**/*.spec.js"
+    "./test/**/*.js"
   ],
   "exclude": [
     "src/proto.js" // generated file
