@@ -1,3 +1,19 @@
+# [0.16.0](https://github.com/libp2p/js-peer-id/compare/v0.15.4...v0.16.0) (2021-12-01)
+
+
+### chore
+
+* remove binary ([#160](https://github.com/libp2p/js-peer-id/issues/160)) ([25f0cd4](https://github.com/libp2p/js-peer-id/commit/25f0cd45bda22090994cc48a5085ab79a2be0ace))
+* update libp2p-crypto ([#161](https://github.com/libp2p/js-peer-id/issues/161)) ([fbc9bf0](https://github.com/libp2p/js-peer-id/commit/fbc9bf0f9338b41981649659ed32cde92c4c5c28))
+
+
+### BREAKING CHANGES
+
+* requires node 15+
+* removes install cli tool
+
+
+
 ## [0.15.4](https://github.com/libp2p/js-peer-id/compare/v0.15.3...v0.15.4) (2021-11-26)
 
 
