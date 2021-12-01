@@ -5,7 +5,6 @@
   "leadMaintainer": "Vasco Santos <santos.vasco10@gmail.com>",
   "main": "src/index.js",
   "types": "src/index.d.ts",
-  "bin": "src/bin.js",
   "scripts": {
     "lint": "aegir lint",
     "prepare": "npm run build --types false",
@@ -44,7 +43,6 @@
   "dependencies": {
     "class-is": "^1.1.0",
     "libp2p-crypto": "^0.21.0",
-    "minimist": "^1.2.5",
     "multiformats": "^9.4.5",
     "protobufjs": "^6.10.2",
     "uint8arrays": "^3.0.0"
