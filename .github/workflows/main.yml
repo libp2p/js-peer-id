@@ -27,7 +27,7 @@ jobs:
       fail-fast: true
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
       - run: npm install
@@ -38,6 +38,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
       - run: npm install
       - run: npx aegir test -t browser -t webworker --bail
   test-firefox:
@@ -45,5 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: lts/*
       - run: npm install
       - run: npx aegir test -t browser -t webworker --bail -- --browser firefox
