@@ -42,6 +42,7 @@
     - [`createFromPrivKey(privKey)`](#createfromprivkeyprivkey)
     - [`createFromJSON(obj)`](#createfromjsonobj)
     - [`createFromProtobuf(buf)`](#createfromprotobufbuf)
+    - [`parse(str)`](#parsestr)
   - [Export](#export)
     - [`toHexString()`](#tohexstring)
     - [`toBytes()`](#tobytes)
@@ -169,7 +170,7 @@ Returns `PeerId`.
 
 ### `createFromCID(cid)`
 
-- `cid: CID|String|Buffer` - The multihash encoded as [CID](https://github.com/ipld/js-cid) (object, `String` or `Buffer`)
+- `cid: CID` - The multihash encoded as [CID](https://github.com/multiformats/js-multiformats/blob/master/src/cid.js) object
 
 Creates a Peer ID from a CID representation of the key's multihash ([RFC 0001](https://github.com/libp2p/specs/blob/master/RFC/0001-text-peerid-cid.md)).
 
@@ -208,6 +209,10 @@ Returns `Promise<PeerId>`.
 ### `createFromProtobuf(buf)`
 
 `buf` is a protocol-buffers encoded PeerId (see `marshal()`)
+
+### `parse(str)`
+
+Attempts to create a PeerId from a base58btc encoded string or a CID encoded as a string.
 
 ## Export
 

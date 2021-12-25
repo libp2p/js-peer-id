@@ -1,15 +1,35 @@
 'use strict'
 
-const mh = require('multihashes')
-const CID = require('cids')
-// TODO: Fix missing type
-// @ts-ignore
-// @ts-ignore
+const { CID } = require('multiformats/cid')
+const b32 = require('multiformats/bases/base32')
+const b36 = require('multiformats/bases/base36')
+const b58 = require('multiformats/bases/base58')
+const b64 = require('multiformats/bases/base64')
+const { base58btc } = require('multiformats/bases/base58')
+const { base32 } = require('multiformats/bases/base32')
+const { base16 } = require('multiformats/bases/base16')
+const Digest = require('multiformats/hashes/digest')
 const cryptoKeys = require('libp2p-crypto/src/keys')
 const { PeerIdProto } = require('./proto')
-const uint8ArrayEquals = require('uint8arrays/equals')
-const uint8ArrayFromString = require('uint8arrays/from-string')
-const uint8ArrayToString = require('uint8arrays/to-string')
+const { equals: uint8ArrayEquals } = require('uint8arrays/equals')
+const { fromString: uint8ArrayFromString } = require('uint8arrays/from-string')
+const { toString: uint8ArrayToString } = require('uint8arrays/to-string')
+const { identity } = require('multiformats/hashes/identity')
+
+const bases = {
+  ...b32,
+  ...b36,
+  ...b58,
+  ...b64
+}
+const baseDecoder = Object.keys(bases).reduce(
+  (acc, curr) => acc.or(bases[curr]),
+  base32.decoder
+)
+
+// these values are from https://github.com/multiformats/multicodec/blob/master/table.csv
+const DAG_PB_CODE = 0x70
+const LIBP2P_KEY_CODE = 0x72
 
 const symbol = Symbol.for('@libp2p/peer-id')
 
@@ -60,7 +80,7 @@ class PeerId {
     Object.defineProperty(this, symbol, { value: true })
 
     this._id = id
-    this._idB58String = mh.toB58String(this.id)
+    this._idB58String = base58btc.encode(this.id).substring(1)
     this._privKey = privKey
     this._pubKey = pubKey
   }
@@ -101,9 +121,9 @@ class PeerId {
     }
 
     try {
-      const decoded = mh.decode(this.id)
+      const decoded = Digest.decode(this.id)
 
-      if (decoded.name === 'identity') {
+      if (decoded.code === identity.code) {
         this._pubKey = cryptoKeys.unmarshalPublicKey(decoded.digest)
       }
     } catch (_) {
@@ -195,7 +215,7 @@ class PeerId {
    * @returns {string}
    */
   toHexString () {
-    return mh.toHexString(this.id)
+    return base16.encode(this.id).substring(1)
   }
 
   /**
@@ -226,10 +246,10 @@ class PeerId {
     // We will create the property right here
     // @ts-ignore
     if (!this._idCIDString) {
-      const cid = new CID(1, 'libp2p-key', this.id, 'base32')
+      const cid = CID.createV1(LIBP2P_KEY_CODE, Digest.decode(this.id))
 
       Object.defineProperty(this, '_idCIDString', {
-        value: cid.toBaseEncodedString('base32'),
+        value: cid.toString(),
         enumerable: false
       })
     }
@@ -288,8 +308,9 @@ class PeerId {
    */
   hasInlinePublicKey () {
     try {
-      const decoded = mh.decode(this.id)
-      if (decoded.name === 'identity') {
+      const decoded = Digest.decode(this.id)
+
+      if (decoded.code === identity.code) {
         return true
       }
     } catch (_) {
@@ -337,7 +358,7 @@ class PeerId {
    * @returns {PeerId}
    */
   static createFromHexString (str) {
-    return new PeerId(mh.fromHexString(str))
+    return new PeerId(base16.decode('f' + str))
   }
 
   /**
@@ -347,9 +368,13 @@ class PeerId {
    * @returns {PeerId}
    */
   static createFromCID (cid) {
-    cid = CID.isCID(cid) ? cid : new CID(cid)
-    if (!validMulticodec(cid)) throw new Error('Supplied PeerID CID has invalid multicodec: ' + cid.codec)
-    return new PeerId(cid.multihash)
+    cid = CID.asCID(cid)
+
+    if (!cid || !validMulticodec(cid)) {
+      throw new Error('Supplied PeerID CID is invalid')
+    }
+
+    return new PeerId(cid.multihash.bytes)
   }
 
   /**
@@ -399,7 +424,7 @@ class PeerId {
    * @returns {Promise<PeerId>}
    */
   static async createFromJSON (obj) {
-    const id = mh.fromB58String(obj.id)
+    const id = base58btc.decode('z' + obj.id)
     const rawPrivKey = obj.privKey && uint8ArrayFromString(obj.privKey, 'base64pad')
     const rawPubKey = obj.pubKey && uint8ArrayFromString(obj.pubKey, 'base64pad')
     const pub = rawPubKey && await cryptoKeys.unmarshalPublicKey(rawPubKey)
@@ -411,12 +436,14 @@ class PeerId {
     const privKey = await cryptoKeys.unmarshalPrivateKey(rawPrivKey)
     const privDigest = await computeDigest(privKey.public)
 
-    if (pub) {
-      const pubDigest = await computeDigest(pub)
+    let pubDigest
 
-      if (!uint8ArrayEquals(privDigest, pubDigest)) {
-        throw new Error('Public and private key do not match')
-      }
+    if (pub) {
+      pubDigest = await computeDigest(pub)
+    }
+
+    if (pub && !uint8ArrayEquals(privDigest, pubDigest)) {
+      throw new Error('Public and private key do not match')
     }
 
     if (id && !uint8ArrayEquals(privDigest, id)) {
@@ -436,42 +463,59 @@ class PeerId {
     if (typeof buf === 'string') {
       buf = uint8ArrayFromString(buf, 'base16')
     }
-
-    const { id, privKey: privKeyBytes, pubKey: pubKeyBytes } = PeerIdProto.decode(buf)
-
-    /**
-     * @type {PrivateKey | false}
-     */
-    const privKey = privKeyBytes && await cryptoKeys.unmarshalPrivateKey(privKeyBytes)
-
-    /**
-     * @type {PublicKey | false}
-     */
-    const pubKey = pubKeyBytes && await cryptoKeys.unmarshalPublicKey(pubKeyBytes)
-
-    if (privKey && pubKey) {
-      const privDigest = await computeDigest(privKey.public)
-      const pubDigest = await computeDigest(pubKey)
-
-      if (!uint8ArrayEquals(privDigest, pubDigest)) {
-        throw new Error('Public and private key do not match')
+  
+    let { id, privKey, pubKey } = PeerIdProto.decode(buf)
+  
+    privKey = privKey ? await cryptoKeys.unmarshalPrivateKey(privKey) : false
+    pubKey = pubKey ? await cryptoKeys.unmarshalPublicKey(pubKey) : false
+  
+    let pubDigest
+    let privDigest
+  
+    if (privKey) {
+      privDigest = await computeDigest(privKey.public)
+    }
+  
+    if (pubKey) {
+      pubDigest = await computeDigest(pubKey)
+    }
+  
+    if (privKey) {
+      if (pubKey) {
+        if (!uint8ArrayEquals(privDigest, pubDigest)) {
+          throw new Error('Public and private key do not match')
+        }
       }
-
       return new PeerId(privDigest, privKey, privKey.public)
     }
-
+  
     // TODO: val id and pubDigest
+  
     if (pubKey) {
-      const pubDigest = await computeDigest(pubKey)
-
       return new PeerId(pubDigest, undefined, pubKey)
     }
-
+  
     if (id) {
       return new PeerId(id)
     }
-
+  
     throw new Error('Protobuf did not contain any usable key material')
+  }
+
+  /**
+   * Parse PeerId object
+   * 
+   * @param {String} str 
+   * @returns 
+   */
+  static parse(str) {
+    if (str.charAt(0) === '1' || str.charAt(0) === 'Q') {
+      // identity hash ed25519 key or sha2-256 hash of rsa public key
+      // base58btc encoded either way
+      str = `z${str}`
+    }
+  
+    return PeerId.createFromBytes(baseDecoder.decode(str))
   }
 
   /**
@@ -493,7 +537,7 @@ class PeerId {
  */
 const computeDigest = async (pubKey) => {
   if (pubKey.bytes.length <= 42) {
-    return Promise.resolve(mh.encode(pubKey.bytes, 'identity'))
+    return Digest.create(identity.code, pubKey.bytes).bytes
   } else {
     return pubKey.hash()
   }
@@ -519,7 +563,7 @@ const computePeerId = async (pubKey, privKey) => {
  */
 const validMulticodec = (cid) => {
   // supported: 'libp2p-key' (CIDv1) and 'dag-pb' (CIDv0 converted to CIDv1)
-  return cid.codec === 'libp2p-key' || cid.codec === 'dag-pb'
+  return cid.code === LIBP2P_KEY_CODE || cid.code === DAG_PB_CODE
 }
 
 /**
@@ -529,5 +573,3 @@ const validMulticodec = (cid) => {
 const toB64Opt = (val) => {
   return uint8ArrayToString(val, 'base64pad')
 }
-
-module.exports = PeerId

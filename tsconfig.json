@@ -1,20 +1,12 @@
 {
-    "extends": "aegir/src/config/tsconfig.aegir.json",
-    "compilerOptions": {
-        "outDir": "dist",
-        "baseUrl": "./",
-        "paths": {
-            "*": [
-                "./types/*"
-            ]
-        }
-    },
-    "include": [
-        "types",
-        "test",
-        "src"
-    ],
-    "exclude": [
-        "src/proto.js" // generated file
-    ]
+  "extends": "aegir/src/config/tsconfig.aegir.json",
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "include": [
+    "./test/**/*.js"
+  ],
+  "exclude": [
+    "src/proto.js" // generated file
+  ]
 }

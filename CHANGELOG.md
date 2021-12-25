@@ -1,3 +1,61 @@
+# [0.16.0](https://github.com/libp2p/js-peer-id/compare/v0.15.4...v0.16.0) (2021-12-01)
+
+
+### chore
+
+* remove binary ([#160](https://github.com/libp2p/js-peer-id/issues/160)) ([25f0cd4](https://github.com/libp2p/js-peer-id/commit/25f0cd45bda22090994cc48a5085ab79a2be0ace))
+* update libp2p-crypto ([#161](https://github.com/libp2p/js-peer-id/issues/161)) ([fbc9bf0](https://github.com/libp2p/js-peer-id/commit/fbc9bf0f9338b41981649659ed32cde92c4c5c28))
+
+
+### BREAKING CHANGES
+
+* requires node 15+
+* removes install cli tool
+
+
+
+## [0.15.4](https://github.com/libp2p/js-peer-id/compare/v0.15.3...v0.15.4) (2021-11-26)
+
+
+
+## [0.15.3](https://github.com/libp2p/js-peer-id/compare/v0.15.2...v0.15.3) (2021-08-18)
+
+
+
+## [0.15.2](https://github.com/libp2p/js-peer-id/compare/v0.15.1...v0.15.2) (2021-07-26)
+
+
+### Bug Fixes
+
+* use undefined instead of null privKey ([#154](https://github.com/libp2p/js-peer-id/issues/154)) ([35faac2](https://github.com/libp2p/js-peer-id/commit/35faac28f576daf2b7b4d59f8eeacfd0d80cc3af))
+
+
+
+## [0.15.1](https://github.com/libp2p/js-peer-id/compare/v0.15.0...v0.15.1) (2021-07-12)
+
+
+### Bug Fixes
+
+* decode more multibase types ([#152](https://github.com/libp2p/js-peer-id/issues/152)) ([4d74274](https://github.com/libp2p/js-peer-id/commit/4d742746b614f9d0ef29bfb01af7b6ff1fa68cf3))
+
+
+
+# [0.15.0](https://github.com/libp2p/js-peer-id/compare/v0.14.8...v0.15.0) (2021-07-06)
+
+
+### chore
+
+* update to new multiformats ([#149](https://github.com/libp2p/js-peer-id/issues/149)) ([69d7a01](https://github.com/libp2p/js-peer-id/commit/69d7a012cb5efffcc13afe3c75fa1acc8bda1f54))
+
+
+### BREAKING CHANGES
+
+* uses the CID class from the new multiformats module
+
+Co-authored-by: Vasco Santos <vasco.santos@moxy.studio>
+
+
+
 ## [0.14.8](https://github.com/libp2p/js-peer-id/compare/v0.14.7...v0.14.8) (2021-04-20)
 
 
