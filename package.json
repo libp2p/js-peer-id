@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/libp2p/js-peer-id",
   "devDependencies": {
-    "aegir": "^36.0.1",
+    "aegir": "^37.0.12",
     "util": "^0.12.3"
   },
   "dependencies": {
