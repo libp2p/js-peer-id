@@ -44,7 +44,7 @@
     "class-is": "^1.1.0",
     "libp2p-crypto": "^0.21.0",
     "multiformats": "^9.4.5",
-    "protobufjs": "^6.10.2",
+    "protobufjs": "^7.0.0",
     "uint8arrays": "^3.0.0"
   },
   "repository": {
