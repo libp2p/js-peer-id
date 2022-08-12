@@ -1,3 +1,6 @@
+⛔️ DEPRECATED: peer-id is not used anymore in favour of [libp2p-peer-id](https://github.com/libp2p/js-libp2p-peer-id) from [libp2p@0.37.0](https://github.com/libp2p/js-libp2p/releases/tag/v0.37.0).
+======
+
 # peer-id
 
 [![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](http://protocol.ai)
